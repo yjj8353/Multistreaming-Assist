@@ -29,13 +29,6 @@
    
 ***
    
-> ### 프로그램 종료시 주의사항
-> ![1](https://user-images.githubusercontent.com/38521736/76392622-45d46800-63b5-11ea-9ef1-17d397143882.png)
-> 1. 프로그램을 종료하기전에 nginx.exe가 실행되고 있는 상태라면, 반드시 우측 하단의 붉은색의 'nginx 정지' 버튼을 누른 뒤
-> 2. 우측 상단의 닫기버튼을 클릭해 닫을 것을 권장함
-   
-***
-   
 > ### OBS 연동
 > ![OBS](https://user-images.githubusercontent.com/38521736/76396069-e2016d80-63bb-11ea-91c0-1fede7df5b0c.png)
 > 1. 서버 칸에 'rtmp://localhost/live' 라고 적은 후
@@ -48,3 +41,10 @@
 > ![OBS2](https://user-images.githubusercontent.com/38521736/76395806-6f908d80-63bb-11ea-9e29-4ab51dc02191.png)
 > 1. nginx.exe 실행 상태에서 우측 하단의 '방송 시작' 버튼 클릭 
 > * 이때, 방송 시작이 정상적으로 진행되지 않는다면 nginx.exe가 제대로 실행되지 않았을 가능성이 높으므로 작업 관리자를 열어 확인 요망
+   
+## 주의사항
+
+> ### 프로그램 종료시 주의사항
+> ![1](https://user-images.githubusercontent.com/38521736/76392622-45d46800-63b5-11ea-9ef1-17d397143882.png)
+> 1. 프로그램을 종료하기전에 nginx.exe가 실행되고 있는 상태라면, 반드시 우측 하단의 붉은색의 'nginx 정지' 버튼을 누른 뒤
+> 2. 우측 상단의 닫기버튼을 클릭해 닫을 것을 권장함(램 누수 문제가 있음)
