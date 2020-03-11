@@ -1,6 +1,9 @@
 # Multistreaming-Assist
 
-* 이 프로그램은 https://github.com/illuspas/nginx-rtmp-win32 에서 배포하는 Nginx RTMP Module을 사용합니다.
+* Electron 6.13.7
+* Nginx-RTMP-Win32 (https://github.com/illuspas/nginx-rtmp-win32)
+
+
 
 ## 배포시 유의사항
 
