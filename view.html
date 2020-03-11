@@ -2,8 +2,8 @@
 <html lang="ko">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
     <title>Multistream-Assist</title>
 </head>
 <body>
@@ -20,11 +20,13 @@
         <input type="button" class="btn btn-secondary" id="generate_button" value="nginx.conf 생성" style="float:left"/>
         <input type="button" class="btn btn-primary" id="switch_button" value="nginx 서버 시작" style="float:right"/>
     </div>
-<script src="./js/jquery-3.4.1.min.js"></script>
-<script src="./js/bootstrap.min.js"></script>
-<script src="./js/make-nginx-conf.js"></script>
 <script src="./js/function.js"></script>
+<script src="./js/make-nginx-conf.js"></script>
 <script type="text/javascript">
+window.$ = window.jquery = require('jquery');
+window.popper = require('popper.js');
+require('bootstrap');
+
 window.onload = function() {
     document.getElementById('generate_button').onclick = function() {
         var twitchKey      = document.getElementById('twitch').value;

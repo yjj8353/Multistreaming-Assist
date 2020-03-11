@@ -1,26 +1,27 @@
 const {app, BrowserWindow} = require('electron');
-const path = require('path');
+const fn = require('./js/function');
 
 function createWindow() {
     const mainWindow = new BrowserWindow({
         width: 500,
-        height: 400
+        height: 400,
+        webPreferences: {
+            nodeIntegration: true
+        }
     });
 
     mainWindow.loadFile('view.html');
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
     mainWindow.setMenuBarVisibility(false);
     mainWindow.on('close', () => {
-        const fn = require('./js/function');
         fn.stop();
-
-        mainWindow = null;
     });
 }
 
 app.on('ready', createWindow);
 app.on('window-all-closed', () => {
     if(process.platform !== 'darwin') {
+        fn.stop();
         app.quit();
     }
 });
