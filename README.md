@@ -46,7 +46,7 @@
 
 > ### nginx.exe가 실행되지 않는 경우
 > 현재까지 확인된 nginx가 제대로 실행되지 않는 경우는 크게 다음과 같음
-> 1. twitch/youtbe 키 값 및 추가적인 rtmp 서버/키 값이 제대로 입력되지 않은 경우
+> 1. 유효하지 않은 twitch/youtbe 키 값 및 추가적인 rtmp 서버/키 값이 입력된 경우
 > 2. Windows Defender 외의 서드파티 백신을 사용 할 경우
 
 ***
