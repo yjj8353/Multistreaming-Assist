@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <title>Multistream-Assist</title>
+</head>
+<body>
+    <div class="container">
+        <div class="form-group">
+            <label>Twitch RTMP 키:</label>
+            <input type="password" id="twitch" class="form-control" placeholder="트위치 스트리밍 키" />
+            <label>Youtube RTMP 키:</label>
+            <input type="password" id="youtube" class="form-control" placeholder="유튜브 스트리밍 키" />
+            <label>추가적인 RTMP 서버/키:</label>
+            <input type="text" id="additionalRTMPUrl" class="form-control" placeholder="추가적인 RTMP 서버 주소" />
+            <input type="password" id="additionalRTMPKey" class="form-control" placeholder="추가적인 RTMP 서버 키" />
+        </div>
+        <input type="button" class="btn btn-secondary" id="generate_button" value="nginx.conf 생성" style="float:left"/>
+        <input type="button" class="btn btn-primary" id="switch_button" value="nginx 서버 시작" style="float:right"/>
+    </div>
+<script src="./js/jquery-3.4.1.min.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+<script src="./js/make-nginx-conf.js"></script>
+<script src="./js/function.js"></script>
+<script type="text/javascript">
+window.onload = function() {
+    document.getElementById('generate_button').onclick = function() {
+        var twitchKey      = document.getElementById('twitch').value;
+        var youtubeKey     = document.getElementById('youtube').value;
+        var additionalRTMP = document.getElementById('additionalRTMPUrl').value.trim() + document.getElementById('additionalRTMPKey').value.trim();
+
+        makeNginxConfigFile(twitchKey, youtubeKey, additionalRTMP);
+    };
+
+    document.getElementById('switch_button').onclick = function() {
+        var value = document.getElementById('switch_button').value;
+        
+        if(value == 'nginx 서버 시작') {
+            document.getElementById('switch_button').setAttribute('value', 'nginx 서버 정지');
+            document.getElementById('switch_button').setAttribute('class', 'btn btn-danger');
+            start();
+        }
+        if(value == 'nginx 서버 정지') {
+            document.getElementById('switch_button').setAttribute('value', 'nginx 서버 시작');
+            document.getElementById('switch_button').setAttribute('class', 'btn btn-primary');
+            stop();
+        }
+    };
+}
+</script>
+</body>
+</html>

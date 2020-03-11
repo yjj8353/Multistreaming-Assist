@@ -1,0 +1,20 @@
+{
+    "name": "multistreaming-assist",
+    "version": "0.0.1",
+    "description": "Multi Streaming Assistant Tool",
+    "main": "main.js",
+    "script": {
+        "start": "electron .",
+        "build": "electron-packager . Multistreaming-Assist --asar"
+    },
+    "repository": "https://github.com/yjj8353/Multistreaming-Assist",
+    "author": "RetroTV",
+    "license": "",
+    "devDependencies": {
+        "asar": "^2.1.0",
+        "electron": "^8.0.3"
+    },
+    "dependencies": {
+        "electron-packager": "^14.2.1"
+    }
+}
