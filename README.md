@@ -37,7 +37,7 @@
 ***
    
 > ### OBS 연동
-> ![OBS](https://user-images.githubusercontent.com/38521736/76395499-ca75b500-63ba-11ea-8771-5f8e69272cd9.png)
+> ![OBS](https://user-images.githubusercontent.com/38521736/76396069-e2016d80-63bb-11ea-91c0-1fede7df5b0c.png)
 > 1. 서버 칸에 'rtmp://localhost/live' 라고 적은 후
 > 2. 적용 버튼 클릭
 > 3. 확인 버튼 클릭
