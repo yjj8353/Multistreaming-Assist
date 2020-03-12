@@ -27,8 +27,11 @@
 window.$ = window.jquery = require('jquery');
 window.popper            = require('popper.js');
                            require('bootstrap');
+const {ipcRenderer}      = require('electron');
 
-window.onload = function() {
+ipcRenderer.send('asynchronous-message', 'false');
+
+window.onload = function() {    
     document.getElementById('generate_button').onclick = function() {
         var twitchKey      = findFirstSlash(document.getElementById('twitch').value);
         var youtubeKey     = findFirstSlash(document.getElementById('youtube').value);
@@ -43,11 +46,13 @@ window.onload = function() {
         if(value == 'nginx 서버 시작') {
             document.getElementById('switch_button').setAttribute('value', 'nginx 서버 정지');
             document.getElementById('switch_button').setAttribute('class', 'btn btn-danger');
+            ipcRenderer.send('asynchronous-message', 'true');
             on();
         }
         if(value == 'nginx 서버 정지') {
             document.getElementById('switch_button').setAttribute('value', 'nginx 서버 시작');
             document.getElementById('switch_button').setAttribute('class', 'btn btn-primary');
+            ipcRenderer.send('asynchronous-message', 'false');
             off();
         }
     };
