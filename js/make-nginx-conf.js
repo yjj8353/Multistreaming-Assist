@@ -84,6 +84,6 @@ function makeNginxConfigFile(twitch, youtube, additionalRTMP) {
 
     fs.writeFile('./nginx/conf/nginx.conf', config, function (err) {
         if (err) throw err;
-        console.log('File is created successfully.');
+        alert('nginx.conf 파일 생성 완료');
     });
 } 

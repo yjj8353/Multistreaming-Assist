@@ -1,8 +1,10 @@
 const {execFile, execFileSync} = require('child_process');
 
+const dir = __dirname.replace("\\resources\\app.asar", "");
+
 // nginx.exe 실행
 function on() {
-    const dir = __dirname.replace("\\resources\\app.asar", "");
+    // nginx.exe를 실행하고, 에러가 있을경우 에러 정보를 리턴하고 nginx.exe 시작 전 상태로 돌아감
     execFile('./nginx.exe', {cwd: dir + "\\nginx"}, (error, stdout, stderr) => {
         if(error) {
             let re = new RegExp('nginx.conf');
@@ -21,6 +23,12 @@ function on() {
 
 // nginx.exe 중단
 function off() {
-    const dir = __dirname.replace("\\resources\\app.asar", "");
-    execFileSync('./nginx.exe', ['-s', 'stop'], {cwd: dir + "\\nginx"});
+    //nginx.exe를 종료하고, 에러가 있을경우 nginx.exe 시작 전 상태로 돌아감
+    execFileSync('./nginx.exe', ['-s', 'stop'], {cwd: dir + "\\nginx"}, (error, stdout, stderr) => {
+        if(error) {
+            document.getElementById('switch_button').setAttribute('value', 'nginx 서버 시작');
+            document.getElementById('switch_button').setAttribute('class', 'btn btn-primary');
+            ipcRenderer.send('asynchronous-message', 'false');
+        }
+    });
 }

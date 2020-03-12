@@ -12,8 +12,10 @@ function createWindow() {
         }
     });
 
+    // nginx.exe 실행 여부
     var switchStatus = null;
 
+    // view.html에서 nginx.exe의 on/off 여부를 받는 이벤트
     ipcMain.on('asynchronous-message', (event, arg) => {
         switchStatus = arg;
     })
@@ -28,6 +30,7 @@ function createWindow() {
     mainWindow.setMenuBarVisibility(false);
 
     // 화면 종료시 실행하는 이벤트
+    // 화면 종료시 nginx.exe가 실행중이면 종료하고 창을 닫음
     mainWindow.on('close', () => {
         if(switchStatus == "true") {
             var dir = __dirname.replace("\\resources\\app.asar", "");
