@@ -1,5 +1,4 @@
 const {app, BrowserWindow} = require('electron');
-const NginxSwitch = require('./js/nginx-switch');
 
 // 메인 화면 생성 및 설정
 function createWindow() {
@@ -22,7 +21,7 @@ function createWindow() {
 
     // 화면 종료시 실행하는 이벤트
     mainWindow.on('close', () => {
-        fn.stop();
+        
     });
 }
 
@@ -31,8 +30,7 @@ app.on('ready', createWindow);
 
 // 모든 window가 닫힐때 발생하는 이벤트
 app.on('window-all-closed', () => {
-    if(process.platform !== 'darwin') {
-        //fn.stop();
+    if(process.platform !== 'darwin') {        
         app.quit();
     }
 });

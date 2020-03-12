@@ -18,7 +18,7 @@ function makeNginxConfigFile(twitch, youtube, additionalRTMP) {
     }
 
     // 추가 RTMP 서버 및 키 확인
-    if(additionalRTMP === "") {
+    if(additionalRTMP === "/") {
         this.additionalRTMP = "";
     } else {
         this.additionalRTMP = "push " + additionalRTMP.trim() + ";";
