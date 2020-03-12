@@ -1,27 +1,27 @@
 const fs = require('fs');
 
 function makeNginxConfigFile(twitch, youtube, additionalRTMP) {
-    //var twitch  = "live_55712246_jkyuSUDogqydXJCDfZ7SRNGdyocKCx";
-    //var youtube = "0p28-k56e-d1pj-awgb";
-
     var additionalRTMP;
 
-    if(twitch) {
-        var fullTwitch = "push rtmp://live-sel.twitch.tv/app/" + twitch.trim() + ";";
-    } else {
+    // twitch 키 확인
+    if(twitch === "") {
         var fullTwitch = "";
+    } else {
+        var fullTwitch = "push rtmp://live-sel.twitch.tv/app/" + twitch.trim() + ";";
     }
 
-    if(youtube) {
-        var fullYoutube = "push rtmp://a.rtmp.youtube.com/live2/" + youtube.trim() + ";";
-    } else {
+    // youtube 키 확인
+    if(youtube === "") {
         var fullYoutube = "";
+    } else {
+        var fullYoutube = "push rtmp://a.rtmp.youtube.com/live2/" + youtube.trim() + ";";
     }
 
-    if(additionalRTMP) {
-        this.additionalRTMP = "push " + additionalRTMP.trim() + ";";
-    } else {
+    // 추가 RTMP 서버 및 키 확인
+    if(additionalRTMP === "") {
         this.additionalRTMP = "";
+    } else {
+        this.additionalRTMP = "push " + additionalRTMP.trim() + ";";
     }
     
     var config = "worker_processes 1;\n"

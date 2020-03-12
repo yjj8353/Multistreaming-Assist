@@ -20,8 +20,9 @@
         <input type="button" class="btn btn-secondary" id="generate_button" value="nginx.conf 생성" style="float:left"/>
         <input type="button" class="btn btn-primary" id="switch_button" value="nginx 서버 시작" style="float:right"/>
     </div>
-<script src="./js/function.js"></script>
+<script src="./js/nginx-switch.js"></script>
 <script src="./js/make-nginx-conf.js"></script>
+<script src="./js/find-slash.js"></script>
 <script type="text/javascript">
 window.$ = window.jquery = require('jquery');
 window.popper            = require('popper.js');
@@ -29,9 +30,9 @@ window.popper            = require('popper.js');
 
 window.onload = function() {
     document.getElementById('generate_button').onclick = function() {
-        var twitchKey      = document.getElementById('twitch').value;
-        var youtubeKey     = document.getElementById('youtube').value;
-        var additionalRTMP = document.getElementById('additionalRTMPUrl').value.trim() + document.getElementById('additionalRTMPKey').value.trim();
+        var twitchKey      = findFirstSlash(document.getElementById('twitch').value);
+        var youtubeKey     = findFirstSlash(document.getElementById('youtube').value);
+        var additionalRTMP = findLastSlash(document.getElementById('additionalRTMPUrl').value) + "/" + findFirstSlash(document.getElementById('additionalRTMPKey').value);
 
         makeNginxConfigFile(twitchKey, youtubeKey, additionalRTMP);
     };
@@ -42,12 +43,12 @@ window.onload = function() {
         if(value == 'nginx 서버 시작') {
             document.getElementById('switch_button').setAttribute('value', 'nginx 서버 정지');
             document.getElementById('switch_button').setAttribute('class', 'btn btn-danger');
-            start();
+            on();
         }
         if(value == 'nginx 서버 정지') {
             document.getElementById('switch_button').setAttribute('value', 'nginx 서버 시작');
             document.getElementById('switch_button').setAttribute('class', 'btn btn-primary');
-            stop();
+            off();
         }
     };
 }
