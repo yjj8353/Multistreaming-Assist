@@ -1,6 +1,5 @@
-const {app, BrowserWindow} = require('electron');
-const {execFileSync} = require('child_process');
-const {ipcMain} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
+const {execFileSync}                = require('child_process');
 
 // 메인 화면 생성 및 설정
 function createWindow() {
@@ -12,8 +11,8 @@ function createWindow() {
         }
     });
 
-    // nginx.exe 실행 여부
-    var switchStatus = null;
+    // nginx.exe가 현재 실행되고 있는지 여부
+    var switchStatus = "false";
 
     // view.html에서 nginx.exe의 on/off 여부를 받는 이벤트
     ipcMain.on('asynchronous-message', (event, arg) => {
