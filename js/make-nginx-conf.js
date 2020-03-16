@@ -1,7 +1,19 @@
 const fs = require('fs');
 
-function makeNginxConfigFile(twitch, youtube, additionalRTMP) {
+async function makeNginxConfigFile(twitch, youtube, additionalRTMP) {
     var additionalRTMP;
+
+    var key = {
+        twitch: twitch.trim(),
+        youtube: youtube.trim()
+    }
+
+    const result = await checkKey(key);
+    
+    if(!result.twitch.checkLength)
+    if(!result.twitch.checkPattern)
+    if(!result.youtube.checkLength)
+    if(!result.youtube.checkPattern)
 
     // twitch 키 확인
     if(twitch === "") {
