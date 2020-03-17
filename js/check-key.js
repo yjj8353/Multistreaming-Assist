@@ -2,70 +2,24 @@ function checkKey(key) {
     console.log('checkKey 시작');
     return new Promise(async function(resolve, result) {
         if(key.twitch == "") {
-            var twitchResult = {
-                checkLength: true,
-                checkPattern: true
-            }
+            var twitchResult = true
         } else {
-            var twitchResult = await checkTwitchKey(key.twitch);
+            var twitchResult = await checkTwitchKeyPattern(key.twitch)
         }
 
         if(key.youtube == "") {
-            var youtubeResult = {
-                checkLength: true,
-                checkPattern: true
-            }
+            var youtubeResult = true
         } else {
-            var youtubeResult = await checkYoutubeKey(key.youtube);
+            var youtubeResult = await checkYoutubeKeyPattern(key.youtube)
         }
-    
+
         const checkResult = {
             twitch: twitchResult,
             youtube: youtubeResult
         }
-    
+
         resolve(checkResult);
     }.bind(key));
-}
-
-function checkTwitchKey(twitchKey) {
-    console.log(twitchKey);
-    console.log('checkTwitchKey 시작');
-    return new Promise(async function(resolve, result) {
-        const testLength = [twitchKey, 44];
-        const twitchResult = {
-            checkLength:  await checkLength(testLength),
-            checkPattern: await checkTwitchKeyPattern(twitchKey)
-        }
-
-        resolve(twitchResult);
-    }.bind(twitchKey));
-}
-
-function checkYoutubeKey(youtubeKey) {
-    console.log('checkYoutubeKey 시작');
-    return new Promise(async function(resolve, result) {
-        const testLength = [youtubeKey, 19];
-        const youtubeResult = {
-            checkLength:  await checkLength(testLength),
-            checkPattern: await checkYoutubeKeyPattern(youtubeKey)
-        }
-
-        resolve(youtubeResult);
-    }.bind(youtubeKey));
-}
-
-function checkLength(testLength) {
-    console.log('checkLength 시작');
-    return new Promise(function(resolve, result) {
-        console.log(testLength[0]);
-        console.log(testLength[1]);
-        if(testLength[0].length == testLength[1]) {
-            resolve(true);
-        } else {
-            resolve(false);
-        }
-    }.bind(testLength));
 }
 
 function checkTwitchKeyPattern(twitchKey) {

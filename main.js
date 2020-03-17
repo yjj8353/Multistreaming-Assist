@@ -23,7 +23,7 @@ function createWindow() {
     mainWindow.loadFile('view.html');
     
     // 개발자용 도구 활성화
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
 
     // 상단 메뉴 활성화 여부
     mainWindow.setMenuBarVisibility(false);

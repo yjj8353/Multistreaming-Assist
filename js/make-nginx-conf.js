@@ -9,28 +9,39 @@ async function makeNginxConfigFile(twitch, youtube, additionalRTMP) {
     }
 
     const result = await checkKey(key);
+    console.log(result);
     
-    if(!result.twitch.checkLength)
-    if(!result.twitch.checkPattern)
-    if(!result.youtube.checkLength)
-    if(!result.youtube.checkPattern)
+    if(!(result.twitch && result.youtube)) {
+        var message = [];
+        if(!result.twitch) {
+            message.push("Twitch RTMP Key가 ");
+        }
+        if(!result.youtube) {
+            message.push("Youtube RTMP Key가 ");
+        }
+        message.push("올바르지 않습니다");
+        message.join();
+
+        alert(message);
+        return;
+    }
 
     // twitch 키 확인
-    if(twitch === "") {
+    if(twitch == "") {
         var fullTwitch = "";
     } else {
         var fullTwitch = "push rtmp://live-sel.twitch.tv/app/" + twitch.trim() + ";";
     }
 
     // youtube 키 확인
-    if(youtube === "") {
+    if(youtube == "") {
         var fullYoutube = "";
     } else {
         var fullYoutube = "push rtmp://a.rtmp.youtube.com/live2/" + youtube.trim() + ";";
     }
 
     // 추가 RTMP 서버 및 키 확인
-    if(additionalRTMP === "/") {
+    if(additionalRTMP == "/") {
         this.additionalRTMP = "";
     } else {
         this.additionalRTMP = "push " + additionalRTMP.trim() + ";";
