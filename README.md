@@ -1,7 +1,6 @@
 # Multistreaming-Assist
 
 * Electron 6.13.7
-* Nginx-RTMP-Win32 (https://github.com/illuspas/nginx-rtmp-win32)
 
 
 
@@ -48,10 +47,3 @@
 > 현재까지 확인된 nginx가 제대로 실행되지 않는 경우는 크게 다음과 같음
 > 1. 유효하지 않은 twitch/youtbe 키 값 및 추가적인 rtmp 서버/키 값이 입력된 경우
 > 2. Windows Defender 외의 서드파티 백신을 사용 할 경우
-
-***
-   
-> ### 프로그램 종료시 주의사항
-> ![1](https://user-images.githubusercontent.com/38521736/76392622-45d46800-63b5-11ea-9ef1-17d397143882.png)
-> 1. 프로그램을 종료하기전에 nginx.exe가 실행되고 있는 상태라면, 반드시 우측 하단의 붉은색의 'nginx 정지' 버튼을 누른 뒤
-> 2. 우측 상단의 닫기버튼을 클릭해 닫을 것을 권장함(램 누수 문제가 있음)
