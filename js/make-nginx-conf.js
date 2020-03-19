@@ -47,7 +47,7 @@ async function makeNginxConfigFile(twitch, youtube, additionalRTMP) {
         this.additionalRTMP = "push " + additionalRTMP.trim() + ";";
     }
     
-    var config = "worker_processes 1;\n"
+    var config = "worker_processes auto;\n"
                + "\n"
                + "error_log logs/error.log debug;\n"
                + "\n"
