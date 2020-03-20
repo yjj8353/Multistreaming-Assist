@@ -1,6 +1,6 @@
 {
     "name": "multistreaming-assist",
-    "version": "0.0.2",
+    "version": "0.1.1",
     "description": "Multi Streaming Assistant Tool",
     "main": "main.js",
     "scripts": {
