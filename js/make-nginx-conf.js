@@ -12,20 +12,22 @@ async function makeNginxConfigFile(twitch, youtube, additionalRTMP) {
     console.log(result);
     
     if(!(result.twitch && result.youtube)) {
-        var message = [];
-        if(!result.twitch) {
-            message.push("Twitch RTMP Key가 ");
-        }
         if(!result.youtube) {
-            message.push("Youtube RTMP Key가 ");
+            document.getElementById('youtube-warning').innerHTML = "주의: youtube 키 값에 문제가 있는 것 같습니다";
+            document.getElementById('youtube').focus();
         }
-        message.push("올바르지 않습니다");
-        message.join();
-
-        alert(message);
-        return;
+        if(!result.twitch) {
+            document.getElementById('twitch-warning').innerHTML = "주의: twitch 키 값에 문제가 있는 것 같습니다";
+            document.getElementById('twitch').focus();
+        }
+        document.getElementById('nginx-make-alert').setAttribute('class', 'error text-danger');
+        document.getElementById('nginx-make-alert').innerHTML = "nginx.conf 생성 실패!";
+    } else {
+        createFile(twitch, youtube, additionalRTMP);
     }
+}
 
+function createFile(twitch, youtube, additionalRTMP) {
     // twitch 키 확인
     if(twitch == "") {
         var fullTwitch = "";
@@ -74,6 +76,7 @@ async function makeNginxConfigFile(twitch, youtube, additionalRTMP) {
 
     fs.writeFile('./nginx/conf/nginx.conf', config, function (err) {
         if (err) throw err;
-        alert('nginx.conf 파일 생성 완료');
+        document.getElementById('nginx-make-alert').setAttribute('class', 'text-success');
+        document.getElementById('nginx-make-alert').innerHTML = "nginx.conf 생성 완료!";
     });
-} 
+}

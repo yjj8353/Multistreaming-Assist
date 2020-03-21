@@ -4,8 +4,8 @@ const {execFileSync}                = require('child_process');
 // 메인 화면 생성 및 설정
 function createWindow() {
     const mainWindow = new BrowserWindow({
-        width: 500,
-        height: 400,
+        width: 520,
+        height: 450,
         webPreferences: {
             nodeIntegration: true
         }

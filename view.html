@@ -8,17 +8,22 @@
 </head>
 <body>
     <div class="container">
-        <div class="form-group">
-            <label>Twitch RTMP 키:</label>
+        <div id="all-form" class="form-group">
+            <label>Twitch RTMP 키:</label> <span style="font-weight:bold" id="twitch-warning" class="error text-danger"></span>
             <input type="password" id="twitch" class="form-control" placeholder="트위치 스트리밍 키" />
-            <label>Youtube RTMP 키:</label>
+        <br />
+            <label>Youtube RTMP 키:</label> <span style="font-weight:bold" id="youtube-warning" class="error text-danger"></span>
             <input type="password" id="youtube" class="form-control" placeholder="유튜브 스트리밍 키" />
+        <br />
             <label>추가적인 RTMP 서버/키:</label>
             <input type="text" id="additionalRTMPUrl" class="form-control" placeholder="추가적인 RTMP 서버 주소" />
             <input type="password" id="additionalRTMPKey" class="form-control" placeholder="추가적인 RTMP 서버 키" />
         </div>
         <input type="button" class="btn btn-secondary" id="generate_button" value="nginx.conf 생성" style="float:left"/>
         <input type="button" class="btn btn-primary" id="switch_button" value="nginx 서버 시작" style="float:right"/>
+        <br />
+        <br />
+        <span style="font-weight:bold" id="nginx-make-alert" class="text-success"></span>
     </div>
 <script src="./js/check-key.js"></script>
 <script src="./js/nginx-switch.js"></script>
