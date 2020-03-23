@@ -51,7 +51,7 @@ function createFile(twitch, youtube, additionalRTMP) {
     
     var config = "worker_processes auto;\n"
                + "\n"
-               + "error_log logs/error.log debug;\n"
+               + "error_log logs/error.log error;\n"
                + "\n"
                + "events {\n"
                + "    worker_connections 1024;\n"
