@@ -12,6 +12,6 @@ const fs                       = require('fs');
 
 // 사용자 모듈
 const {checkKey, checkTwitchKeyPattern, checkYoutubeKeyPattern} = require('./js/check-key.js');
-const {findFirstSlash, findLastSlash} = require('./js/find-slash.js');
-const {makeNginxConfigFile} = require('./js/make-nginx-conf.js');
-const {on, off} = require('./js/nginx-switch.js');
+const {findFirstSlash, findLastSlash}                           = require('./js/find-slash.js');
+const {makeNginxConfigFile}                                     = require('./js/make-nginx-conf.js');
+const {on, off}                                                 = require('./js/nginx-switch.js');
