@@ -1,5 +1,5 @@
 // url 마지막에 슬래시(/)가 있는 경우 잘라냄
-function findLastSlash(url) {
+exports.findLastSlash = function(url) {
     let re = new RegExp('/$');
     
     let find = re.exec(url.trim());
@@ -11,7 +11,7 @@ function findLastSlash(url) {
 }
 
 // url 시작부분에 슬래시(/)가 있는 경우 잘라냄
-function findFirstSlash(url) {
+exports.findFirstSlash = function(url) {
     let re = new RegExp('^/');
     
     let find = re.exec(url.trim());

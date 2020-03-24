@@ -1,6 +1,4 @@
-const fs = require('fs');
-
-async function makeNginxConfigFile(twitch, youtube, additionalRTMP) {
+exports.makeNginxConfigFile = async function(twitch, youtube, additionalRTMP) {
     var additionalRTMP;
 
     var key = {

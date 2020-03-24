@@ -25,16 +25,9 @@
         <br />
         <span style="font-weight:bold" id="nginx-make-alert" class="text-success"></span>
     </div>
-<script src="./js/check-key.js"></script>
-<script src="./js/nginx-switch.js"></script>
-<script src="./js/make-nginx-conf.js"></script>
-<script src="./js/find-slash.js"></script>
+<script src="./js/load-module.js"></script>
+<script src="./js/load-const-value.js"></script>
 <script type="text/javascript">
-window.$ = window.jquery = require('jquery');
-window.popper            = require('popper.js');
-                           require('bootstrap');
-const {ipcRenderer}      = require('electron');
-
 window.onload = function() {    
     document.getElementById('generate_button').onclick = function() {
         var twitchKey      = findFirstSlash(document.getElementById('twitch').value);

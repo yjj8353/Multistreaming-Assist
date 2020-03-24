@@ -1,9 +1,5 @@
-const {execFile, execFileSync} = require('child_process');
-
-const dir = __dirname.replace("\\resources\\app.asar", "");
-
 // nginx.exe 실행
-function on() {
+exports.on = function() {
     // nginx.exe를 실행하고, 에러가 있을경우 에러 정보를 리턴하고 nginx.exe 시작 전 상태로 돌아감
     execFile('./nginx.exe', {cwd: dir + "\\nginx"}, (error, stdout, stderr) => {
         if(error) {
@@ -22,7 +18,7 @@ function on() {
 }
 
 // nginx.exe 중단
-function off() {
+exports.off = function () {
     //nginx.exe를 종료하고, 에러가 있을경우 nginx.exe 시작 전 상태로 돌아감
     execFileSync('./nginx.exe', ['-s', 'stop'], {cwd: dir + "\\nginx"}, (error, stdout, stderr) => {
         if(error) {
