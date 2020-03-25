@@ -26,19 +26,9 @@ exports.makeNginxConfigFile = async function(twitch, youtube, additionalRTMP) {
 }
 
 function createFile(twitch, youtube, additionalRTMP) {
-    // twitch 키 확인
-    if(twitch == "") {
-        var fullTwitch = "";
-    } else {
-        var fullTwitch = "push rtmp://live-sel.twitch.tv/app/" + twitch.trim() + ";";
-    }
-
-    // youtube 키 확인
-    if(youtube == "") {
-        var fullYoutube = "";
-    } else {
-        var fullYoutube = "push rtmp://a.rtmp.youtube.com/live2/" + youtube.trim() + ";";
-    }
+    // 입력받은 twitch/youtube key값이 공백이면 "" 대입, 값이 있으면 전체주소로 대입
+    const fullTwitch  = twitch ? "push rtmp://live-sel.twitch.tv/app/" + twitch.trim() + ";" : "";
+    const fullYoutube = youtube ? "push rtmp://a.rtmp.youtube.com/live2/" + youtube.trim() + ";" : "";
 
     // 추가 RTMP 서버 및 키 확인
     if(additionalRTMP == "/") {

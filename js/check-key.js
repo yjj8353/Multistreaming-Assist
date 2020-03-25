@@ -1,17 +1,8 @@
 exports.checkKey = function(key) {
     console.log('checkKey 시작');
     return new Promise(async function(resolve, result) {
-        if(key.twitch == "") {
-            var twitchResult = true
-        } else {
-            var twitchResult = await checkTwitchKeyPattern(key.twitch)
-        }
-
-        if(key.youtube == "") {
-            var youtubeResult = true
-        } else {
-            var youtubeResult = await checkYoutubeKeyPattern(key.youtube)
-        }
+        var twitchResult  = key.twitch ? await checkTwitchKeyPattern(key.twitch) : true;
+        var youtubeResult = key.youtube ? await checkYoutubeKeyPattern(key.youtube) : true; 
 
         const checkResult = {
             twitch: twitchResult,
