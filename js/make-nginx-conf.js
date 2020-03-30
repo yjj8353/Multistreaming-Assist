@@ -10,22 +10,32 @@ exports.makeNginxConfigFile = async function(twitch, youtube, additionalRTMP) {
     console.log(result);
     
     if(!(result.twitch && result.youtube)) {
-        if(!result.youtube) {
-            document.getElementById('youtube-warning').innerHTML = "주의: youtube 키 값에 문제가 있는 것 같습니다";
-            document.getElementById('youtube').focus();
-        }
-        if(!result.twitch) {
-            document.getElementById('twitch-warning').innerHTML = "주의: twitch 키 값에 문제가 있는 것 같습니다";
-            document.getElementById('twitch').focus();
-        }
-        document.getElementById('nginx-make-alert').setAttribute('class', 'error text-danger');
-        document.getElementById('nginx-make-alert').innerHTML = "nginx.conf 생성 실패!";
+        checkFail(result);
     } else {
         createFile(twitch, youtube, additionalRTMP);
     }
 }
 
+function checkFail(result) {
+    document.getElementById('twitch-warning').innerHTML = "";
+    document.getElementById('youtube-warning').innerHTML = "";
+
+    if(!result.youtube) {
+        document.getElementById('youtube-warning').innerHTML = " 주의! youtube 키 값에 문제가 있는 것 같습니다";
+        document.getElementById('youtube').focus();
+    }
+    if(!result.twitch) {
+        document.getElementById('twitch-warning').innerHTML = " 주의! twitch 키 값에 문제가 있는 것 같습니다";
+        document.getElementById('twitch').focus();
+    }
+    document.getElementById('nginx-make-alert').setAttribute('class', 'error text-danger');
+    document.getElementById('nginx-make-alert').innerHTML = "nginx.conf 생성 실패!";
+}
+
 function createFile(twitch, youtube, additionalRTMP) {
+    document.getElementById('twitch-warning').innerHTML = "";
+    document.getElementById('youtube-warning').innerHTML = "";
+    
     // 입력받은 twitch/youtube key값이 공백이면 "" 대입, 값이 있으면 전체주소로 대입
     const fullTwitch  = twitch ? "push rtmp://live-sel.twitch.tv/app/" + twitch.trim() + ";" : "";
     const fullYoutube = youtube ? "push rtmp://a.rtmp.youtube.com/live2/" + youtube.trim() + ";" : "";
@@ -62,8 +72,11 @@ function createFile(twitch, youtube, additionalRTMP) {
                + "}\n"
                + "\n"
 
-    fs.writeFile('./nginx/conf/nginx.conf', config, function (err) {
-        if (err) throw err;
+    fs.writeFile('./nginx/conf/nginx.conf', config, function (error) {
+        if (error) {
+            document.getElementById('nginx-make-alert').setAttribute('class', 'text-danger');
+            document.getElementById('nginx-make-alert').innerHTML = "nginx.conf 생성 실패! 생성 버튼을 다시 클릭해 주세요!";
+        }
         document.getElementById('nginx-make-alert').setAttribute('class', 'text-success');
         document.getElementById('nginx-make-alert').innerHTML = "nginx.conf 생성 완료!";
     });

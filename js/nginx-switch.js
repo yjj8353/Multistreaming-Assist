@@ -17,6 +17,7 @@ exports.on = function() {
 
             document.getElementById('switch_button').setAttribute('value', 'nginx 서버 시작');
             document.getElementById('switch_button').setAttribute('class', 'btn btn-primary');
+            // main.js에 현재 niginx.exe가 off 되었다는 신호를 보냄
             ipcRenderer.send('asynchronous-message', 'false');
         }
     });
