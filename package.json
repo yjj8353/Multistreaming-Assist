@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "bootstrap": "^4.4.1",
+        "custom-electron-titlebar": "^3.2.2-hotfix62",
         "electron-log": "^4.0.7",
         "electron-packager": "^14.2.1",
         "jquery": "^3.4.1",

@@ -4,7 +4,8 @@ window.popper            = require('popper.js');
                            require('bootstrap');
 
 // 일렉트론 관련
-const {ipcRenderer} = require('electron');
+const {ipcRenderer, Menu, MenuItem} = require('electron');
+const {Titlebar, Color}              = require('custom-electron-titlebar');
 
 // 시스템 관련
 const {execFile, execFileSync} = require('child_process');
@@ -15,3 +16,4 @@ const {checkKey, checkTwitchKeyPattern, checkYoutubeKeyPattern} = require('./js/
 const {findFirstSlash, findLastSlash}                           = require('./js/find-slash.js');
 const {makeNginxConfigFile}                                     = require('./js/make-nginx-conf.js');
 const {on, off}                                                 = require('./js/nginx-switch.js');
+                                                                  require('./js/menu-bar.js')

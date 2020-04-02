@@ -1,11 +1,12 @@
-const {app, BrowserWindow, ipcMain, dialog, Menu} = require('electron');
-const {execFileSync}                              = require('child_process');
+const {app, BrowserWindow, ipcMain, dialog} = require('electron');
+const {execFileSync}                        = require('child_process');
 
 // 메인 화면 생성 및 설정
 function createWindow() {
     const mainWindow = new BrowserWindow({
         width: 520,
         height: 450,
+        frame: false,
         webPreferences: {
             nodeIntegration: true
         }
@@ -24,7 +25,7 @@ function createWindow() {
 
     // 메인 화면으로 사용할 화면 로드
     mainWindow.loadFile('view.html');
-    
+
     // 상단 메뉴 활성화 여부
     mainWindow.setMenuBarVisibility(false);
 
@@ -32,7 +33,8 @@ function createWindow() {
     mainWindow.on('close', (event) => {
         if(switchStatus === "true") {
             let response = dialog.showMessageBoxSync({
-                type: 'info',
+                title: '잠깐만요!',
+                type: 'warning',
                 buttons: ['네', '아니오'],
                 message: '아직 nginx가 켜져있는거 같습니다만... 정말로 종료할까요?'
             });
@@ -49,6 +51,8 @@ function createWindow() {
         }
     });
 }
+
+require('./js/custom-menu.js');
 
 // app이 준비 되었을때 발생하는 이벤트
 app.on('ready', createWindow);
