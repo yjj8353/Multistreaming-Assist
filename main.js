@@ -1,5 +1,5 @@
-const {app, BrowserWindow, ipcMain, dialog} = require('electron');
-const {execFileSync}                = require('child_process');
+const {app, BrowserWindow, ipcMain, dialog, Menu} = require('electron');
+const {execFileSync}                              = require('child_process');
 
 // 메인 화면 생성 및 설정
 function createWindow() {
@@ -10,6 +10,9 @@ function createWindow() {
             nodeIntegration: true
         }
     });
+
+    // 개발자용 도구 활성화
+    //mainWindow.webContents.openDevTools();
 
     // nginx.exe가 현재 실행되고 있는지 여부
     var switchStatus = "false";
@@ -22,9 +25,6 @@ function createWindow() {
     // 메인 화면으로 사용할 화면 로드
     mainWindow.loadFile('view.html');
     
-    // 개발자용 도구 활성화
-    //mainWindow.webContents.openDevTools();
-
     // 상단 메뉴 활성화 여부
     mainWindow.setMenuBarVisibility(false);
 
@@ -37,12 +37,13 @@ function createWindow() {
                 message: '아직 nginx가 켜져있는거 같습니다만... 정말로 종료할까요?'
             });
 
-            if(response == 0) {
+            // '네'
+            if(response === 0) {
                 var dir = __dirname.replace("\\resources\\app.asar", "");
                 execFileSync('./nginx.exe', ['-s', 'stop'], {cwd: dir + "\\nginx"});
             }
-    
-            if(response == 1) {
+            // '아니오'
+            if(response === 1) {
                 event.preventDefault();
             }
         }
