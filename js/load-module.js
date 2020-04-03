@@ -16,4 +16,4 @@ const {checkKey, checkTwitchKeyPattern, checkYoutubeKeyPattern} = require('./js/
 const {findFirstSlash, findLastSlash}                           = require('./js/find-slash.js');
 const {makeNginxConfigFile}                                     = require('./js/make-nginx-conf.js');
 const {on, off}                                                 = require('./js/nginx-switch.js');
-                                                                  require('./js/menu-bar.js')
+                                                                  require('./js/titlebar-settings.js')

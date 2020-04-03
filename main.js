@@ -12,6 +12,9 @@ function createWindow() {
         }
     });
 
+    // 사용자가 커스텀한 메뉴바 설정을 불러옴
+    require('./js/titlebar-menu-custom.js');
+
     // 개발자용 도구 활성화
     //mainWindow.webContents.openDevTools();
 
@@ -51,8 +54,6 @@ function createWindow() {
         }
     });
 }
-
-require('./js/custom-menu.js');
 
 // app이 준비 되었을때 발생하는 이벤트
 app.on('ready', createWindow);
