@@ -5,7 +5,7 @@ window.popper            = require('popper.js');
 
 // 일렉트론 관련
 const {ipcRenderer, Menu, MenuItem} = require('electron');
-const {Titlebar, Color}              = require('custom-electron-titlebar');
+const {Titlebar, Color}             = require('custom-electron-titlebar');
 
 // 시스템 관련
 const {execFile, execFileSync} = require('child_process');
