@@ -10,9 +10,11 @@ exports.on = function() {
         if(error) {
             let re = new RegExp('nginx.conf');
             if(re.exec(error)) {
-                alert('nginx.conf 파일에 문제가 있는것 같습니다');
+                document.getElementById('nginx-make-alert').setAttribute('class', 'error text-danger');
+                document.getElementById('nginx-make-alert').innerHTML = "nginx.conf 파일에 문제가 있는 것 같습니다!";
             } else {
-                alert('원인을 알 수 없는 오류가 생겼습니다.');
+                document.getElementById('nginx-make-alert').setAttribute('class', 'error text-danger');
+                document.getElementById('nginx-make-alert').innerHTML = "원인을 알 수 없는 오류가 생겼습니다!";
             }
 
             document.getElementById('switch_button').setAttribute('value', 'nginx 서버 시작');
