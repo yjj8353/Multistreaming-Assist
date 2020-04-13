@@ -102,11 +102,11 @@ export default {
     },
 
     how2Use () {
-      shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/master/README.md')
+      shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/quasar/README.md')
     },
 
     contributors () {
-      shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/master/%EA%B8%B0%EC%97%AC%EC%9E%90%EB%AA%A9%EB%A1%9D.md')
+      shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/quasar/%EA%B8%B0%EC%97%AC%EC%9E%90%EB%AA%A9%EB%A1%9D.md')
     }
   }
 }
