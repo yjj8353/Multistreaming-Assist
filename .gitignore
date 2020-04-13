@@ -1,5 +1,6 @@
 # nginx ignore
 src/pages/nginx
+src/store/nginx
 
 .DS_Store
 .thumbs.db

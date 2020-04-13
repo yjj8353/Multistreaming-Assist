@@ -67,8 +67,12 @@
         </div>
       </div>
       <div v-else>
-        <p>경로에 한글이 포함되어 있는 것 같습니다</p>
-        <p>한글이 포함되어 있으면 Nginx가 실행되지 않습니다</p>
+        <q-card class="my-card">
+          <q-card-section>
+            <span>경로에 한글이 포함되어 있는 것 같습니다</span><br />
+            <span>한글이 포함되어 있으면 Nginx가 실행되지 않습니다</span>
+          </q-card-section>
+        </q-card>
       </div>
 
     </q-page>
@@ -84,6 +88,11 @@ import { checkKey, makeNginxConfFile } from '../function/functions'
 
 export default {
   name: 'PageIndex',
+  mounted() {
+    window.addEventListener('load', () => {
+      this.getSaveKey()
+    })
+  },
   data () {
     return {
       twitchKey: '',
@@ -96,6 +105,16 @@ export default {
     }
   },
   methods: {
+    getSaveKey () {
+      const conf = fs.readFileSync(path.join(this.$store.state.dir, '\\nginx\\conf\\rtmp.json'), 'utf-8')
+      const keys = JSON.parse(conf)
+
+      this.twitchKey = keys.twitch
+      this.youtubeKey = keys.youtube
+      this.additionalRTMPUrl = keys.rtmpUrl
+      this.additionalRTMPKey = keys.rtmpKey
+    },
+
     async makeNginxConf () {
       let keys = {
         twitch: this.twitchKey.trim(),
@@ -108,6 +127,8 @@ export default {
         if (!results.twitch) { this.notify('negative', 'TWITCH KEY 값에 문제가 있습니다') }
         if (!results.youtube) { this.notify('negative', 'YOUTUBE KEY 값에 문제가 있습니다') }
       } else {
+        this.makeRTMPJson()
+
         const fullTwitch = this.twitchKey.trim() ? 'push rtmp://live-sel.twitch.tv/app/' + this.twitchKey.trim() + ';' : ''
         const fullYoutube = this.youtubeKey.trim() ? 'push rtmp://a.rtmp.youtube.com/live2/' + this.youtubeKey.trim() + ';' : ''
         let   fullAdditionalRTMP = 'push ' + this.additionalRTMPUrl.trim() + '/' + this.additionalRTMPKey.trim() + ';'
@@ -117,15 +138,34 @@ export default {
         }
 
         const config = makeNginxConfFile(fullTwitch, fullYoutube, fullAdditionalRTMP)
-        let error = true
+        const self = this
+
         fs.writeFile(path.join(this.$store.state.dir, '\\nginx\\conf\\nginx.conf'), config, function (err) {
           if (err) {
-            this.notify('negative', 'nginx.conf 파일생성에 실패했습니다')
+            self.notify('negative', 'nginx.conf 파일생성에 실패했습니다')
+          } else {
+            self.notify('positive', 'nginx.conf 파일생성 성공!')
           }
-        })
-
-        this.notify('positive', 'nginx.conf 파일생성 성공!')
+        })      
       }
+    },
+
+    makeRTMPJson () {
+      const rtmpJSON = '{\n' +
+                        '    "twitch":' + '"' + this.twitchKey + '",\n' +
+                        '    "youtube":' + '"' + this.youtubeKey + '",\n' +
+                        '    "rtmpUrl":' + '"' + this.additionalRTMPUrl + '",\n' +
+                        '    "rtmpKey":' + '"' + this.additionalRTMPKey + '"\n' +
+                        '}'
+      const self = this
+
+      fs.writeFile(path.join(this.$store.state.dir, '\\nginx\\conf\\rtmp.json'), rtmpJSON, function (err) {
+        if (err)  {
+          self.notify('negative', 'rtmp.json 파일 생성에 실패했습니다')
+        } else {
+          self.notify('positive', 'rtmp.json 파일 생성 성공!')
+        }
+      })
     },
 
     nginxSwitch () {
