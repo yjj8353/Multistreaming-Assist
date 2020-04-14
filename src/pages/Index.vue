@@ -169,17 +169,21 @@ export default {
     },
 
     nginxSwitch () {
+      const self = this
+
       if (this.$store.state.nginxStatus === false) {
-        execFile('./nginx.exe', { cwd: path.join(this.$store.state.dir, '\\nginx') }, (error, stdout, stderr) => {
-          if (error) {
-            this.notify('negative', 'nginx 실행에 실패했습니다')
-          } else {
-            this.$store.commit('setNginxStatus', true)
+        this.$store.commit('setNginxStatus', true)
+
+        execFile('./nginx.exe', { cwd: path.join(this.$store.state.dir, '\\nginx') }, (err, stdout, stderr) => {
+          if (err) {
+            self.notify('negative', 'nginx 실행에 실패했습니다')
+            self.$store.commit('setNginxStatus', false)
           }
         })
+
       } else if (this.$store.state.nginxStatus === true) {
-        execFileSync('./nginx.exe', ['-s', 'stop'], { cwd: path.join(this.$store.state.dir, '\\nginx') }, (error, stdout, stderr) => {
-          if (error) throw error
+        execFileSync('./nginx.exe', ['-s', 'stop'], { cwd: path.join(this.$store.state.dir, '\\nginx') }, (err, stdout, stderr) => {
+          if (err) throw err
         })
         this.$store.commit('setNginxStatus', false)
       }
