@@ -138,15 +138,14 @@ export default {
         }
 
         const config = makeNginxConfFile(fullTwitch, fullYoutube, fullAdditionalRTMP)
-        const self = this
 
-        fs.writeFile(path.join(this.$store.state.dir, '\\nginx\\conf\\nginx.conf'), config, function (err) {
+        fs.writeFile(path.join(this.$store.state.dir, '\\nginx\\conf\\nginx.conf'), config, (err) => {
           if (err) {
-            self.notify('negative', 'nginx.conf 파일생성에 실패했습니다')
+            this.notify('negative', 'nginx.conf 파일생성에 실패했습니다')
           } else {
-            self.notify('positive', 'nginx.conf 파일생성 성공!')
+            this.notify('positive', 'nginx.conf 파일생성 성공!')
           }
-        })      
+        })
       }
     },
 
@@ -157,27 +156,24 @@ export default {
                         '    "rtmpUrl":' + '"' + this.additionalRTMPUrl + '",\n' +
                         '    "rtmpKey":' + '"' + this.additionalRTMPKey + '"\n' +
                         '}'
-      const self = this
 
-      fs.writeFile(path.join(this.$store.state.dir, '\\nginx\\conf\\rtmp.json'), rtmpJSON, function (err) {
+      fs.writeFile(path.join(this.$store.state.dir, '\\nginx\\conf\\rtmp.json'), rtmpJSON, (err) => {
         if (err)  {
-          self.notify('negative', 'rtmp.json 파일 생성에 실패했습니다')
+          this.notify('negative', 'rtmp.json 파일 생성에 실패했습니다')
         } else {
-          self.notify('positive', 'rtmp.json 파일 생성 성공!')
+          this.notify('positive', 'rtmp.json 파일 생성 성공!')
         }
       })
     },
 
     nginxSwitch () {
-      const self = this
-
       if (this.$store.state.nginxStatus === false) {
         this.$store.commit('setNginxStatus', true)
 
         execFile('./nginx.exe', { cwd: path.join(this.$store.state.dir, '\\nginx') }, (err, stdout, stderr) => {
           if (err) {
-            self.notify('negative', 'nginx 실행에 실패했습니다')
-            self.$store.commit('setNginxStatus', false)
+            this.notify('negative', 'nginx 실행에 실패했습니다')
+            this.$store.commit('setNginxStatus', false)
           }
         })
 
