@@ -1,6 +1,7 @@
 <template>
   <q-page-container>
     <q-page class="q-pa-md" style="background-color: white;">
+      <!-- 경로에 한글이 포함되어 있지 않을 경우 실행 -->
       <div v-if="checkPath()">
         <div class="row">
           <div class="col">
@@ -66,6 +67,8 @@
           </div>
         </div>
       </div>
+
+      <!-- 경로에 한글이 포함되어 있을 경우 실행 -->
       <div v-else>
         <q-card class="my-card">
           <q-card-section>
