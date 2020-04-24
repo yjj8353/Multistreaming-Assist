@@ -4,8 +4,8 @@
       <!-- 경로에 한글이 포함되어 있지 않을 경우 실행 -->
       <div v-if="checkPath()">
         <div class="row">
-          <div class="col">
-            <q-input label="TWITCH RTMP KEY" v-model="twitchKey" :type="twitchIsPwd ? 'password' : 'text'">
+          <div class="col-11">
+            <q-input label="TWITCH RTMP KEY" v-model="twitchKey" :type="twitchIsPwd ? 'password' : 'text'" @input="checTwitchKeykNull">
               <template v-slot:append>
                 <q-icon
                   :name="twitchIsPwd ? 'visibility_off' : 'visibility'"
@@ -15,12 +15,15 @@
               </template>
             </q-input>
           </div>
+          <div class="col-1" style="display: flex; align-items: center; justify-content: center;">
+            <q-toggle v-model="twitchOn" :disable="!twitchKey" size="md" />
+          </div>
         </div>
 
         <p></p>
 
         <div class="row">
-          <div class="col">
+          <div class="col-11">
             <q-input label="YOUTUBE RTMP KEY" v-model="youtubeKey" :type="youtubeIsPwd ? 'password' : 'text'">
               <template v-slot:append>
                 <q-icon
@@ -30,6 +33,9 @@
                 />
               </template>
             </q-input>
+          </div>
+          <div class="col-1" style="display: flex; align-items: center; justify-content: center;">
+            <q-toggle v-model="youtubeOn" :disable="!youtubeKey" size="md" />
           </div>
         </div>
 
@@ -44,7 +50,7 @@
           </div>
 
           <div class="q-pl-md col">
-            <q-input label="추가적인 RTMP KEY" v-model="additionalRTMPKey" :type="youtubeIsPwd ? 'password' : 'text'">
+            <q-input label="추가적인 RTMP KEY" v-model="additionalRTMPKey" :type="additionalIsPwd ? 'password' : 'text'">
               <template v-slot:append>
                 <q-icon
                   :name="additionalIsPwd ? 'visibility_off' : 'visibility'"
@@ -54,13 +60,16 @@
               </template>
             </q-input>
           </div>
+          <div class="col-1" style="display: flex; align-items: center; justify-content: center;">
+            <q-toggle v-model="additionalOn" :disable="!additionalRTMPUrl || !additionalRTMPKey" size="md" />
+          </div>
         </div>
 
         <p></p>
 
         <div class="row">
           <div class="q-pr-md col">
-            <q-btn size="lg" color="grey" label="nginx.conf 생성" @click="makeNginxConf"/>
+            <q-btn size="lg" color="grey" label="nginx.conf 생성" />
           </div>
           <div class="q-pl-md col">
             <q-btn size="lg" class="float-right" :color="$store.state.nginxStatus ? 'red' : 'primary'" :label="$store.state.nginxStatus ? 'nginx 종료' : 'nginx 시작'" @click="nginxSwitch" />
@@ -94,6 +103,7 @@ export default {
   mounted() {
     window.addEventListener('load', () => {
       this.getSaveKey()
+      this.turnOnSwitch()
     })
   },
   data () {
@@ -102,9 +112,14 @@ export default {
       youtubeKey: '',
       additionalRTMPUrl: '',
       additionalRTMPKey: '',
+
       twitchIsPwd: true,
       youtubeIsPwd: true,
-      additionalIsPwd: true
+      additionalIsPwd: true,
+
+      twitchOn: false,
+      youtubeOn: false,
+      additionalOn: false,
     }
   },
   methods: {
@@ -116,6 +131,26 @@ export default {
       this.youtubeKey = keys.youtube
       this.additionalRTMPUrl = keys.rtmpUrl
       this.additionalRTMPKey = keys.rtmpKey
+    },
+
+    turnOnSwitch () {
+      if (this.twitchKey) {
+        this.twitchOn = true
+      }
+
+      if (this.youtubeKey) {
+        this.youtubeOn = true
+      }
+
+      if (this.additionalRTMPUrl && this.additionalRTMPKey) {
+        this.additionalOn = true
+      }
+    },
+
+    checTwitchKeykNull (value) {
+      if (!value) {
+        this.twitchOn = !this.twitchOn
+      }
     },
 
     async makeNginxConf () {
