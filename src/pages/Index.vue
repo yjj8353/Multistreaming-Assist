@@ -69,7 +69,7 @@
 
         <div class="row">
           <div class="q-pr-md col">
-            <q-btn size="lg" color="grey" label="nginx.conf 생성" />
+            <q-btn size="lg" color="grey" label="nginx.conf 생성" @click="makeNginxConf" />
           </div>
           <div class="q-pl-md col">
             <q-btn size="lg" class="float-right" :color="$store.state.nginxStatus ? 'red' : 'primary'" :label="$store.state.nginxStatus ? 'nginx 종료' : 'nginx 시작'" @click="nginxSwitch" />
@@ -95,6 +95,8 @@
 import { execFile, execFileSync } from 'child_process'
 import path from 'path'
 import fs from 'fs'
+
+import log from 'electron-log'
 
 import { checkKey, makeNginxConfFile } from '../function/functions'
 
@@ -124,6 +126,9 @@ export default {
   },
   methods: {
     getSaveKey () {
+      log.debug('getSaveKey 함수 진입')
+      log.debug('rtmp.json을 분석합니다')
+
       const conf = fs.readFileSync(path.join(this.$store.state.dir, '\\nginx\\conf\\rtmp.json'), 'utf-8')
       const keys = JSON.parse(conf)
 
@@ -134,16 +139,20 @@ export default {
     },
 
     turnOnSwitch () {
+      log.debug('turnOnSwitch 함수 진입')
       if (this.twitchKey) {
         this.twitchOn = true
+        log.debug('Twitch Key 값이 존재하므로 ON 합니다')
       }
 
       if (this.youtubeKey) {
         this.youtubeOn = true
+        log.debug('Youtube Key 값이 존재하므로 ON 합니다')
       }
 
       if (this.additionalRTMPUrl && this.additionalRTMPKey) {
         this.additionalOn = true
+        log.debug('추가적인 Key 값이 존재하므로 ON 합니다')
       }
     },
 
@@ -154,6 +163,8 @@ export default {
     },
 
     async makeNginxConf () {
+      log.debug('makeNginxConf 함수 진입')
+
       let keys = {
         twitch: this.twitchKey.trim(),
         youtube: this.youtubeKey.trim()
@@ -180,14 +191,18 @@ export default {
         fs.writeFile(path.join(this.$store.state.dir, '\\nginx\\conf\\nginx.conf'), config, (err) => {
           if (err) {
             this.notify('negative', 'nginx.conf 파일생성에 실패했습니다')
+            log.error('nginx.conf 파일 생성 실패')
           } else {
             this.notify('positive', 'nginx.conf 파일생성 성공!')
+            log.debug('nginx.conf 파일 생성 성공')
           }
         })
       }
     },
 
     makeRTMPJson () {
+      log.debug('makeRTMPJson 함수 진입')
+
       const rtmpJSON = '{\n' +
                         '    "twitch":' + '"' + this.twitchKey + '",\n' +
                         '    "youtube":' + '"' + this.youtubeKey + '",\n' +
@@ -198,13 +213,17 @@ export default {
       fs.writeFile(path.join(this.$store.state.dir, '\\nginx\\conf\\rtmp.json'), rtmpJSON, (err) => {
         if (err)  {
           this.notify('negative', 'rtmp.json 파일 생성에 실패했습니다')
+          log.error('rtmp.json 파일 생성 실패')
         } else {
           this.notify('positive', 'rtmp.json 파일 생성 성공!')
+          log.debug('rtmp.json 파일 생성 성공')
         }
       })
     },
 
     nginxSwitch () {
+      log.debug('nginxSwitch 함수 진입')
+
       if (this.$store.state.nginxStatus === false) {
         this.$store.commit('setNginxStatus', true)
 
@@ -224,6 +243,14 @@ export default {
     },
 
     notify (type, message) {
+      log.debug('notify 함수 진입')
+      if (type === 'negative') {
+        log.error('NOTIFY [ type: ' + type + ' message: ' + message + ' ]')
+      }
+      if (type === 'positive') {
+        log.debug('NOTIFY [ type: ' + type + ' message: ' + message + ' ]')
+      }
+
       this.$q.notify({
         type: type,
         message: message
@@ -231,6 +258,8 @@ export default {
     },
 
     checkPath () {
+      log.debug('checkPath 함수 진입')
+
       const re = new RegExp('[ㄱ-ㅎ|ㅏ-ㅑ|가-힣]')
       return !(re.test(this.$store.state.dir))
     }
