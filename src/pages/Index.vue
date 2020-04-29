@@ -24,7 +24,7 @@
 
         <div class="row">
           <div class="col-11">
-            <q-input label="YOUTUBE RTMP KEY" v-model="youtubeKey" :type="youtubeIsPwd ? 'password' : 'text'">
+            <q-input label="YOUTUBE RTMP KEY" v-model="youtubeKey" :type="youtubeIsPwd ? 'password' : 'text'" @input="checYoutubeKeykNull">
               <template v-slot:append>
                 <q-icon
                   :name="youtubeIsPwd ? 'visibility_off' : 'visibility'"
@@ -43,14 +43,14 @@
 
         <div class="row">
           <div class="q-pr-md col">
-            <q-input label="추가적인 RTMP URL" v-model="additionalRTMPUrl" type="text">
+            <q-input label="추가적인 RTMP URL" v-model="additionalRTMPUrl" type="text" @input="checkAddtionalRTMPUrlOrKeyNull">
               <template v-slot:append>
               </template>
             </q-input>
           </div>
 
           <div class="q-pl-md col">
-            <q-input label="추가적인 RTMP KEY" v-model="additionalRTMPKey" :type="additionalIsPwd ? 'password' : 'text'">
+            <q-input label="추가적인 RTMP KEY" v-model="additionalRTMPKey" :type="additionalIsPwd ? 'password' : 'text'" @input="checkAddtionalRTMPUrlOrKeyNull">
               <template v-slot:append>
                 <q-icon
                   :name="additionalIsPwd ? 'visibility_off' : 'visibility'"
@@ -158,7 +158,19 @@ export default {
 
     checTwitchKeykNull (value) {
       if (!value) {
-        this.twitchOn = !this.twitchOn
+        this.twitchOn = false
+      }
+    },
+
+    checkYoutubeKeyNull (value) {
+      if (!value) {
+        this.youtubeOn = false
+      }
+    },
+
+    checkAddtionalRTMPUrlOrKeyNull (value) {
+      if (!value) {
+        this.additionalOn = false
       }
     },
 
