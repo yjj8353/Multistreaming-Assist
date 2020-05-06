@@ -24,7 +24,7 @@
 
         <div class="row">
           <div class="col-11">
-            <q-input label="YOUTUBE RTMP KEY" v-model="youtubeKey" :type="youtubeIsPwd ? 'password' : 'text'" @input="checYoutubeKeykNull">
+            <q-input label="YOUTUBE RTMP KEY" v-model="youtubeKey" :type="youtubeIsPwd ? 'password' : 'text'" @input="checkYoutubeKeyNull">
               <template v-slot:append>
                 <q-icon
                   :name="youtubeIsPwd ? 'visibility_off' : 'visibility'"
@@ -68,9 +68,9 @@
         <p></p>
 
         <div class="row">
-          <div class="q-pr-md col">
+          <!-- <div class="q-pr-md col">
             <q-btn size="lg" color="grey" label="nginx.conf 생성" @click="makeNginxConf" />
-          </div>
+          </div> -->
           <div class="q-pl-md col">
             <q-btn size="lg" class="float-right" :color="$store.state.nginxStatus ? 'red' : 'primary'" :label="$store.state.nginxStatus ? 'nginx 종료' : 'nginx 시작'" @click="nginxSwitch" />
           </div>
@@ -187,28 +187,38 @@ export default {
       if (!(results.twitch && results.youtube)) {
         if (!results.twitch) { this.notify('negative', 'TWITCH KEY 값에 문제가 있습니다') }
         if (!results.youtube) { this.notify('negative', 'YOUTUBE KEY 값에 문제가 있습니다') }
-      } else {
-        this.makeRTMPJson()
 
-        const fullTwitch = this.twitchKey.trim() ? 'push rtmp://live-sel.twitch.tv/app/' + this.twitchKey.trim() + ';' : ''
-        const fullYoutube = this.youtubeKey.trim() ? 'push rtmp://a.rtmp.youtube.com/live2/' + this.youtubeKey.trim() + ';' : ''
-        let   fullAdditionalRTMP = 'push ' + this.additionalRTMPUrl.trim() + '/' + this.additionalRTMPKey.trim() + ';'
+        return false
+
+      } else {
+        let fullTwitch = this.twitchKey.trim() ? 'push rtmp://live-sel.twitch.tv/app/' + this.twitchKey.trim() + ';' : ''
+        let fullYoutube = this.youtubeKey.trim() ? 'push rtmp://a.rtmp.youtube.com/live2/' + this.youtubeKey.trim() + ';' : ''
+        let fullAdditionalRTMP = 'push ' + this.additionalRTMPUrl.trim() + '/' + this.additionalRTMPKey.trim() + ';'
         
         if (fullAdditionalRTMP === 'push /;') {
           fullAdditionalRTMP = ''
         }
 
+        fullTwitch = this.twitchOn ? fullTwitch : ''
+        fullYoutube = this.youtubeOn ? fullYoutube : ''
+        fullAdditionalRTMP = this.additionalOn ? fullAdditionalRTMP : ''
+
         const config = makeNginxConfFile(fullTwitch, fullYoutube, fullAdditionalRTMP)
 
-        fs.writeFile(path.join(this.$store.state.dir, '\\nginx\\conf\\nginx.conf'), config, (err) => {
-          if (err) {
-            this.notify('negative', 'nginx.conf 파일생성에 실패했습니다')
-            log.error('nginx.conf 파일 생성 실패')
-          } else {
-            this.notify('positive', 'nginx.conf 파일생성 성공!')
-            log.debug('nginx.conf 파일 생성 성공')
-          }
-        })
+        try {
+          fs.writeFileSync(path.join(this.$store.state.dir, '\\nginx\\conf\\nginx.conf'), config)
+
+          this.notify('positive', 'nginx.conf 파일생성 성공!')
+          log.debug('nginx.conf 파일 생성 성공')
+
+          return true
+
+        } catch (e) {
+          this.notify('negative', 'nginx.conf 파일생성에 실패했습니다')
+          log.error('nginx.conf 파일 생성 실패')
+
+          return false
+        }
       }
     },
 
@@ -233,10 +243,16 @@ export default {
       })
     },
 
-    nginxSwitch () {
+    async nginxSwitch () {
       log.debug('nginxSwitch 함수 진입')
-
+      
       if (this.$store.state.nginxStatus === false) {
+        if (!(await this.makeNginxConf())) {
+          return
+        }
+
+        this.makeRTMPJson()
+
         this.$store.commit('setNginxStatus', true)
 
         execFile('./nginx.exe', { cwd: path.join(this.$store.state.dir, '\\nginx') }, (err, stdout, stderr) => {
