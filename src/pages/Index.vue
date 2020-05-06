@@ -16,7 +16,7 @@
             </q-input>
           </div>
           <div class="col-1" style="display: flex; align-items: center; justify-content: center;">
-            <q-toggle v-model="twitchOn" :disable="!twitchKey" size="md" />
+            <q-toggle v-model="twitchOn" :disable="!twitchKey" size="md" @input="toggleSwitch" />
           </div>
         </div>
 
@@ -35,7 +35,7 @@
             </q-input>
           </div>
           <div class="col-1" style="display: flex; align-items: center; justify-content: center;">
-            <q-toggle v-model="youtubeOn" :disable="!youtubeKey" size="md" />
+            <q-toggle v-model="youtubeOn" :disable="!youtubeKey" size="md" @input="toggleSwitch" />
           </div>
         </div>
 
@@ -61,18 +61,18 @@
             </q-input>
           </div>
           <div class="col-1" style="display: flex; align-items: center; justify-content: center;">
-            <q-toggle v-model="additionalOn" :disable="!additionalRTMPUrl || !additionalRTMPKey" size="md" />
+            <q-toggle v-model="additionalOn" :disable="!additionalRTMPUrl || !additionalRTMPKey" size="md" @input="toggleSwitch" />
           </div>
         </div>
 
         <p></p>
 
         <div class="row">
-          <!-- <div class="q-pr-md col">
-            <q-btn size="lg" color="grey" label="nginx.conf 생성" @click="makeNginxConf" />
-          </div> -->
+          <div v-show="toggleSwitchStatus && $store.state.nginxStatus" class="q-pr-md col">
+            <q-btn size="lg" color="grey" label="Nginx 재시작" @click="nginxReload" />
+          </div>
           <div class="q-pl-md col">
-            <q-btn size="lg" class="float-right" :color="$store.state.nginxStatus ? 'red' : 'primary'" :label="$store.state.nginxStatus ? 'nginx 종료' : 'nginx 시작'" @click="nginxSwitch" />
+            <q-btn size="lg" class="float-right" :color="$store.state.nginxStatus ? 'red' : 'primary'" :label="$store.state.nginxStatus ? 'Nginx 종료' : 'Nginx 시작'" @click="nginxSwitch" />
           </div>
         </div>
       </div>
@@ -122,6 +122,8 @@ export default {
       twitchOn: false,
       youtubeOn: false,
       additionalOn: false,
+
+      toggleSwitchStatus: false
     }
   },
   methods: {
@@ -290,6 +292,16 @@ export default {
 
       const re = new RegExp('[ㄱ-ㅎ|ㅏ-ㅑ|가-힣]')
       return !(re.test(this.$store.state.dir))
+    },
+
+    toggleSwitch () {
+      if (this.$store.state.nginxStatus) {
+        this.toggleSwitchStatus = true
+      }
+    },
+
+    nginxReload () {
+      this.toggleSwitchStatus = false
     }
   }
 }
