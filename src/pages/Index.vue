@@ -2,7 +2,7 @@
   <q-page-container>
     <q-page class="q-pa-md" style="background-color: white;">
       <!-- 경로에 한글이 포함되어 있지 않을 경우 실행 -->
-      <div v-if="checkPath()">
+      <div v-if="checkIncludeKoreanOnPath()">
         <div class="row">
           <div class="col-11">
             <q-input label="TWITCH RTMP KEY" v-model="twitchKey" :type="twitchIsPwd ? 'password' : 'text'" @input="checTwitchKeykNull">
@@ -287,7 +287,7 @@ export default {
       })
     },
 
-    checkPath () {
+    checkIncludeKoreanOnPath () {
       log.debug('checkPath 함수 진입')
 
       const re = new RegExp('[ㄱ-ㅎ|ㅏ-ㅑ|가-힣]')
@@ -300,7 +300,39 @@ export default {
       }
     },
 
-    nginxReload () {
+    async nginxReload () {
+      await this.makeNginxConf()
+      
+      execFileSync('./nginx.exe', ['-t'], { cwd: path.join(this.$store.state.dir, '\\nginx') }, (err, stdout, stderr) => {
+        if (err) {
+          this.notify('negative', 'nginx.conf 파일 테스트에 실패했습니다')
+          throw err
+        }
+
+        const re = new RegExp('nginx.conf syntax is ok')
+        console.log(re.test(stdout))
+        if (re.test(stdout)) {
+          console.log('테스트 통과')
+          execFileSync('./nginx.exe', ['-s', 'stop'], { cwd: path.join(this.$store.state.dir, '\\nginx') }, (err, stdout, stderr) => {
+            if (err) {
+              this.notify('negative', 'nginx 중지하지 못했습니다')
+              throw err
+            } else {
+              this.notify('positive', 'nginx 중지 완료')
+            }
+          })
+
+          execFile('./nginx.exe', { cwd: path.join(this.$store.state.dir, '\\nginx') }, (err, stdout, stderr) => {
+            if (err) {
+              this.notify('negative', 'nginx 실행에 실패했습니다')
+              this.$store.commit('setNginxStatus', false)
+            }
+          })
+        } else {
+          this.notify('negative', 'nginx.conf 파일에 문제가 있는 것 같습니다')
+        }
+      })
+      
       this.toggleSwitchStatus = false
     }
   }
