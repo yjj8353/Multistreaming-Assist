@@ -256,14 +256,13 @@ export default {
 
         this.makeRTMPJson()
 
-        this.$store.commit('setNginxStatus', true)
-
-        startNginx()
+        const err = startNginx(this.$store, path.join(this.$store.state.dir, '\\nginx'))
+        if (err) {
+          this.notify('negative', 'nginx 실행에 실패했습니다')
+        }
 
       } else if (this.$store.state.nginxStatus === true) {
-        execFileSync('./nginx.exe', ['-s', 'quit'], { cwd: path.join(this.$store.state.dir, '\\nginx') })
-
-        this.$store.commit('setNginxStatus', false)
+        const result = quitNginx(this.$store, path.join(this.$store.state.dir, '\\nginx'))
       }
     },
 
@@ -297,17 +296,18 @@ export default {
 
     async nginxReload () {
       await this.makeNginxConf()
+      
+      // result[0]: stdout, result[1]: stderr
+      const result = testNginx(path.join(this.$store.state.dir, '\\nginx'))
+      const re = new RegExp('syntax is ok');
 
-      execFileSync('./nginx.exe', ['-s', 'stop'], { cwd: path.join(this.$store.state.dir, '\\nginx') })
-      this.notify = ('positive', 'nginx 종료')
-
-      this.notify = ('positive', 'nginx 재시작')
-      execFile('./nginx.exe', { cwd: path.join(this.$store.state.dir, '\\nginx') }, (err, stdout, stderr) => {
-        if (err) {
-          this.notify('negative', 'nginx 실행에 실패했습니다')
-          this.$store.commit('setNginxStatus', false)
-        }
-      })
+      // nginx.exe -t 결과는 항상 stderr로만 리턴하니 주의
+      if (re.test(result[1])) {
+        setTimeout(function () {
+          this.nginxSwitch()
+        }.bind(this), 1000)
+        this.nginxSwitch()
+      }
 
       this.toggleSwitchStatus = false
     }

@@ -27,7 +27,7 @@ export function checkKey (keys) {
 }
 
 export function makeNginxConfFile (twitch, youtube, additionalRTMP) {
-  const config = 'worker_processes auto;\n' +
+  const config = 'worker_processes 1;\n' +
                  '\n' +
                  'error_log logs/error.log error;\n' +
                  '\n' +
