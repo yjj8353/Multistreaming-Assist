@@ -93,12 +93,13 @@
 
 <script>
 import { execFile, execFileSync } from 'child_process'
+import { startNginx, stopNginx, quitNginx, testNginx } from '../function/nginx'
 import path from 'path'
 import fs from 'fs'
 
 import log from 'electron-log'
 
-import { checkKey, makeNginxConfFile } from '../function/functions'
+import { checkKey, makeNginxConfFile, test } from '../function/functions'
 
 export default {
   name: 'PageIndex',
@@ -257,17 +258,11 @@ export default {
 
         this.$store.commit('setNginxStatus', true)
 
-        execFile('./nginx.exe', { cwd: path.join(this.$store.state.dir, '\\nginx') }, (err, stdout, stderr) => {
-          if (err) {
-            this.notify('negative', 'nginx 실행에 실패했습니다')
-            this.$store.commit('setNginxStatus', false)
-          }
-        })
+        startNginx()
 
       } else if (this.$store.state.nginxStatus === true) {
-        execFileSync('./nginx.exe', ['-s', 'stop'], { cwd: path.join(this.$store.state.dir, '\\nginx') }, (err, stdout, stderr) => {
-          if (err) throw err
-        })
+        execFileSync('./nginx.exe', ['-s', 'quit'], { cwd: path.join(this.$store.state.dir, '\\nginx') })
+
         this.$store.commit('setNginxStatus', false)
       }
     },
@@ -302,37 +297,18 @@ export default {
 
     async nginxReload () {
       await this.makeNginxConf()
-      
-      execFileSync('./nginx.exe', ['-t'], { cwd: path.join(this.$store.state.dir, '\\nginx') }, (err, stdout, stderr) => {
+
+      execFileSync('./nginx.exe', ['-s', 'stop'], { cwd: path.join(this.$store.state.dir, '\\nginx') })
+      this.notify = ('positive', 'nginx 종료')
+
+      this.notify = ('positive', 'nginx 재시작')
+      execFile('./nginx.exe', { cwd: path.join(this.$store.state.dir, '\\nginx') }, (err, stdout, stderr) => {
         if (err) {
-          this.notify('negative', 'nginx.conf 파일 테스트에 실패했습니다')
-          throw err
-        }
-
-        const re = new RegExp('nginx.conf syntax is ok')
-        console.log(re.test(stdout))
-        if (re.test(stdout)) {
-          console.log('테스트 통과')
-          execFileSync('./nginx.exe', ['-s', 'stop'], { cwd: path.join(this.$store.state.dir, '\\nginx') }, (err, stdout, stderr) => {
-            if (err) {
-              this.notify('negative', 'nginx 중지하지 못했습니다')
-              throw err
-            } else {
-              this.notify('positive', 'nginx 중지 완료')
-            }
-          })
-
-          execFile('./nginx.exe', { cwd: path.join(this.$store.state.dir, '\\nginx') }, (err, stdout, stderr) => {
-            if (err) {
-              this.notify('negative', 'nginx 실행에 실패했습니다')
-              this.$store.commit('setNginxStatus', false)
-            }
-          })
-        } else {
-          this.notify('negative', 'nginx.conf 파일에 문제가 있는 것 같습니다')
+          this.notify('negative', 'nginx 실행에 실패했습니다')
+          this.$store.commit('setNginxStatus', false)
         }
       })
-      
+
       this.toggleSwitchStatus = false
     }
   }
