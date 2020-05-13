@@ -93,7 +93,7 @@
 
 <script>
 import { execFile, execFileSync } from 'child_process'
-import { startNginx, stopNginx, quitNginx, testNginx } from '../function/nginx'
+import { startNginx, quitNginx, testNginx } from '../function/nginx'
 import path from 'path'
 import fs from 'fs'
 
@@ -250,19 +250,21 @@ export default {
       log.debug('nginxSwitch 함수 진입')
       
       if (this.$store.state.nginxStatus === false) {
-        if (!(await this.makeNginxConf())) {
-          return
-        }
+        if (!(await this.makeNginxConf())) return
 
         this.makeRTMPJson()
 
-        const err = startNginx(this.$store, path.join(this.$store.state.dir, '\\nginx'))
+        this.$store.commit('setNginxStatus', true)
+
+        const err = startNginx(path.join(this.$store.state.dir, '\\nginx'))
         if (err) {
+          this.$store.commit('setNginxStatus', false)
           this.notify('negative', 'nginx 실행에 실패했습니다')
         }
 
       } else if (this.$store.state.nginxStatus === true) {
-        const result = quitNginx(this.$store, path.join(this.$store.state.dir, '\\nginx'))
+        const result = quitNginx(path.join(this.$store.state.dir, '\\nginx'))
+        this.$store.commit('setNginxStatus', false)
       }
     },
 
@@ -294,15 +296,16 @@ export default {
       }
     },
 
-    async nginxReload () {
-      await this.makeNginxConf()
-      
+    nginxReload () {
+
       // result[0]: stdout, result[1]: stderr
       const result = testNginx(path.join(this.$store.state.dir, '\\nginx'))
       const re = new RegExp('syntax is ok');
 
       // nginx.exe -t 결과는 항상 stderr로만 리턴하니 주의
       if (re.test(result[1])) {
+        
+        // nginx 종료 후, 1초동안 대기 한 뒤 nginx를 새로 시작함
         setTimeout(function () {
           this.nginxSwitch()
         }.bind(this), 1000)

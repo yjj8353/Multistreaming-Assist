@@ -1,24 +1,19 @@
 import { execFile, execFileSync } from 'child_process'
 
-export function startNginx (setNginxStatus, path) {
-    setNginxStatus.commit('setNginxStatus', true)
-
+export function startNginx (path) {
     execFile('nginx.exe', { cwd: path }, (err, stdout, stderr) => {
         if (err) {
-            setNginxStatus.commit('setNginxStatus', false)
             return err;
         }
     })
 }
 
-export function stopNginx (path) {
-    execFileSync('nginx.exe', ['-s', 'stop'], { cwd: path })
-}
+export function quitNginx (path) {
+    let result = new Result()
 
-export function quitNginx (setNginxStatus, path) {
     execFileSync('nginx.exe', ['-s', 'quit'], { cwd: path })
 
-    setNginxStatus.commit('setNginxStatus', false)
+    return [result.getStdout(), result.getStderr()]
 }
 
 export function testNginx (path) {
@@ -29,6 +24,8 @@ export function testNginx (path) {
     return [result.getStdout(), result.getStderr()]
 }
 
+// 이유는 모르겠으나 quasar는 child_process의 result가 들어오지 않으므로 main process의
+// stdout stderr를 가로채서 만들어야 함
 class Result {
     constructor() {
         this.stdout = []
