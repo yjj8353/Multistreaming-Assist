@@ -99,7 +99,7 @@ import fs from 'fs'
 
 import log from 'electron-log'
 
-import { checkKey, makeNginxConfFile, test } from '../function/functions'
+import { checkKey, makeNginxConfFile, makeRTMPJSON, makeRTMPJSONFile } from '../function/functions'
 
 export default {
   name: 'PageIndex',
@@ -206,7 +206,7 @@ export default {
         fullYoutube = this.youtubeOn ? fullYoutube : ''
         fullAdditionalRTMP = this.additionalOn ? fullAdditionalRTMP : ''
 
-        const config = makeNginxConfFile(fullTwitch, fullYoutube, fullAdditionalRTMP)
+        const config = await makeNginxConfFile(fullTwitch, fullYoutube, fullAdditionalRTMP)
 
         try {
           fs.writeFileSync(path.join(this.$store.state.dir, '\\nginx\\conf\\nginx.conf'), config)
@@ -225,15 +225,10 @@ export default {
       }
     },
 
-    makeRTMPJson () {
+    async makeRTMPJSON () {
       log.debug('makeRTMPJson 함수 진입')
 
-      const rtmpJSON = '{\n' +
-                        '    "twitch":' + '"' + this.twitchKey + '",\n' +
-                        '    "youtube":' + '"' + this.youtubeKey + '",\n' +
-                        '    "rtmpUrl":' + '"' + this.additionalRTMPUrl + '",\n' +
-                        '    "rtmpKey":' + '"' + this.additionalRTMPKey + '"\n' +
-                        '}'
+      const rtmpJSON = await makeRTMPJSONFile(this.twitchKey, this.youtubeKey, this.additionalRTMPUrl, this.additionalRTMPKey)
 
       fs.writeFile(path.join(this.$store.state.dir, '\\nginx\\conf\\rtmp.json'), rtmpJSON, (err) => {
         if (err)  {
@@ -252,7 +247,7 @@ export default {
       if (this.$store.state.nginxStatus === false) {
         if (!(await this.makeNginxConf())) return
 
-        this.makeRTMPJson()
+        await this.makeRTMPJSON()
 
         this.$store.commit('setNginxStatus', true)
 

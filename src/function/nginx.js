@@ -1,4 +1,4 @@
-import { execFile, execFileSync } from 'child_process'
+import { execFile, execFileSync, execSync } from 'child_process'
 
 export function startNginx (path) {
     execFile('nginx.exe', { cwd: path }, (err, stdout, stderr) => {
@@ -8,12 +8,18 @@ export function startNginx (path) {
     })
 }
 
-export function quitNginx (path) {
-    let result = new Result()
+export function quitNginx () {
+    let result
+    let error
 
-    execFileSync('nginx.exe', ['-s', 'quit'], { cwd: path })
+    try {
+        // tasklist /fi nginx.exe를 쓰면 실행중인 nginx.exe를 찾을 수 있음
+        result = execSync('taskkill /im nginx.exe /f')
+    } catch (err) {
+        error = err.stderr
+    }
 
-    return [result.getStdout(), result.getStderr()]
+    return [result.toString(), error.toString()]
 }
 
 export function testNginx (path) {
@@ -24,7 +30,7 @@ export function testNginx (path) {
     return [result.getStdout(), result.getStderr()]
 }
 
-// 이유는 모르겠으나 quasar는 child_process의 result가 들어오지 않으므로 main process의
+// 이유는 모르겠으나 quasar는 child_process의 execFileSync result가 들어오지 않으므로 main process의
 // stdout stderr를 가로채서 만들어야 함
 class Result {
     constructor() {

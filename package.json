@@ -1,8 +1,8 @@
 {
-  "name": "multistreaming-assist-refactoring",
-  "version": "0.0.1",
-  "description": "A Quasar Framework app",
-  "productName": "Quasar App",
+  "name": "multistreaming-assist",
+  "version": "0.3.1",
+  "description": "Nginx Multistreaming Assist Tool",
+  "productName": "Multistreaming-Assist",
   "cordovaId": "org.cordova.quasar.app",
   "capacitorId": "",
   "author": "yjj8353 <yjj8353@gmail.com>",
@@ -15,6 +15,7 @@
     "@quasar/extras": "^1.7.0",
     "axios": "^0.18.1",
     "electron-log": "^4.1.1",
+    "nuts": "^0.34.0",
     "quasar": "^1.10.5"
   },
   "devDependencies": {
@@ -22,6 +23,7 @@
     "babel-eslint": "^10.0.1",
     "devtron": "^1.4.0",
     "electron": "^8.0.1",
+    "electron-builder": "^22.4.0",
     "electron-debug": "^3.0.1",
     "electron-devtools-installer": "^2.2.4",
     "electron-packager": "^14.1.1",

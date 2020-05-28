@@ -169,7 +169,21 @@ module.exports = function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'multistreaming-assist-refactoring'
+        appId: 'Multistreaming-Assist',
+        // win: {
+        //     target: [{
+        //     target: "nsis",
+        //     arch  : "x64"
+        //   }]
+        // },
+        // nsis: {
+        //   oneClick: false,
+        //   perMachine: true,
+        //   allowToChangeInstallationDirectory: true,
+        //   language: 1042,
+        //   include: "build/installer.nsh",
+        //   shortcutName: "Multistreamin-Assist"
+        // }
       },
 
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration

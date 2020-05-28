@@ -1,20 +1,15 @@
-export function checkKey (keys) {
-  return new Promise(async function (resolve, reject) {
+export async function checkKey (keys) {
     const twitchKeyCheckResult = keys.twitch ? await checkTwitchKeyPattern(keys.twitch) : true
     const youtubeKeyCheckResult = keys.youtube ? await checkYoutubeKeyPattern(keys.youtube) : true
 
-    function checkTwitchKeyPattern (twitch) {
-      return new Promise(function (resolve, reject) {
-        const re = new RegExp('^live_[0-9]*_[a-zA-Z0-9]{30}$')
-        resolve(re.test(twitch))
-      }.bind(twitch))
+    async function checkTwitchKeyPattern (twitch) {
+      const re = new RegExp('^live_[0-9]*_[a-zA-Z0-9]{30}$')
+      return re.test(twitch)
     }
     
-    function checkYoutubeKeyPattern (youtube) {
-      return new Promise(function(resolve, reject) {
-        const re = new RegExp('^[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}$')
-        resolve(re.test(youtube))
-      }.bind(youtube))
+    async function checkYoutubeKeyPattern (youtube) {
+      const re = new RegExp('^[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}$')
+      return re.test(youtube)
     }
 
     const results = {
@@ -22,11 +17,10 @@ export function checkKey (keys) {
       youtube: youtubeKeyCheckResult
     }
 
-    resolve(results)
-  }.bind(keys))
+    return results
 }
 
-export function makeNginxConfFile (twitch, youtube, additionalRTMP) {
+export async function makeNginxConfFile (twitch, youtube, additionalRTMP) {
   const config = 'worker_processes 1;\n' +
                  '\n' +
                  'error_log logs/error.log error;\n' +
@@ -53,4 +47,15 @@ export function makeNginxConfFile (twitch, youtube, additionalRTMP) {
                  '\n'
 
   return config
+}
+
+export async function makeRTMPJSONFile (twitchKey, youtubeKey, additionalRTMPUrl, additionalRTMPKey) {
+  const rtmpJSON = '{\n' +
+                   '    "twitch":' + '"' + twitchKey + '",\n' +
+                   '    "youtube":' + '"' + youtubeKey + '",\n' +
+                   '    "rtmpUrl":' + '"' + additionalRTMPUrl + '",\n' +
+                   '    "rtmpKey":' + '"' + additionalRTMPKey + '"\n' +
+                   '}'
+
+  return rtmpJSON
 }

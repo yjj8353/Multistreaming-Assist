@@ -1,5 +1,4 @@
-import { app, BrowserWindow, nativeTheme, ipcMain, dialog } from 'electron'
-import { execFileSync } from 'child_process'
+import { app, BrowserWindow, nativeTheme } from 'electron'
 
 try {
   if (process.platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
