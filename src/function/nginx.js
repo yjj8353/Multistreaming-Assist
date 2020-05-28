@@ -16,10 +16,12 @@ export function quitNginx () {
         // tasklist /fi nginx.exe를 쓰면 실행중인 nginx.exe를 찾을 수 있음
         result = execSync('taskkill /im nginx.exe /f')
     } catch (err) {
-        error = err.stderr
+        error = err.stderr.toString()
     }
 
-    return [result.toString(), error.toString()]
+    result = result.toString()
+
+    return [result, error]
 }
 
 export function testNginx (path) {

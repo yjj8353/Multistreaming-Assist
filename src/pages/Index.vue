@@ -92,12 +92,9 @@
 </template>
 
 <script>
-import { execFile, execFileSync } from 'child_process'
 import { startNginx, quitNginx, testNginx } from '../function/nginx'
 import path from 'path'
 import fs from 'fs'
-
-import log from 'electron-log'
 
 import { checkKey, makeNginxConfFile, makeRTMPJSON, makeRTMPJSONFile } from '../function/functions'
 
@@ -128,10 +125,9 @@ export default {
     }
   },
   methods: {
-    getSaveKey () {
-      log.debug('getSaveKey 함수 진입')
-      log.debug('rtmp.json을 분석합니다')
 
+    // rtmp.json 파일에서 키 값을 가져와 세팅함
+    getSaveKey () {
       const conf = fs.readFileSync(path.join(this.$store.state.dir, '\\nginx\\conf\\rtmp.json'), 'utf-8')
       const keys = JSON.parse(conf)
 
@@ -141,45 +137,44 @@ export default {
       this.additionalRTMPKey = keys.rtmpKey
     },
 
+    // rtmp.json 파일에서 키 값이 존재하는 플랫폼만 스위치를 켬
     turnOnSwitch () {
-      log.debug('turnOnSwitch 함수 진입')
       if (this.twitchKey) {
         this.twitchOn = true
-        log.debug('Twitch Key 값이 존재하므로 ON 합니다')
       }
 
       if (this.youtubeKey) {
         this.youtubeOn = true
-        log.debug('Youtube Key 값이 존재하므로 ON 합니다')
       }
 
       if (this.additionalRTMPUrl && this.additionalRTMPKey) {
         this.additionalOn = true
-        log.debug('추가적인 Key 값이 존재하므로 ON 합니다')
       }
     },
 
+    // twitchKey q-input 값이 비는 순간 스위치를 끔
     checTwitchKeykNull (value) {
       if (!value) {
         this.twitchOn = false
       }
     },
 
+    // youtubeKey q-input 값이 비는 순간 스위치를 끔
     checkYoutubeKeyNull (value) {
       if (!value) {
         this.youtubeOn = false
       }
     },
 
+    // additionalRTMP의 url 혹은 key q-input 값이 비는 순간 스위치를 끔
     checkAddtionalRTMPUrlOrKeyNull (value) {
       if (!value) {
         this.additionalOn = false
       }
     },
 
+    // nginx.conf 파일을 생성
     async makeNginxConf () {
-      log.debug('makeNginxConf 함수 진입')
-
       let keys = {
         twitch: this.twitchKey.trim(),
         youtube: this.youtubeKey.trim()
@@ -212,38 +207,32 @@ export default {
           fs.writeFileSync(path.join(this.$store.state.dir, '\\nginx\\conf\\nginx.conf'), config)
 
           this.notify('positive', 'nginx.conf 파일생성 성공!')
-          log.debug('nginx.conf 파일 생성 성공')
 
           return true
 
         } catch (e) {
           this.notify('negative', 'nginx.conf 파일생성에 실패했습니다')
-          log.error('nginx.conf 파일 생성 실패')
 
           return false
         }
       }
     },
 
+    // rtmp.json 파일을 생성
     async makeRTMPJSON () {
-      log.debug('makeRTMPJson 함수 진입')
-
       const rtmpJSON = await makeRTMPJSONFile(this.twitchKey, this.youtubeKey, this.additionalRTMPUrl, this.additionalRTMPKey)
 
       fs.writeFile(path.join(this.$store.state.dir, '\\nginx\\conf\\rtmp.json'), rtmpJSON, (err) => {
         if (err)  {
           this.notify('negative', 'rtmp.json 파일 생성에 실패했습니다')
-          log.error('rtmp.json 파일 생성 실패')
         } else {
           this.notify('positive', 'rtmp.json 파일 생성 성공!')
-          log.debug('rtmp.json 파일 생성 성공')
         }
       })
     },
 
+    // nginx.exe를 키거나 끔
     async nginxSwitch () {
-      log.debug('nginxSwitch 함수 진입')
-      
       if (this.$store.state.nginxStatus === false) {
         if (!(await this.makeNginxConf())) return
 
@@ -263,34 +252,28 @@ export default {
       }
     },
 
+    // 사용자에게 알림 메시지를 보여줌
     notify (type, message) {
-      log.debug('notify 함수 진입')
-      if (type === 'negative') {
-        log.error('NOTIFY [ type: ' + type + ' message: ' + message + ' ]')
-      }
-      if (type === 'positive') {
-        log.debug('NOTIFY [ type: ' + type + ' message: ' + message + ' ]')
-      }
-
       this.$q.notify({
         type: type,
         message: message
       })
     },
 
+    // 프로그램 경로에 한글이 존재하는지 확인
     checkIncludeKoreanOnPath () {
-      log.debug('checkPath 함수 진입')
-
       const re = new RegExp('[ㄱ-ㅎ|ㅏ-ㅑ|가-힣]')
       return !(re.test(this.$store.state.dir))
     },
 
+    // nginx.exe가 겨진 상태에서, Key 적용여부 토글 스위치 상태가 변했는지 체크함
     toggleSwitch () {
       if (this.$store.state.nginxStatus) {
         this.toggleSwitchStatus = true
       }
     },
 
+    // nginx.exe를 재시작함 (현재 완성되지 않음)
     nginxReload () {
 
       // result[0]: stdout, result[1]: stderr
