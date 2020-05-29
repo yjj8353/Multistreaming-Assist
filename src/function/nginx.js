@@ -1,6 +1,7 @@
 import { execFile, execFileSync, execSync } from 'child_process'
 
-export function startNginx (path) {
+// nginx.exe 시작
+export function startNginxProcess (path) {
     execFile('nginx.exe', { cwd: path }, (err, stdout, stderr) => {
         if (err) {
             return err;
@@ -8,12 +9,12 @@ export function startNginx (path) {
     })
 }
 
-export function quitNginx () {
+// nginx.exe 종료
+export function quitNginxProcess () {
     let result
     let error
 
     try {
-        // tasklist /fi nginx.exe를 쓰면 실행중인 nginx.exe를 찾을 수 있음
         result = execSync('taskkill /im nginx.exe /f')
     } catch (err) {
         error = err.stderr.toString()
@@ -24,7 +25,24 @@ export function quitNginx () {
     return [result, error]
 }
 
-export function testNginx (path) {
+// 작동중인 nginx.exe 프로세스가 있는지 확인
+export function findNginxProcess () {
+    let result
+    let error
+
+    try {
+        result = execSync('tasklist /fi "imagename eq nginx.exe"')
+    } catch (err) {
+        error = err.stderr.toString()
+    }
+
+    result = result.toString()
+
+    return [result, error]
+}
+
+// 변경된 nginx.conf 파일이 문법적으로 오류가 없는지 확인
+export function testNginxProcess (path) {
     let result = new Result()
 
     execFileSync('nginx.exe', ['-t'], { cwd: path })

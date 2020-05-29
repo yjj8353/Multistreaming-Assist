@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { startNginx, quitNginx, testNginx } from '../function/nginx'
+import { startNginxProcess, quitNginxProcess, findNginxProcess, testNginxProcess } from '../function/nginx'
 import path from 'path'
 import fs from 'fs'
 
@@ -108,19 +108,24 @@ export default {
   },
   data () {
     return {
+
+      // q-input에 들어가는 키 값들
       twitchKey: '',
       youtubeKey: '',
       additionalRTMPUrl: '',
       additionalRTMPKey: '',
 
+      // Key 입력칸 비밀번호 마스크 여부(true면 *로 감춰지고 false면 문자로 보임)
       twitchIsPwd: true,
       youtubeIsPwd: true,
       additionalIsPwd: true,
 
+      // Key 입력칸 우측 토글 스위치 On/Off 여부
       twitchOn: false,
       youtubeOn: false,
       additionalOn: false,
 
+      // nginx.exe가 실행된 이후로 토글 스위치 값이 변경되었는지 확인 용도
       toggleSwitchStatus: false
     }
   },
@@ -240,14 +245,14 @@ export default {
 
         this.$store.commit('setNginxStatus', true)
 
-        const err = startNginx(path.join(this.$store.state.dir, '\\nginx'))
+        const err = startNginxProcess(path.join(this.$store.state.dir, '\\nginx'))
         if (err) {
           this.$store.commit('setNginxStatus', false)
           this.notify('negative', 'nginx 실행에 실패했습니다')
         }
 
       } else if (this.$store.state.nginxStatus === true) {
-        const result = quitNginx(path.join(this.$store.state.dir, '\\nginx'))
+        const result = quitNginxProcess(path.join(this.$store.state.dir, '\\nginx'))
         this.$store.commit('setNginxStatus', false)
       }
     },
@@ -273,11 +278,17 @@ export default {
       }
     },
 
+    nginxIsWorking () {
+      const result = findNginxProcess()
+
+      //if ()
+    },
+
     // nginx.exe를 재시작함 (현재 완성되지 않음)
     nginxReload () {
 
       // result[0]: stdout, result[1]: stderr
-      const result = testNginx(path.join(this.$store.state.dir, '\\nginx'))
+      const result = testNginxProcess(path.join(this.$store.state.dir, '\\nginx'))
       const re = new RegExp('syntax is ok');
 
       // nginx.exe -t 결과는 항상 stderr로만 리턴하니 주의
