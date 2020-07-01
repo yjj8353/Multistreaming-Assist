@@ -79,9 +79,9 @@
         <p></p>
 
         <div class="row">
-          <div v-show="toggleSwitchStatus && $store.state.nginxStatus" class="q-pr-md col">
+          <!-- <div v-show="toggleSwitchStatus && $store.state.nginxStatus" class="q-pr-md col">
             <q-btn size="lg" color="grey" label="Nginx 재시작" @click="nginxReload" />
-          </div>
+          </div> -->
           <div class="q-pl-md col">
             <q-btn size="lg" class="float-right" :color="$store.state.nginxStatus ? 'red' : 'primary'" :label="$store.state.nginxStatus ? 'Nginx 종료' : 'Nginx 시작'" @click="nginxSwitch" />
           </div>
@@ -155,6 +155,7 @@ export default {
 
   // 페이지에서 사용되는 메소드
   /* 
+   *
    * getSaveKey                     : rtmp.json 파일에서 RTMP URL 및 RTMP KEY 값을 가져옴
    * turnOnSwitch                   : rtmp.json 파일에서 RTMP KEY가 존재하는 입력칸의 토글 스위치만 ON으로 세팅
    * checkTwitckKeyNull             : TWITCH KEY 값이 NULL이 되었는지 확인

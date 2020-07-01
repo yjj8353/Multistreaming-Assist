@@ -1,8 +1,16 @@
 import { execFile, execFileSync, execSync } from 'child_process'
+import fs from 'fs'
+import path from 'path'
 
 // nginx.exe 시작
-export function startNginxProcess (path) {
-    execFile('nginx.exe', { cwd: path }, (err, stdout, stderr) => {
+export function startNginxProcess (programPath) {
+    const logsDir = path.join(programPath, '\\logs')
+
+    if (!fs.existsSync(logsDir)) {
+        fs.mkdirSync(logsDir)
+    }
+
+    execFile('nginx.exe', { cwd: programPath }, (err, stdout, stderr) => {
         if (err) {
             return err;
         }
@@ -42,10 +50,10 @@ export function findNginxProcess () {
 }
 
 // 변경된 nginx.conf 파일이 문법적으로 오류가 없는지 확인
-export function testNginxProcess (path) {
+export function testNginxProcess (programPath) {
     let result = new Result()
 
-    execFileSync('nginx.exe', ['-t'], { cwd: path })
+    execFileSync('nginx.exe', ['-t'], { cwd: programPath })
 
     return [result.getStdout(), result.getStderr()]
 }

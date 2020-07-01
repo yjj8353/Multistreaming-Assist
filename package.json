@@ -1,6 +1,6 @@
 {
   "name": "multistreaming-assist",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Nginx Multistreaming Assist Tool",
   "productName": "Multistreaming-Assist",
   "cordovaId": "org.cordova.quasar.app",

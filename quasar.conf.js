@@ -175,15 +175,15 @@ module.exports = function (ctx) {
             target: "nsis",
             arch  : "x64"
           }]
-        },
-        nsis: {
-          oneClick: false,
-          perMachine: true,
-          allowToChangeInstallationDirectory: true,
-          language: 1042,
-          include: "build/installer.nsh",
-          shortcutName: "Multistreamin-Assist"
-        }
+        }//,
+        // nsis: {
+        //   oneClick: false,
+        //   perMachine: true,
+        //   allowToChangeInstallationDirectory: true,
+        //   language: 1042,
+        //   include: "build/installer.nsh",
+        //   shortcutName: "Multistreamin-Assist"
+        // }
       },
 
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
