@@ -8,7 +8,7 @@ export async function checkKey (keys) {
     }
     
     async function checkYoutubeKeyPattern (youtube) {
-      const re = new RegExp('^[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}$')
+      const re = new RegExp('^[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}(-[a-z0-9]{4})?$')
       return re.test(youtube)
     }
 
