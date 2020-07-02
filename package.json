@@ -1,25 +1,50 @@
 {
-    "name": "multistreaming-assist",
-    "version": "0.1.4",
-    "description": "Multi Streaming Assistant Tool",
-    "main": "main.js",
-    "scripts": {
-        "start": "electron .",
-        "build": "electron-packager . Multistreaming-Assist --asar"
-    },
-    "repository": "https://github.com/yjj8353/Multistreaming-Assist",
-    "author": "RetroTV",
-    "license": "CC0-1.0",
-    "devDependencies": {
-        "asar": "^3.0.1",
-        "electron": "^8.0.3"
-    },
-    "dependencies": {
-        "bootstrap": "^4.4.1",
-        "custom-electron-titlebar": "^3.2.2-hotfix62",
-        "electron-log": "^4.0.7",
-        "electron-packager": "^14.2.1",
-        "jquery": "^3.4.1",
-        "popper.js": "^1.16.1"
-    }
+  "name": "multistreaming-assist",
+  "version": "0.4.1",
+  "description": "Nginx Multistreaming Assist Tool",
+  "productName": "Multistreaming-Assist",
+  "cordovaId": "org.cordova.quasar.app",
+  "capacitorId": "",
+  "author": "yjj8353 <yjj8353@gmail.com>",
+  "private": true,
+  "scripts": {
+    "lint": "eslint --ext .js,.vue src",
+    "test": "echo \"No test specified\" && exit 0"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.7.0",
+    "axios": "^0.18.1",
+    "electron-log": "^4.1.1",
+    "nuts": "^0.34.0",
+    "quasar": "^1.10.5"
+  },
+  "devDependencies": {
+    "@quasar/app": "^1.8.4",
+    "babel-eslint": "^10.0.1",
+    "devtron": "^1.4.0",
+    "electron": "^8.0.1",
+    "electron-builder": "^22.4.0",
+    "electron-debug": "^3.0.1",
+    "electron-devtools-installer": "^2.2.4",
+    "electron-packager": "^14.1.1",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-loader": "^3.0.3",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^6.1.2"
+  },
+  "engines": {
+    "node": ">= 10.18.1",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  },
+  "browserslist": [
+    "last 1 version, not dead, ie >= 11"
+  ],
+  "resolutions": {
+    "@babel/parser": "7.7.5"
+  }
 }
