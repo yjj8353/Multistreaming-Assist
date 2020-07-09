@@ -12,7 +12,7 @@
     "license": "CC0-1.0",
     "devDependencies": {
         "asar": "^3.0.1",
-        "electron": "^8.0.3"
+        "electron": "^8.2.4"
     },
     "dependencies": {
         "bootstrap": "^4.4.1",
