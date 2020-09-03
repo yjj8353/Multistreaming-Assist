@@ -331,9 +331,25 @@ export default {
     nginxIsWorking () {
       const result = findNginxProcess()
 
-      console.log(result);
-
-      //if ()
+      if (result) {
+        this.notify('positive', 'Nginx는 정상적으로 실행 중 입니다')
+      } else {
+          this.$q.dialog({
+          title: '저런...',
+          message: '어째서인지 Nginx가 꺼져있는거 같은데, 재기동 할까요?',
+          ok: {
+            push: true
+          },
+          tersistent: true
+        }).onOk(() => {
+          const err = startNginxProcess(path.join(this.$store.state.dir, '\\nginx'))
+          
+          if (err) {
+            this.$store.commit('setNginxStatus', false)
+            this.notify('negative', 'nginx 실행에 실패했습니다')
+          }
+        })
+      }
     }
   }
 }

@@ -45,8 +45,9 @@ export function findNginxProcess () {
     }
 
     result = result.toString()
-
-    return [result, error]
+    
+    const re = new RegExp('nginx.exe')
+    return re.test(result)
 }
 
 // 변경된 nginx.conf 파일이 문법적으로 오류가 없는지 확인
