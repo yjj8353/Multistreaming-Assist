@@ -72,18 +72,26 @@
 
            <!-- 추가적인 RTMP URL 및 KEY 반영 토글 스위치 -->
           <div class="col-1" style="display: flex; align-items: center; justify-content: center;">
-            <q-toggle v-model="additionalOn" :disable="!additionalRTMPUrl || !additionalRTMPKey" size="md" @input="toggleSwitchIsToggle" />
+            <q-toggle size="md"
+                      v-model="additionalOn"
+                      :disable="!additionalRTMPUrl || !additionalRTMPKey"
+                      @input="toggleSwitchIsToggle" />
           </div>
         </div>
 
         <p></p>
 
         <div class="row">
-          <!-- <div v-show="toggleSwitchStatus && $store.state.nginxStatus" class="q-pr-md col">
-            <q-btn size="lg" color="grey" label="Nginx 재시작" @click="nginxReload" />
-          </div> -->
+          <div v-show="$store.state.nginxStatus" class="q-pr-md col">
+            <q-btn size="lg" color="grey" label="프로세스 확인" @click="nginxIsWorking" />
+          </div>
           <div class="q-pl-md col">
-            <q-btn size="lg" class="float-right" :color="$store.state.nginxStatus ? 'red' : 'primary'" :label="$store.state.nginxStatus ? 'Nginx 종료' : 'Nginx 시작'" @click="nginxSwitch" />
+            <q-btn size="lg"
+                   class="float-right"
+                   :color="$store.state.nginxStatus ? 'red' : 'primary'"
+                   :label="$store.state.nginxStatus ? 'Nginx 종료' : 'Nginx 시작'"
+                   @click="nginxSwitch"
+            />
           </div>
         </div>
       </div>
@@ -323,27 +331,9 @@ export default {
     nginxIsWorking () {
       const result = findNginxProcess()
 
+      console.log(result);
+
       //if ()
-    },
-
-    // nginx.exe를 재시작함 (현재 완성되지 않음)
-    nginxReload () {
-
-      // result[0]: stdout, result[1]: stderr
-      const result = testNginxProcess(path.join(this.$store.state.dir, '\\nginx'))
-      const re = new RegExp('syntax is ok');
-
-      // nginx.exe -t 결과는 항상 stderr로만 리턴하니 주의
-      if (re.test(result[1])) {
-        
-        // nginx 종료 후, 1초동안 대기 한 뒤 nginx를 새로 시작함
-        setTimeout(function () {
-          this.nginxSwitch()
-        }.bind(this), 1000)
-        this.nginxSwitch()
-      }
-
-      this.toggleSwitchStatus = false
     }
   }
 }
