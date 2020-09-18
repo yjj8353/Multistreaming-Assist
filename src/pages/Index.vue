@@ -127,7 +127,7 @@ import { makeNginxConfFile } from '../function/functions'
 
 export default {
   name: 'PageIndex',
-  
+
   // 페이지가 마운트시 실행되는 메소드
   mounted() {
     window.addEventListener('load', () => {
@@ -162,7 +162,7 @@ export default {
   },
 
   // 페이지에서 사용되는 메소드
-  /* 
+  /*
    *
    * getSaveKey                     : rtmp.json 파일에서 RTMP URL 및 RTMP KEY 값을 가져옴
    * turnOnSwitch                   : rtmp.json 파일에서 RTMP KEY가 존재하는 입력칸의 토글 스위치만 ON으로 세팅
@@ -177,7 +177,7 @@ export default {
    * toggleSwitchIsToggle           : nginx가 실행된 상태에서 토글 스위치의 상태가 변경되었는지 확인
    * nginxIsWorking                 : nginx가 실행중인지 확인함
    * nginxReload                    : nginx를 재시작함
-   * 
+   *
    */
   methods: {
 
@@ -242,12 +242,11 @@ export default {
         if (!results.youtube) { this.notify('negative', 'YOUTUBE KEY 값에 문제가 있습니다') }
 
         return false
-
       } else {
         let fullTwitch = this.twitchKey.trim() ? 'push rtmp://live-sel.twitch.tv/app/' + this.twitchKey.trim() + ';' : ''
         let fullYoutube = this.youtubeKey.trim() ? 'push rtmp://a.rtmp.youtube.com/live2/' + this.youtubeKey.trim() + ';' : ''
         let fullAdditionalRTMP = 'push ' + this.additionalRTMPUrl.trim() + '/' + this.additionalRTMPKey.trim() + ';'
-        
+
         if (fullAdditionalRTMP === 'push /;') {
           fullAdditionalRTMP = ''
         }
@@ -264,7 +263,6 @@ export default {
           this.notify('positive', 'nginx.conf 파일생성 성공!')
 
           return true
-
         } catch (e) {
           this.notify('negative', 'nginx.conf 파일생성에 실패했습니다')
 
@@ -278,7 +276,7 @@ export default {
       const rtmpJSON = await makeRTMPJSONFile(this.twitchKey, this.youtubeKey, this.additionalRTMPUrl, this.additionalRTMPKey)
 
       fs.writeFile(path.join(this.$store.state.dir, '\\nginx\\conf\\rtmp.json'), rtmpJSON, (err) => {
-        if (err)  {
+        if (err) {
           this.notify('negative', 'rtmp.json 파일 생성에 실패했습니다')
         } else {
           this.notify('positive', 'rtmp.json 파일 생성 성공!')
@@ -300,7 +298,6 @@ export default {
           this.$store.commit('setNginxStatus', false)
           this.notify('negative', 'nginx 실행에 실패했습니다')
         }
-
       } else if (this.$store.state.nginxStatus === true) {
         const result = quitNginxProcess(path.join(this.$store.state.dir, '\\nginx'))
         this.$store.commit('setNginxStatus', false)
@@ -334,20 +331,28 @@ export default {
       if (result) {
         this.notify('positive', 'Nginx는 정상적으로 실행 중 입니다')
       } else {
-          this.$q.dialog({
+        this.$q.dialog({
           title: '저런...',
           message: '어째서인지 Nginx가 꺼져있는거 같은데, 재기동 할까요?',
           ok: {
-            push: true
+            push: true,
+            label: '물론이죠!'
+          },
+          cancel: {
+            push: true,
+            color: 'negative',
+            label: '처음 상태로 되돌려주세요!'
           },
           tersistent: true
         }).onOk(() => {
           const err = startNginxProcess(path.join(this.$store.state.dir, '\\nginx'))
-          
+
           if (err) {
             this.$store.commit('setNginxStatus', false)
             this.notify('negative', 'nginx 실행에 실패했습니다')
           }
+        }).onCancel(() => {
+          this.$store.commit('setNginxStatus', false)
         })
       }
     }
