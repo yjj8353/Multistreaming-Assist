@@ -1,5 +1,7 @@
 <template>
+  
   <q-page-container>
+    
     <q-page class="q-pa-md" style="background-color: white;">
       <!-- 경로에 한글이 포함되어 있지 않을 경우 -->
       <div v-if="checkIncludeKoreanOnPath()">
@@ -82,9 +84,6 @@
         <p></p>
 
         <div class="row">
-          <div v-show="$store.state.nginxStatus" class="q-pr-md col">
-            <q-btn size="lg" color="grey" label="프로세스 확인" @click="nginxIsWorking" />
-          </div>
           <div class="q-pl-md col">
             <q-btn size="lg"
                    class="float-right"
@@ -117,7 +116,6 @@ import path from 'path'
 // nginx 실행 관련
 import { startNginxProcess } from '../function/nginx'
 import { quitNginxProcess }  from '../function/nginx'
-import { findNginxProcess }  from '../function/nginx'
 import { testNginxProcess }  from '../function/nginx'
 
 // functions 관련
@@ -129,7 +127,7 @@ export default {
   name: 'PageIndex',
 
   // 페이지가 마운트시 실행되는 메소드
-  mounted() {
+  mounted () {
     window.addEventListener('load', () => {
       this.getSaveKey()
       this.turnOnSwitch()
@@ -299,8 +297,11 @@ export default {
           this.notify('negative', 'nginx 실행에 실패했습니다')
         }
       } else if (this.$store.state.nginxStatus === true) {
-        const result = quitNginxProcess(path.join(this.$store.state.dir, '\\nginx'))
-        this.$store.commit('setNginxStatus', false)
+        try {
+          quitNginxProcess(path.join(this.$store.state.dir, '\\nginx'))
+        } finally {
+          this.$store.commit('setNginxStatus', false)
+        }
       }
     },
 
@@ -322,38 +323,6 @@ export default {
     toggleSwitchIsToggle () {
       if (this.$store.state.nginxStatus) {
         this.toggleSwitchStatus = true
-      }
-    },
-
-    nginxIsWorking () {
-      const result = findNginxProcess()
-
-      if (result) {
-        this.notify('positive', 'Nginx는 정상적으로 실행 중 입니다')
-      } else {
-        this.$q.dialog({
-          title: '저런...',
-          message: '어째서인지 Nginx가 꺼져있는거 같은데, 재기동 할까요?',
-          ok: {
-            push: true,
-            label: '물론이죠!'
-          },
-          cancel: {
-            push: true,
-            color: 'negative',
-            label: '처음 상태로 되돌려주세요!'
-          },
-          tersistent: true
-        }).onOk(() => {
-          const err = startNginxProcess(path.join(this.$store.state.dir, '\\nginx'))
-
-          if (err) {
-            this.$store.commit('setNginxStatus', false)
-            this.notify('negative', 'nginx 실행에 실패했습니다')
-          }
-        }).onCancel(() => {
-          this.$store.commit('setNginxStatus', false)
-        })
       }
     }
   }
