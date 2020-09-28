@@ -173,8 +173,6 @@ export default {
    * notify                         : 사용자에게 알림 메시지를 표시함
    * checkIncludeKoreanOnPath       : 프로그램 경로에 한글이 존재하는지 확인
    * toggleSwitchIsToggle           : nginx가 실행된 상태에서 토글 스위치의 상태가 변경되었는지 확인
-   * nginxIsWorking                 : nginx가 실행중인지 확인함
-   * nginxReload                    : nginx를 재시작함
    *
    */
   methods: {
