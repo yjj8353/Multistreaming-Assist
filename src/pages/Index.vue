@@ -1,8 +1,7 @@
 <template>
-  
   <q-page-container>
-    
     <q-page class="q-pa-md" style="background-color: white;">
+
       <!-- 경로에 한글이 포함되어 있지 않을 경우 -->
       <div v-if="checkIncludeKoreanOnPath()">
 
@@ -83,6 +82,7 @@
 
         <p></p>
 
+        <!-- NGINX 시작/종료 버튼 -->
         <div class="row">
           <div class="q-pl-md col">
             <q-btn size="lg"
