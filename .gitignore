@@ -1,6 +1,8 @@
 # nginx ignore
 src/pages/nginx
 src/store/nginx
+*nginx.conf
+*rtmp.json
 
 .DS_Store
 .thumbs.db
