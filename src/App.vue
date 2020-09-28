@@ -14,8 +14,28 @@
           <q-btn dense flat icon="close" @click="closeApp" />
         </q-bar>
 
+        <!-- Tool Bar -->
         <div class="q-pa-xs q-pl-md row items-center">
+
+          <!-- 도구 -->
           <div class="cursor-pointer non-selectable">
+            도구
+            <q-menu>
+              <q-list v-if="$store.state.nginxStatus" dense style="min-width: 100px">
+                <q-item clickable v-close-popup>
+                  <q-item-section @click="nginxIsWorking">NGINX 프로세스 확인</q-item-section>
+                </q-item>
+              </q-list>
+              <q-list v-else dense style="min-width: 100px">
+                <q-item disable v-close-popup>
+                  <q-item-section>NGINX 프로세스 확인</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </div>
+
+          <!-- 도움말 -->
+          <div class="q-ml-md cursor-pointer non-selectable">
             도움말
             <q-menu>
               <q-list dense style="min-width: 100px">
@@ -27,21 +47,6 @@
 
                 <q-item clickable v-close-popup>
                   <q-item-section @click="contributors">도움을 주신분들</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </div>
-          <div class="q-ml-md cursor-pointer non-selectable">
-            도구
-            <q-menu>
-              <q-list v-if="$store.state.nginxStatus" dense style="min-width: 100px">
-                <q-item clickable v-close-popup>
-                  <q-item-section @click="nginxIsWorking">NGINX 프로세스 확인</q-item-section>
-                </q-item>
-              </q-list>
-              <q-list v-else dense style="min-width: 100px">
-                <q-item disable v-close-popup>
-                  <q-item-section>NGINX 프로세스 확인</q-item-section>
                 </q-item>
               </q-list>
             </q-menu>
