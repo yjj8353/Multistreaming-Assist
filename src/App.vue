@@ -128,7 +128,11 @@ export default {
           },
           tersistent: true
         }).onOk(() => {
-          execFileSync('./nginx.exe', ['-s', 'stop'], { cwd: path.join(this.$store.state.dir, '\\nginx') })
+          try {
+            execFileSync('./nginx.exe', ['-s', 'stop'], { cwd: path.join(this.$store.state.dir, '\\nginx') })
+          } catch (e) {
+            
+          }
           this.$q.electron.remote.BrowserWindow.getFocusedWindow().close()
         }).onCancel(() => {
 
