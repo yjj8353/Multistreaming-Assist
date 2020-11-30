@@ -1,12 +1,9 @@
-# nginx ignore
-src/pages/nginx
-src/store/nginx
-*nginx.conf
-*rtmp.json
-
 .DS_Store
 .thumbs.db
 node_modules
+
+# Nginx
+/nginx
 
 # Quasar core related directories
 .quasar
@@ -37,3 +34,6 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
+
+# vscode
+.vscode

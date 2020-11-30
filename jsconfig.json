@@ -11,6 +11,9 @@
       "components/*": [
         "src/components/*"
       ],
+      "function/*": [
+        "src/function/*"
+      ],
       "layouts/*": [
         "src/layouts/*"
       ],

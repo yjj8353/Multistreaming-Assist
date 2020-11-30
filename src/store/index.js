@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-// import example from './module-example'
+// store의 모듈들을 여기서 import 한다
+import toggleSwitch from './toggleSwitch'
+import nginx from './nginx'
+import keys from './keys'
+import dir  from './dir'
 
 Vue.use(Vuex)
 
@@ -17,28 +21,25 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      // example
-    },
-    state: {
       
-      // nginx가 켜져있으면 true, 꺼져있으면 false
-      nginxStatus: false,
-
-      // build 완료된 결과물은 끝에 "\\resources\\app.asar"가 추가 경로로 붙으므로 지워야 함
-      dir: __dirname.replace("\\resources\\app.asar", "")
-    },
-    mutations: {
-      
-      // nginxStatus 변수에 변경 사항을 적용하기 위한 메소드
-      setNginxStatus: function (state, data) {
-        state.nginxStatus = data
-      }
+      // 위에서 선언한 모듈을 여기에 적는다
+      toggleSwitch,
+      nginx,
+      keys,
+      dir
     },
 
     // enable strict mode (adds overhead!)
     // for dev mode only
     strict: process.env.DEV
   })
+
+  // if(process.env.DEV && module.hot) {
+  //   module.hot.accept(['./nginx'], () => {
+  //     const newNginx = require('./nginx').default
+  //     Store.hotUpdate({ modules: { nginx: newNginx } })
+  //   })
+  // }
 
   return Store
 }

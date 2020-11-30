@@ -1,33 +1,27 @@
 {
   "name": "multistreaming-assist",
-  "version": "0.4.1",
-  "description": "Nginx Multistreaming Assist Tool",
+  "version": "0.0.1",
+  "description": "This is multi streaming assist tool",
   "productName": "Multistreaming-Assist",
-  "cordovaId": "org.cordova.quasar.app",
-  "capacitorId": "",
   "author": "yjj8353 <yjj8353@gmail.com>",
   "private": true,
   "scripts": {
-    "lint": "eslint --ext .js,.vue src",
+    "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/cli": "^1.1.2",
-    "@quasar/extras": "^1.9.10",
+    "@quasar/extras": "^1.0.0",
     "axios": "^0.18.1",
-    "electron-log": "^4.1.1",
-    "nuts": "^0.34.0",
-    "quasar": "^1.14.5"
+    "core-js": "^3.6.5",
+    "quasar": "^1.0.0"
   },
   "devDependencies": {
-    "@quasar/app": "^1.9.6",
+    "@quasar/app": "^2.0.0",
     "babel-eslint": "^10.0.1",
     "devtron": "^1.4.0",
-    "electron": "^8.2.4",
-    "electron-builder": "^22.4.0",
+    "electron": "^9.0.0",
     "electron-debug": "^3.0.1",
-    "electron-devtools-installer": "^2.2.4",
-    "electron-packager": "^14.1.1",
+    "electron-devtools-installer": "^3.0.0",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-loader": "^3.0.3",
@@ -37,15 +31,20 @@
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^6.1.2"
   },
+  "browserslist": [
+    "last 10 Chrome versions",
+    "last 10 Firefox versions",
+    "last 4 Edge versions",
+    "last 7 Safari versions",
+    "last 8 Android versions",
+    "last 8 ChromeAndroid versions",
+    "last 8 FirefoxAndroid versions",
+    "last 10 iOS versions",
+    "last 5 Opera versions"
+  ],
   "engines": {
     "node": ">= 10.18.1",
     "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
-  },
-  "browserslist": [
-    "last 1 version, not dead, ie >= 11"
-  ],
-  "resolutions": {
-    "@babel/parser": "7.7.5"
   }
 }
