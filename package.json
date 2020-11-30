@@ -12,12 +12,12 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/cli": "^1.1.0",
-    "@quasar/extras": "^1.8.2",
+    "@quasar/cli": "^1.1.2",
+    "@quasar/extras": "^1.9.10",
     "axios": "^0.18.1",
     "electron-log": "^4.1.1",
     "nuts": "^0.34.0",
-    "quasar": "^1.12.8"
+    "quasar": "^1.14.5"
   },
   "devDependencies": {
     "@quasar/app": "^1.9.6",
