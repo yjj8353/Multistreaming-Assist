@@ -82,7 +82,7 @@ module.exports = function (/* ctx */) {
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
       iconSet: 'material-icons', // Quasar icon set
-      lang: 'en-us', // Quasar language pack
+      lang: 'ko-kr', // Quasar language pack
       config: {},
 
       // Possible values for "importStrategy":
@@ -115,9 +115,9 @@ module.exports = function (/* ctx */) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: 'Multistreaming-Assist-RE',
-        short_name: 'Multistreaming-Assist-RE',
-        description: 'This is tool multistreaming assist',
+        name: 'Multistreaming-Assist',
+        short_name: 'MA',
+        description: 'This is multistreaming assist tool',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
@@ -182,7 +182,7 @@ module.exports = function (/* ctx */) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'multistreaming-assist-re'
+        appId: 'multistreaming-assist'
       },
 
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
