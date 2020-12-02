@@ -8,6 +8,8 @@
 /* eslint-env node */
 
 module.exports = function (/* ctx */) {
+  const execSync = require('child_process').execSync
+
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
@@ -68,6 +70,16 @@ module.exports = function (/* ctx */) {
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /node_modules/
+        })
+      },
+
+      afterBuild({ quasarConf }) {
+        console.log('설치 파일을 만드는 중 입니다.')
+
+        return new Promise((resolve, reject) => {
+          result = execSync('makensis "C:\\git\\javascript\\Multistreaming-Assist\\install.nsi"')
+          console.log('설치 파일 생성이 완료 되었습니다.')
+          resolve(result)
         })
       }
     },
