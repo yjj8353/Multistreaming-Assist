@@ -73,9 +73,8 @@ module.exports = function (/* ctx */) {
         })
       },
 
-      afterBuild({ quasarConf }) {
+      afterBuild() {
         console.log('설치 파일을 만드는 중 입니다.')
-
         return new Promise((resolve, reject) => {
           result = execSync('makensis "C:\\git\\javascript\\Multistreaming-Assist\\install.nsi"')
           console.log('설치 파일 생성이 완료 되었습니다.')
