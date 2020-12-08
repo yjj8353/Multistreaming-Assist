@@ -91,22 +91,19 @@
     </div>
 
     <div class="q-pa-md q-gutter-sm">
-      <q-dialog v-model="dialog" :position="position">
-        <q-card style="width: 350px">
-          <q-linear-progress :value="0.6" color="pink" />
-
-          <q-card-section class="row items-center no-wrap">
-            <div>
-              <div class="text-weight-bold">The Walker</div>
-              <div class="text-grey">Fitz & The Tantrums</div>
-            </div>
-
-            <q-space />
-
-            <q-btn flat round icon="fast_rewind" />
-            <q-btn flat round icon="pause" />
-            <q-btn flat round icon="fast_forward" />
+      <q-dialog v-model="seamless" seamless position="bottom">
+        <q-card style="width: 400px">
+          <q-card-section class="row items-center no-wrap text-weight-bold">
+            업데이트가 있습니다, 다운로드 하시겠습니까?
           </q-card-section>
+          <q-separator />
+          <q-card-section class="row no-wrap">
+            <q-checkbox v-model="fuckYouUpdate" label="앞으로 업데이트 알림을 보지 않습니다" />
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn label="귀찮아요" color="negative"/>
+            <q-btn label="할게요" color="primary"/>
+          </q-card-actions>
         </q-card>
       </q-dialog>
     </div>
@@ -241,11 +238,11 @@ export default {
   // 페이지에서 사용되는 데이터 변수
   data () {
     return {
-      dialog: false,
-      position: 'top',
+      seamless: false,
 
       // update 여부
       updateExist: false,
+      fuckYouUpdate: false,
 
       // Key 입력칸 비밀번호 마스크 여부(true면 *로 감춰지고 false면 문자로 보임)
       twitchIsPwd: true,
@@ -331,8 +328,9 @@ export default {
     },
 
     updateMessage(position) {
-      this.position = position
-      this.dialog = true
+      if(this.updateExist === false) {
+        this.seamless = true
+      }
       // if(this.updateExist === false) {
       //   this.$q.dialog({
       //     title: '업데이트',
