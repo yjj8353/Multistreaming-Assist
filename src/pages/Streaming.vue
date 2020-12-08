@@ -90,6 +90,27 @@
       </div>
     </div>
 
+    <div class="q-pa-md q-gutter-sm">
+      <q-dialog v-model="dialog" :position="position">
+        <q-card style="width: 350px">
+          <q-linear-progress :value="0.6" color="pink" />
+
+          <q-card-section class="row items-center no-wrap">
+            <div>
+              <div class="text-weight-bold">The Walker</div>
+              <div class="text-grey">Fitz & The Tantrums</div>
+            </div>
+
+            <q-space />
+
+            <q-btn flat round icon="fast_rewind" />
+            <q-btn flat round icon="pause" />
+            <q-btn flat round icon="fast_forward" />
+          </q-card-section>
+        </q-card>
+      </q-dialog>
+    </div>
+
   </q-page>
 </template>
 
@@ -214,12 +235,15 @@ export default {
       this.turnOnSwitch()
     })
 
-    this.updateMessage()
+    this.updateMessage('top')
   },
 
   // 페이지에서 사용되는 데이터 변수
   data () {
     return {
+      dialog: false,
+      position: 'top',
+
       // update 여부
       updateExist: false,
 
@@ -306,38 +330,40 @@ export default {
       request.end()
     },
 
-    updateMessage() {
-      if(this.updateExist === false) {
-        this.$q.dialog({
-          title: '업데이트',
-          message: '업데이트가 존재합니다, 업데이트 프로그램을 다운로드 하시겠습니까?',
-          ok: {
-            push: true,
-            label: '할게요'
-          },
-          cancel: {
-            push: true,
-            color: 'negative',
-            label: '귀찮아요'
-          },
-          options: {
-            type: 'checkbox',
-            model: [],
-            inline: true,
-            items: [
-              { label: '프로그램 실행 시, 이 창을 띄우지 않습니다.', value: 'fuckYouDialog' }
-            ]
-          },
-          persistent: true
-        }).onOk(data => {
-          this.notify('negative', `${data}`)
-          // console.log('>>>> OK, received', data)
-        }).onCancel(() => {
-          // console.log('>>>> Cancel')
-        }).onDismiss(() => {
-          // console.log('I am triggered on both OK and Cancel')
-        })
-      }
+    updateMessage(position) {
+      this.position = position
+      this.dialog = true
+      // if(this.updateExist === false) {
+      //   this.$q.dialog({
+      //     title: '업데이트',
+      //     message: '업데이트가 존재합니다, 업데이트 프로그램을 다운로드 하시겠습니까?',
+      //     ok: {
+      //       push: true,
+      //       label: '할게요'
+      //     },
+      //     cancel: {
+      //       push: true,
+      //       color: 'negative',
+      //       label: '귀찮아요'
+      //     },
+      //     options: {
+      //       type: 'checkbox',
+      //       model: [],
+      //       inline: true,
+      //       items: [
+      //         { label: '프로그램 실행 시, 이 창을 띄우지 않습니다.', value: 'fuckYouDialog' }
+      //       ]
+      //     },
+      //     persistent: true
+      //   }).onOk(data => {
+      //     this.notify('negative', `${data}`)
+      //     // console.log('>>>> OK, received', data)
+      //   }).onCancel(() => {
+      //     // console.log('>>>> Cancel')
+      //   }).onDismiss(() => {
+      //     // console.log('I am triggered on both OK and Cancel')
+      //   })
+      // }
     },
 
     // rtmp.json 파일에서 키 값을 가져와 세팅함
