@@ -106,8 +106,6 @@ import { FunctionMixin } from '../components/FunctionMixin'
 import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
 
-// const Status = Object.freeze({ ON: true, OFF: false })
-
 export default {
   name: 'StreamingPage',
   
@@ -210,16 +208,21 @@ export default {
 
   // 페이지가 마운트시 실행되는 메소드
   mounted () {
-    window.addEventListener('load', () => {
-      this.updateCheck()
+    window.addEventListener('load', async() => {
+      await this.updateCheck()
       this.getSaveKey()
       this.turnOnSwitch()
     })
+
+    this.updateMessage()
   },
 
   // 페이지에서 사용되는 데이터 변수
   data () {
     return {
+      // update 여부
+      updateExist: false,
+
       // Key 입력칸 비밀번호 마스크 여부(true면 *로 감춰지고 false면 문자로 보임)
       twitchIsPwd: true,
       youtubeIsPwd: true,
@@ -261,7 +264,7 @@ export default {
       setRecordOn: 'recordOn'
     }),
 
-    updateCheck() {
+    async updateCheck() {
       let finalUrl
       let thisProgramVersion
       let latestProgramVersion
@@ -270,16 +273,71 @@ export default {
         host: 'github.com',
         path: '/yjj8353/Multistreaming-Assist/releases/latest'
       }, async response => {
-        finalUrl = await response.responseUrl.toString()
-        latestProgramVersion = finalUrl.replace('https://github.com/yjj8353/Multistreaming-Assist/releases/tag/', '')
+        const re = /[0-9].*\.[0-9].*\.[0-9].*/
 
+        finalUrl = await response.responseUrl.toString()
+        latestProgramVersion = re.exec(finalUrl.replace('https://github.com/yjj8353/Multistreaming-Assist/releases/tag/', ''))[0]
         thisProgramVersion = fs.readFileSync(path.join(this.getRootDir, 'version'), 'UTF-8')
 
-        console.log(latestProgramVersion)
-        console.log(thisProgramVersion)
+        const lpvArray = latestProgramVersion.split('.')
+        const tpvArray = thisProgramVersion.split('.')
+
+        if(parseInt(lpvArray[0]) > parseInt(tpvArray[0])) {
+          // major version update 있음
+          this.updateExist = true
+        } else {
+          if(parseInt(lpvArray[1]) > parseInt(tpvArray[1])) {
+            // minor version update 있음
+            this.updateExist = true
+          } else {
+            if(parseInt(lpvArray[2]) > parseInt(tpvArray[2])) {
+              // patch version update 있음
+              this.updateExist = true
+            } else {
+              // version 동일함
+              this.updateExist = false
+            }
+          }
+        }
+      }).on('error', err => {
+        console.log(err)
       })
 
       request.end()
+    },
+
+    updateMessage() {
+      if(this.updateExist === false) {
+        this.$q.dialog({
+          title: '업데이트',
+          message: '업데이트가 존재합니다, 업데이트 프로그램을 다운로드 하시겠습니까?',
+          ok: {
+            push: true,
+            label: '할게요'
+          },
+          cancel: {
+            push: true,
+            color: 'negative',
+            label: '귀찮아요'
+          },
+          options: {
+            type: 'checkbox',
+            model: [],
+            inline: true,
+            items: [
+              { label: '프로그램 실행 시, 이 창을 띄우지 않습니다.', value: 'fuckYouDialog' }
+            ]
+          },
+          persistent: true
+        }).onOk(data => {
+          this.notify('negative', `${data}`)
+          // console.log('>>>> OK, received', data)
+        }).onCancel(() => {
+          // console.log('>>>> Cancel')
+        }).onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+        })
+      }
     },
 
     // rtmp.json 파일에서 키 값을 가져와 세팅함
@@ -403,7 +461,6 @@ export default {
 
     // nginx.exe를 키거나 끔
     async nginxSwitch() {
-      this.updateCheck()
       if(this.nginxStatus === false) {
         if(!(await this.makeRTMPJSON())) return
         if(!(await this.makeNginxConf())) return
