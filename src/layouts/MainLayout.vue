@@ -60,7 +60,7 @@
           <q-tabs>
             <q-route-tab
               label="스트리밍"
-              to="/"
+              to="/streaming"
               exact
             />
             <q-route-tab

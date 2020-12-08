@@ -9,6 +9,8 @@
 
 module.exports = function (/* ctx */) {
   const execSync = require('child_process').execSync
+  const fs = require('fs')
+  const path = require('path')
 
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
@@ -75,10 +77,27 @@ module.exports = function (/* ctx */) {
 
       afterBuild() {
         console.log('설치 파일을 만드는 중 입니다.')
+
+        const projectDir = path.join(__dirname, '/dist/electron/Multistreaming-Assist-win32-x64')
+        const packageJSON = fs.readFileSync(path.join(__dirname, 'package.json'), 'UTF-8')
+        const version = JSON.parse(packageJSON).version
+
+        try {
+          fs.writeFileSync(path.join(projectDir, '/version'), version, { encoding: 'UTF-8', flag: 'w' })
+        } catch(e) {
+          console.log(e)
+          console.log('version을 기록하는데 실패했습니다.')
+          return false
+        }
+
         return new Promise((resolve, reject) => {
-          result = execSync('makensis "C:\\git\\javascript\\Multistreaming-Assist\\install.nsi"')
-          console.log('설치 파일 생성이 완료 되었습니다.')
-          resolve(result)
+          try {
+            execSync('makensis "C:\\git\\javascript\\Multistreaming-Assist\\install.nsi"')
+            console.log('설치 파일 생성이 완료 되었습니다.')
+          } catch(e) {
+            console.log(e)
+            console.log('설치 파일 생성에 실패했습니다.')
+          }
         })
       }
     },

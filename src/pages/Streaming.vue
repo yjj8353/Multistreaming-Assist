@@ -96,6 +96,7 @@
 <script>
 import fs from 'fs'
 import path from 'path'
+import https from 'follow-redirects/https'
 
 // Mixin
 import { NginxMixin } from '../components/NginxMixin'
@@ -120,6 +121,7 @@ export default {
     
     ...mapGetters('dir', {
       getDir: 'dir',
+      getRootDir: 'rootDir',
       getNginxDir: 'nginxDir',
       getNginxConfDir: 'nginxConfDir',
       getRecordingDir: 'recordingDir'
@@ -141,6 +143,10 @@ export default {
 
     dir: {
       get() { return this.getDir }
+    },
+
+    rootDir: {
+      get() { return this.getRootDir }
     },
 
     nginxDir: {
@@ -205,6 +211,7 @@ export default {
   // 페이지가 마운트시 실행되는 메소드
   mounted () {
     window.addEventListener('load', () => {
+      this.updateCheck()
       this.getSaveKey()
       this.turnOnSwitch()
     })
@@ -213,7 +220,6 @@ export default {
   // 페이지에서 사용되는 데이터 변수
   data () {
     return {
-
       // Key 입력칸 비밀번호 마스크 여부(true면 *로 감춰지고 false면 문자로 보임)
       twitchIsPwd: true,
       youtubeIsPwd: true,
@@ -254,6 +260,27 @@ export default {
       setAdditionalOn: 'additionalOn',
       setRecordOn: 'recordOn'
     }),
+
+    updateCheck() {
+      let finalUrl
+      let thisProgramVersion
+      let latestProgramVersion
+
+      const request = https.request({
+        host: 'github.com',
+        path: '/yjj8353/Multistreaming-Assist/releases/latest'
+      }, async response => {
+        finalUrl = await response.responseUrl.toString()
+        latestProgramVersion = finalUrl.replace('https://github.com/yjj8353/Multistreaming-Assist/releases/tag/', '')
+
+        thisProgramVersion = fs.readFileSync(path.join(this.getRootDir, 'version'), 'UTF-8')
+
+        console.log(latestProgramVersion)
+        console.log(thisProgramVersion)
+      })
+
+      request.end()
+    },
 
     // rtmp.json 파일에서 키 값을 가져와 세팅함
     getSaveKey() {
@@ -362,7 +389,6 @@ export default {
     async makeRTMPJSON() {
       const rtmpJSON = await this.makeRTMPJSONFile()
       
-      console.log(rtmpJSON)
       try {
         fs.writeFileSync(path.join(this.nginxConfDir, 'rtmp.json'), rtmpJSON)
         this.notify('positive', 'rtmp.json 파일 생성 성공!')
@@ -377,6 +403,7 @@ export default {
 
     // nginx.exe를 키거나 끔
     async nginxSwitch() {
+      this.updateCheck()
       if(this.nginxStatus === false) {
         if(!(await this.makeRTMPJSON())) return
         if(!(await this.makeNginxConf())) return

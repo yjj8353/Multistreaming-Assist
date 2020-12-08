@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
-    "axios": "^0.18.1",
+    "axios": "^0.21.0",
     "core-js": "^3.6.5",
+    "cors": "^2.8.5",
+    "follow-redirects": "^1.13.0",
     "quasar": "^1.0.0"
   },
   "devDependencies": {
