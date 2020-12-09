@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 // store의 모듈들을 여기서 import 한다
 import toggleSwitch from './toggleSwitch'
+import option from './option'
 import nginx from './nginx'
 import keys from './keys'
 import dir  from './dir'
@@ -24,6 +25,7 @@ export default function (/* { ssrContext } */) {
       
       // 위에서 선언한 모듈을 여기에 적는다
       toggleSwitch,
+      option,
       nginx,
       keys,
       dir

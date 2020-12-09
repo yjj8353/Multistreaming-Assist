@@ -101,8 +101,8 @@
             <q-checkbox v-model="fuckYouUpdate" label="앞으로 업데이트 알림을 보지 않습니다" />
           </q-card-section>
           <q-card-actions align="right">
-            <q-btn label="귀찮아요" color="negative"/>
-            <q-btn label="할게요" color="primary"/>
+            <q-btn label="귀찮아요" color="negative" @click="closeUpdatePopup" />
+            <q-btn label="할게요" color="primary" @click="openUpdatePage" />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -115,6 +115,9 @@
 import fs from 'fs'
 import path from 'path'
 import https from 'follow-redirects/https'
+
+// electron
+import { shell } from 'electron'
 
 // Mixin
 import { NginxMixin } from '../components/NginxMixin'
@@ -130,6 +133,9 @@ export default {
   mixins: [NginxMixin, FunctionMixin],
 
   computed: {
+    ...mapGetters('option', {
+      getUpdatePopup: 'updatePopup'
+    }),
 
     ...mapGetters('nginx', {
       getNginxStatus: 'nginxStatus'
@@ -221,6 +227,11 @@ export default {
     recordOn: {
       get() { return this.getRecordOn },
       set(value) { this.setRecordOn(value) }
+    },
+
+    updatePopup: {
+      get() { return this.getUpdatePopup },
+      set(value) { this.setUpdatePopup(value) }
     }
   },
 
@@ -232,7 +243,7 @@ export default {
       this.turnOnSwitch()
     })
 
-    this.updateMessage('top')
+    this.updateMessage()
   },
 
   // 페이지에서 사용되는 데이터 변수
@@ -263,6 +274,10 @@ export default {
    * nginxSwitch                    : nginx를 ON/OFF 함
    */
   methods: {
+    ...mapActions('option', {
+      setUpdatePopup: 'updatePopup'
+    }),
+
     ...mapActions('dir', {
       setRecordingDir: 'recordingDir'
     }),
@@ -327,41 +342,24 @@ export default {
       request.end()
     },
 
-    updateMessage(position) {
+    updateMessage() {
+      if(this.updatePopup === true) return
+
+      // 배포전에 바꿀것
       if(this.updateExist === false) {
         this.seamless = true
       }
-      // if(this.updateExist === false) {
-      //   this.$q.dialog({
-      //     title: '업데이트',
-      //     message: '업데이트가 존재합니다, 업데이트 프로그램을 다운로드 하시겠습니까?',
-      //     ok: {
-      //       push: true,
-      //       label: '할게요'
-      //     },
-      //     cancel: {
-      //       push: true,
-      //       color: 'negative',
-      //       label: '귀찮아요'
-      //     },
-      //     options: {
-      //       type: 'checkbox',
-      //       model: [],
-      //       inline: true,
-      //       items: [
-      //         { label: '프로그램 실행 시, 이 창을 띄우지 않습니다.', value: 'fuckYouDialog' }
-      //       ]
-      //     },
-      //     persistent: true
-      //   }).onOk(data => {
-      //     this.notify('negative', `${data}`)
-      //     // console.log('>>>> OK, received', data)
-      //   }).onCancel(() => {
-      //     // console.log('>>>> Cancel')
-      //   }).onDismiss(() => {
-      //     // console.log('I am triggered on both OK and Cancel')
-      //   })
-      // }
+    },
+
+    openUpdatePage() {
+      shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/releases/latest')
+      this.updatePopup = this.fuckYouUpdate
+      this.seamless = false
+    },
+
+    closeUpdatePopup() {
+      this.updatePopup = this.fuckYouUpdate
+      this.seamless = false
     },
 
     // rtmp.json 파일에서 키 값을 가져와 세팅함
@@ -402,6 +400,12 @@ export default {
         this.recordOn = false
       } else {
         this.recordOn = keys.recordOn
+      }
+
+      if(keys.updatePopup === undefined) {
+        this.updatePopup = false
+      } else {
+        this.updatePopup = keys.updatePopup
       }
     },
 

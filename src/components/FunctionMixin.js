@@ -7,6 +7,10 @@ export const FunctionMixin = {
       getRecordingDir: 'recordingDir'
     }),
 
+    ...mapGetters('option', {
+      getUpdatePopup: 'updatePopup'
+    }),
+
     ...mapGetters('keys', {
       getTwitchKey: 'twitchKey',
       getYoutubeKey: 'youtubeKey',
@@ -70,6 +74,10 @@ export const FunctionMixin = {
 
     fullAdditionalRTMPUrl: {
       get() { return this.getFullAdditionalRTMPUrl }
+    },
+
+    updatePopup: {
+      get() { return this.getUpdatePopup }
     }
   },
 
@@ -149,6 +157,8 @@ export const FunctionMixin = {
                        '    "recordingDir":' + '"' + this.recordingDir.replace(/\\/g, '\\\\') + '",\n' +
                        '\n' +
                        '    "recordOn":' + this.recordOn + '\n' +
+                       '\n' +
+                       '    "updatePopup":' + this.updatePopup + '\n' +
                        '}'
 
       return rtmpJSON
