@@ -240,7 +240,6 @@ export default {
     window.addEventListener('load', async() => {
       await this.updateCheck()
       this.getSaveKey()
-      this.turnOnSwitch()
     })
 
     this.updateMessage()
@@ -351,16 +350,14 @@ export default {
       }
     },
 
-    async openUpdatePage() {
+    openUpdatePage() {
       shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/releases/latest')
       this.updatePopup = this.fuckYouUpdate
-      await this.makeRTMPJSON()
       this.seamless = false
     },
 
-    async closeUpdatePopup() {
+    closeUpdatePopup() {
       this.updatePopup = this.fuckYouUpdate
-      await this.makeRTMPJSON()
       this.seamless = false
     },
 
@@ -387,7 +384,7 @@ export default {
       }
 
       if(keys.additionalOn === undefined) {
-        this.youtubeOn = false
+        this.additionalOn = false
       } else {
         this.additionalOn = keys.additionalOn
       }
@@ -408,21 +405,6 @@ export default {
         this.updatePopup = false
       } else {
         this.updatePopup = keys.updatePopup
-      }
-    },
-
-    // rtmp.json 파일에서 키 값이 존재하는 플랫폼만 스위치를 켬
-    turnOnSwitch() {
-      if(this.twitchKey) {
-        this.twitchOn = true
-      }
-
-      if(this.youtubeKey) {
-        this.youtubeOn = true
-      }
-
-      if(this.additionalRTMPUrl && this.additionalRTMPKey) {
-        this.additionalOn = true
       }
     },
 
