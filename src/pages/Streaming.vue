@@ -351,14 +351,16 @@ export default {
       }
     },
 
-    openUpdatePage() {
+    async openUpdatePage() {
       shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/releases/latest')
       this.updatePopup = this.fuckYouUpdate
+      await this.makeRTMPJSON()
       this.seamless = false
     },
 
-    closeUpdatePopup() {
+    async closeUpdatePopup() {
       this.updatePopup = this.fuckYouUpdate
+      await this.makeRTMPJSON()
       this.seamless = false
     },
 
