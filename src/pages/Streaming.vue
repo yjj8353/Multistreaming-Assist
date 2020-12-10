@@ -238,9 +238,8 @@ export default {
   // 페이지가 마운트시 실행되는 메소드
   mounted () {
     window.addEventListener('load', async() => {
-      await this.updateCheck()
+      this.updateCheck()
       this.getSaveKey()
-      this.updateMessage()
     })
   },
 
@@ -307,7 +306,7 @@ export default {
         host: 'github.com',
         path: '/yjj8353/Multistreaming-Assist/releases/latest'
       }, async response => {
-        const re = /[0-9].*\.[0-9].*\.[0-9].*/
+        const re = /[0-9]+\.[0-9]+\.[0-9]+/
 
         finalUrl = await response.responseUrl.toString()
         latestProgramVersion = re.exec(finalUrl.replace('https://github.com/yjj8353/Multistreaming-Assist/releases/tag/', ''))[0]
@@ -333,6 +332,8 @@ export default {
             }
           }
         }
+
+        this.updateMessage()
       }).on('error', err => {
         console.log(err)
       })
