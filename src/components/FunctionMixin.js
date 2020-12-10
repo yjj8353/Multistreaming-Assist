@@ -156,7 +156,7 @@ export const FunctionMixin = {
                        '\n' +                        // 역슬래시 이스케이프
                        '    "recordingDir":' + '"' + this.recordingDir.replace(/\\/g, '\\\\') + '",\n' +
                        '\n' +
-                       '    "recordOn":' + this.recordOn + '\n' +
+                       '    "recordOn":' + this.recordOn + ',\n' +
                        '\n' +
                        '    "updatePopup":' + this.updatePopup + '\n' +
                        '}'

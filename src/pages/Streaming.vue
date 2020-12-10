@@ -98,7 +98,7 @@
           </q-card-section>
           <q-separator />
           <q-card-section class="row no-wrap">
-            <q-checkbox v-model="fuckYouUpdate" label="앞으로 업데이트 알림을 보지 않습니다" />
+            <q-checkbox v-model="updatePopup" label="앞으로 업데이트 알림을 보지 않습니다" />
           </q-card-section>
           <q-card-actions align="right">
             <q-btn label="귀찮아요" color="negative" @click="closeUpdatePopup" />
@@ -352,13 +352,13 @@ export default {
 
     openUpdatePage() {
       shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/releases/latest')
-      this.updatePopup = this.fuckYouUpdate
       this.seamless = false
+      this.makeRTMPJSON()
     },
 
     closeUpdatePopup() {
-      this.updatePopup = this.fuckYouUpdate
       this.seamless = false
+      this.makeRTMPJSON()
     },
 
     // rtmp.json 파일에서 키 값을 가져와 세팅함
