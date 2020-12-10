@@ -240,9 +240,8 @@ export default {
     window.addEventListener('load', async() => {
       await this.updateCheck()
       this.getSaveKey()
+      this.updateMessage()
     })
-
-    this.updateMessage()
   },
 
   // 페이지에서 사용되는 데이터 변수
@@ -342,10 +341,7 @@ export default {
     },
 
     updateMessage() {
-      if(this.updatePopup === true) return
-
-      // 배포전에 바꿀것
-      if(this.updateExist === false) {
+      if(this.updateExist === true && this.updatePopup === false) {
         this.seamless = true
       }
     },
