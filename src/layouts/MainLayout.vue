@@ -12,6 +12,7 @@
 
           <q-space />
 
+          <!-- 최소화, 최대화, 닫기 버튼 -->
           <q-btn dense flat icon="minimize" @click="minimize" />
           <q-btn dense flat :icon="isMaximized ? 'filter_none' : 'crop_square'" @click="maximize" />
           <q-btn dense flat icon="close" @click="closeApp" />
@@ -56,6 +57,8 @@
           </div>
 
         </div>
+
+        <!-- 스트리밍/녹화 선택 -->
         <div class="bg-blue-6">
           <q-tabs>
             <q-route-tab
@@ -166,6 +169,8 @@ export default {
 
   data () {
     return {
+      
+      // 현재 최대화 상태를 저장하는 변수
       isMaximized: false
     }
   },
@@ -182,6 +187,17 @@ export default {
       setNginxStatus: 'nginxStatus'
     }),
 
+
+    /*
+    * minimize: 프로그램 창 최소화
+    * maximize: 프로그램 창 최대화
+    * closeApp: 프로그램 닫기
+    * windowResizeEvent: 프로그램 창 크기가 변경될시, isMaximize 변수를 갱신
+    * how2Use: 사용법 페이지 열기
+    * contributors: 기여자 목록 페이지 열기
+    * nginxIsWorking: 프로그램을 닫을시, 현재 nginx가 실행중인지 확인
+    * checkIncludeKoreanOnPath: 프로그램이 켜질시, 현재 프로그램 경로에 한글이 포함되었는지 확인
+    */
     minimize() {
       if (process.env.MODE === 'electron') {
         this.win.minimize()
