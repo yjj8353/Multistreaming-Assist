@@ -3,7 +3,9 @@
 node_modules
 
 # Nginx
-/nginx
+/nginx/conf/nginx.conf
+/nginx/conf/rtmp.json
+/nginx/logs
 
 # Quasar core related directories
 .quasar
