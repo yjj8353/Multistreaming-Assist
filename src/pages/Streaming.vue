@@ -120,8 +120,8 @@ import https from 'follow-redirects/https'
 import { shell } from 'electron'
 
 // Mixin
-import { NginxMixin } from '../components/NginxMixin'
-import { FunctionMixin } from '../components/FunctionMixin'
+import { NginxMixin } from '../mixins/NginxMixin'
+import { FunctionMixin } from '../mixins/FunctionMixin'
 
 // vuex
 import { mapActions } from 'vuex'

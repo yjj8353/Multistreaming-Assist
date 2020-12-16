@@ -98,8 +98,8 @@ import { shell } from 'electron'
 import { execFileSync } from 'child_process'
 
 // Mixin
-import { NginxMixin } from 'src/components/NginxMixin'
-import { FunctionMixin } from 'src/components/FunctionMixin'
+import { NginxMixin } from 'src/mixins/NginxMixin'
+import { FunctionMixin } from 'src/mixins/FunctionMixin'
 
 // vuex
 import { mapActions } from 'vuex'
@@ -186,7 +186,6 @@ export default {
     ...mapActions('nginx', {
       setNginxStatus: 'nginxStatus'
     }),
-
 
     /*
     * minimize: 프로그램 창 최소화
