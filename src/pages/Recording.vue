@@ -3,6 +3,7 @@
     
     <div class="row">
       <div class="col-11">
+        <!-- setRecordingDir는 잘못 적은게 아니므로 수정하지 말 것. -->
         <q-input label="녹화 경로"
                  v-model="recordingDir"
                  @input="setRecordingDir"
