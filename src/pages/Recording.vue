@@ -64,7 +64,7 @@ export default {
   },
 
   mounted() {
-    this.originalRecordDir = this.getRecordingDir
+    this.originalRecordDir = this.recordingDir
   },
 
   data() {
