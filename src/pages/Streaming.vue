@@ -90,22 +90,9 @@
       </div>
     </div>
 
-    <div class="q-pa-md q-gutter-sm">
-      <q-dialog v-model="seamless" seamless position="bottom">
-        <q-card style="width: 400px">
-          <q-card-section class="row items-center no-wrap text-weight-bold">
-            업데이트가 있습니다, 다운로드 하시겠습니까?
-          </q-card-section>
-          <q-separator />
-          <q-card-section class="row no-wrap">
-            <q-checkbox v-model="updatePopup" label="앞으로 업데이트 알림을 보지 않습니다" />
-          </q-card-section>
-          <q-card-actions align="right">
-            <q-btn label="귀찮아요" color="negative" @click="closeUpdatePopup" />
-            <q-btn label="할게요" color="primary" @click="openUpdatePage" />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
+    <!-- updateExist 존재할때만 키도록 할 것 -->
+    <div v-if="updateCheck() && !getUpdatePopup">
+      <update-component />
     </div>
 
   </q-page>
@@ -116,9 +103,6 @@ import fs from 'fs'
 import path from 'path'
 import https from 'follow-redirects/https'
 
-// electron
-import { shell } from 'electron'
-
 // Mixin
 import { NginxMixin } from '../mixins/NginxMixin'
 import { FunctionMixin } from '../mixins/FunctionMixin'
@@ -126,8 +110,10 @@ import { FunctionMixin } from '../mixins/FunctionMixin'
 // vuex
 import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
+import UpdateComponent from 'src/components/UpdateComponent.vue'
 
 export default {
+  components: { UpdateComponent },
   name: 'StreamingPage',
   
   mixins: [NginxMixin, FunctionMixin],
@@ -231,7 +217,7 @@ export default {
 
     updatePopup: {
       get() { return this.getUpdatePopup },
-      set(value) { this.setUpdatePopup(value) }
+      set(value) { return this.setUpdatePopup(value) }
     }
   },
 
@@ -250,7 +236,6 @@ export default {
 
       // update 여부
       updateExist: false,
-      fuckYouUpdate: false,
 
       // Key 입력칸 비밀번호 마스크 여부(true면 *로 감춰지고 false면 문자로 보임)
       twitchIsPwd: true,
@@ -271,12 +256,12 @@ export default {
    * nginxSwitch                    : nginx를 ON/OFF 함
    */
   methods: {
-    ...mapActions('option', {
-      setUpdatePopup: 'updatePopup'
-    }),
-
     ...mapActions('dir', {
       setRecordingDir: 'recordingDir'
+    }),
+
+    ...mapActions('option', {
+      setUpdatePopup: 'updatePopup'
     }),
 
     ...mapActions('keys', {
@@ -332,30 +317,11 @@ export default {
             }
           }
         }
-
-        this.updateMessage()
       }).on('error', err => {
         console.log(err)
       })
 
       request.end()
-    },
-
-    updateMessage() {
-      if(this.updateExist === true && this.updatePopup === false) {
-        this.seamless = true
-      }
-    },
-
-    openUpdatePage() {
-      shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/releases/latest')
-      this.seamless = false
-      this.makeRTMPJSON()
-    },
-
-    closeUpdatePopup() {
-      this.seamless = false
-      this.makeRTMPJSON()
     },
 
     // rtmp.json 파일에서 키 값을 가져와 세팅함
@@ -470,6 +436,8 @@ export default {
 
     // nginx.exe를 키거나 끔
     async nginxSwitch() {
+      console.log(this.updateExist)
+      console.log(this.updatePopup)
       if(this.nginxStatus === false) {
         if(!(await this.makeRTMPJSON())) return
         if(!(await this.makeNginxConf())) return
