@@ -28,7 +28,7 @@ import { mapGetters } from 'vuex'
 import { FunctionMixin } from '../mixins/FunctionMixin'
 
 export default {
-  name: 'UpdatePopup',
+  name: 'UpdateComponent',
 
   mixins: [FunctionMixin],
 

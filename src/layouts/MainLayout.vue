@@ -78,6 +78,12 @@
       <q-page-container>
         <router-view />
       </q-page-container>
+
+      <!-- updateExist 존재할때만 키도록 할 것 -->
+      <div v-if="updateExist && !updatePopup">
+        <UpdateComponent />
+      </div>
+
     </div>
 
     <!-- 경로에 한글이 포함되어 있을 경우 -->
@@ -96,6 +102,9 @@
 <script>
 import { shell } from 'electron'
 import { execFileSync } from 'child_process'
+import fs from 'fs'
+import path from 'path'
+import https from 'follow-redirects/https'
 
 // Mixin
 import { NginxMixin } from 'src/mixins/NginxMixin'
@@ -105,12 +114,20 @@ import { FunctionMixin } from 'src/mixins/FunctionMixin'
 import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
 
+import UpdateComponent from 'src/components/UpdateComponent.vue'
+
 export default {
   name: 'MainLayout',
 
   mixins: [NginxMixin, FunctionMixin],
 
+  components: { UpdateComponent },
+
   computed: {
+    ...mapGetters('option', {
+      getUpdatePopup: 'updatePopup'
+    }),
+
     ...mapGetters('dir', {
       getDir: 'dir',
       getRootDir: 'rootDir',
@@ -154,6 +171,11 @@ export default {
 
     win: {
       get() { return this.$q.electron.remote.BrowserWindow.getFocusedWindow() }
+    },
+
+    updatePopup: {
+      get() { return this.getUpdatePopup },
+      set(value) { return this.setUpdatePopup(value) }
     }
   },
 
@@ -165,17 +187,30 @@ export default {
     this.nginxLogsDir = this.nginxDir
 
     window.addEventListener('resize', this.windowResizeEvent)
+
+    window.addEventListener('load', async() => {
+      await this.updateCheck()
+
+      console.log(this.updatePopup)
+      console.log(this.updateExist)
+    })
   },
 
   data () {
     return {
-      
+      // update 여부
+      updateExist: false,
+
       // 현재 최대화 상태를 저장하는 변수
       isMaximized: false
     }
   },
 
   methods: {
+    ...mapActions('option', {
+      setUpdatePopup: 'updatePopup'
+    }),
+
     ...mapActions('dir', {
       setRootDir: 'rootDir',
       setNginxDir: 'nginxDir', 
@@ -253,6 +288,52 @@ export default {
       } else {
         this.isMaximized = false
       }
+    },
+
+    async updateCheck() {
+      let finalUrl
+      let thisProgramVersion
+      let latestProgramVersion
+
+      const request = https.request({
+        host: 'github.com',
+        path: '/yjj8353/Multistreaming-Assist/releases/latest'
+      }, async response => {
+        const re = /[0-9]+\.[0-9]+\.[0-9]+/
+
+        finalUrl = await response.responseUrl.toString()
+        latestProgramVersion = re.exec(finalUrl.replace('https://github.com/yjj8353/Multistreaming-Assist/releases/tag/', ''))[0]
+        thisProgramVersion = fs.readFileSync(path.join(this.getRootDir, 'version'), 'UTF-8')
+
+        const lpvArray = latestProgramVersion.split('.')
+        const tpvArray = thisProgramVersion.split('.')
+
+        if(parseInt(lpvArray[0]) > parseInt(tpvArray[0])) {
+          // major version update 있음
+          this.updateExist = true
+          console.log('true')
+        } else {
+          if(parseInt(lpvArray[1]) > parseInt(tpvArray[1])) {
+            // minor version update 있음
+            this.updateExist = true
+            console.log('true')
+          } else {
+            if(parseInt(lpvArray[2]) > parseInt(tpvArray[2])) {
+              // patch version update 있음
+              this.updateExist = true
+              console.log('true')
+            } else {
+              // version 동일함
+              this.updateExist = false
+              console.log('false')
+            }
+          }
+        }
+      }).on('error', err => {
+        console.log(err)
+      })
+
+      request.end()
     },
 
     how2Use () {

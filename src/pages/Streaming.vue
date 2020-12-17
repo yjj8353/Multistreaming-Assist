@@ -90,18 +90,12 @@
       </div>
     </div>
 
-    <!-- updateExist 존재할때만 키도록 할 것 -->
-    <div v-if="updateCheck() && !getUpdatePopup">
-      <update-component />
-    </div>
-
   </q-page>
 </template>
 
 <script>
 import fs from 'fs'
 import path from 'path'
-import https from 'follow-redirects/https'
 
 // Mixin
 import { NginxMixin } from '../mixins/NginxMixin'
@@ -110,10 +104,8 @@ import { FunctionMixin } from '../mixins/FunctionMixin'
 // vuex
 import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
-import UpdateComponent from 'src/components/UpdateComponent.vue'
 
 export default {
-  components: { UpdateComponent },
   name: 'StreamingPage',
   
   mixins: [NginxMixin, FunctionMixin],
@@ -224,7 +216,6 @@ export default {
   // 페이지가 마운트시 실행되는 메소드
   mounted () {
     window.addEventListener('load', async() => {
-      this.updateCheck()
       this.getSaveKey()
     })
   },
@@ -232,11 +223,6 @@ export default {
   // 페이지에서 사용되는 데이터 변수
   data () {
     return {
-      seamless: false,
-
-      // update 여부
-      updateExist: false,
-
       // Key 입력칸 비밀번호 마스크 여부(true면 *로 감춰지고 false면 문자로 보임)
       twitchIsPwd: true,
       youtubeIsPwd: true,
@@ -256,12 +242,12 @@ export default {
    * nginxSwitch                    : nginx를 ON/OFF 함
    */
   methods: {
-    ...mapActions('dir', {
-      setRecordingDir: 'recordingDir'
-    }),
-
     ...mapActions('option', {
       setUpdatePopup: 'updatePopup'
+    }),
+
+    ...mapActions('dir', {
+      setRecordingDir: 'recordingDir'
     }),
 
     ...mapActions('keys', {
@@ -281,48 +267,6 @@ export default {
       setAdditionalOn: 'additionalOn',
       setRecordOn: 'recordOn'
     }),
-
-    async updateCheck() {
-      let finalUrl
-      let thisProgramVersion
-      let latestProgramVersion
-
-      const request = https.request({
-        host: 'github.com',
-        path: '/yjj8353/Multistreaming-Assist/releases/latest'
-      }, async response => {
-        const re = /[0-9]+\.[0-9]+\.[0-9]+/
-
-        finalUrl = await response.responseUrl.toString()
-        latestProgramVersion = re.exec(finalUrl.replace('https://github.com/yjj8353/Multistreaming-Assist/releases/tag/', ''))[0]
-        thisProgramVersion = fs.readFileSync(path.join(this.getRootDir, 'version'), 'UTF-8')
-
-        const lpvArray = latestProgramVersion.split('.')
-        const tpvArray = thisProgramVersion.split('.')
-
-        if(parseInt(lpvArray[0]) > parseInt(tpvArray[0])) {
-          // major version update 있음
-          this.updateExist = true
-        } else {
-          if(parseInt(lpvArray[1]) > parseInt(tpvArray[1])) {
-            // minor version update 있음
-            this.updateExist = true
-          } else {
-            if(parseInt(lpvArray[2]) > parseInt(tpvArray[2])) {
-              // patch version update 있음
-              this.updateExist = true
-            } else {
-              // version 동일함
-              this.updateExist = false
-            }
-          }
-        }
-      }).on('error', err => {
-        console.log(err)
-      })
-
-      request.end()
-    },
 
     // rtmp.json 파일에서 키 값을 가져와 세팅함
     getSaveKey() {
@@ -436,8 +380,6 @@ export default {
 
     // nginx.exe를 키거나 끔
     async nginxSwitch() {
-      console.log(this.updateExist)
-      console.log(this.updatePopup)
       if(this.nginxStatus === false) {
         if(!(await this.makeRTMPJSON())) return
         if(!(await this.makeNginxConf())) return
