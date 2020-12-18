@@ -79,7 +79,7 @@
         <router-view />
       </q-page-container>
 
-      <!-- updateExist 존재할때만 키도록 할 것 -->
+      <!-- 업데이트가 존재하고, 팝업금지가 체크되어 있지 않을 때 표시함 -->
       <div v-if="updateExist && !updatePopup">
         <UpdateComponent />
       </div>
