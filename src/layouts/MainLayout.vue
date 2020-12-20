@@ -190,9 +190,6 @@ export default {
 
     window.addEventListener('load', async() => {
       await this.updateCheck()
-
-      console.log(this.updatePopup)
-      console.log(this.updateExist)
     })
   },
 
@@ -311,21 +308,17 @@ export default {
         if(parseInt(lpvArray[0]) > parseInt(tpvArray[0])) {
           // major version update 있음
           this.updateExist = true
-          console.log('true')
         } else {
           if(parseInt(lpvArray[1]) > parseInt(tpvArray[1])) {
             // minor version update 있음
             this.updateExist = true
-            console.log('true')
           } else {
             if(parseInt(lpvArray[2]) > parseInt(tpvArray[2])) {
               // patch version update 있음
               this.updateExist = true
-              console.log('true')
             } else {
               // version 동일함
               this.updateExist = false
-              console.log('false')
             }
           }
         }
