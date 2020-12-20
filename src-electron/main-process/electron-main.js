@@ -16,13 +16,23 @@ if (process.env.PROD) {
 
 let mainWindow
 
-function createWindow () {
-  /**
-   * Initial window options
-   */
-  mainWindow = new BrowserWindow({
-    width: 480,
-    height: 600,
+// electron x, y 좌표 및 width, height 정보를 기억하는 모듈
+const windowStateKeeper = require('electron-window-state')
+
+// 기본 윈도우 크기
+function createWindow () {  
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 480,
+    defaultHeight: 600
+  })
+
+  mainWindow = new BrowserWindow({   
+    // mainWindowState에 electron의 크기 및 위치 정보를 저장함 
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
+    
     useContentSize: true,
     frame: false,
     webPreferences: {
@@ -35,6 +45,7 @@ function createWindow () {
       // preload: path.resolve(__dirname, 'electron-preload.js')
     }
   })
+  mainWindowState.manage(mainWindow)
 
   mainWindow.loadURL(process.env.APP_URL)
 
