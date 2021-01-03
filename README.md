@@ -1,3 +1,11 @@
+# Todo List
+
+1. Typescript로 전환
+2. Electron 윈도우 위치 기억 기능
+3. 리팩토링
+
+-----
+
 # Multistreaming-Assist
 
 * Electron 6.13.7
