@@ -5,8 +5,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Streaming.vue') },
-      { path: 'recording', component: () => import('pages/Recording.vue') },
-      { path: 'help', component: () => import('pages/Help.vue') }
+      { path: 'recording', component: () => import('pages/Recording.vue') }
     ]
   },
 
