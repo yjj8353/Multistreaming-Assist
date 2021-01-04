@@ -20,22 +20,22 @@ const getters: GetterTree<KeyStateInterface, StateInterface> = {
   },
 
   fullTwitchUrl(state: KeyStateInterface): string {
-    let fullTwitchUrl = state.twitchKey.trim() ? 'push rtmp://live-sel.twitch.tv/app/' + state.twitchKey.trim() + ';' : ''
+    const fullTwitchUrl = state.twitchKey.trim() ? 'push rtmp://live-sel.twitch.tv/app/' + state.twitchKey.trim() + ';' : ''
     return fullTwitchUrl
   },
 
   fullYoutubeUrl(state: KeyStateInterface): string {
-      let fullYoutubeUrl = state.youtubeKey.trim() ? 'push rtmp://a.rtmp.youtube.com/live2/' + state.youtubeKey.trim() + ';' : ''
-      return fullYoutubeUrl
+    const fullYoutubeUrl = state.youtubeKey.trim() ? 'push rtmp://a.rtmp.youtube.com/live2/' + state.youtubeKey.trim() + ';' : ''
+    return fullYoutubeUrl
   },
 
   fullAdditionalUrl(state: KeyStateInterface): string {
-      let fullAdditionalRTMPUrl = 'push ' + state.additionalRTMPUrl.trim() + '/' + state.additionalRTMPKey.trim() + ';'
-      if(fullAdditionalRTMPUrl === 'push /') {
-          fullAdditionalRTMPUrl = ''
-      }
+    let fullAdditionalRTMPUrl = 'push ' + state.additionalRTMPUrl.trim() + '/' + state.additionalRTMPKey.trim() + ';'
+    if(fullAdditionalRTMPUrl === 'push /') {
+      fullAdditionalRTMPUrl = ''
+    }
 
-      return fullAdditionalRTMPUrl
+    return fullAdditionalRTMPUrl
   }
 }
 
