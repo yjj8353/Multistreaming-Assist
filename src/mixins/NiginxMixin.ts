@@ -6,46 +6,38 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 import fs from 'fs'
-import { execFile, execFileSync, execSync } from 'child_process'
+
+import { useExec, useExecFile, useExecSync } from '../functions/ShellFunction'
 
 @Component
 export class NginxMixin extends Vue {
-  startNginxProcess(nginxDir: string, nginxLogsDir: string): void|string {
+  startNginxProcess(nginxDir: string, nginxLogsDir: string): void {
     if(!fs.existsSync(nginxLogsDir)) {
       fs.mkdirSync(nginxLogsDir)
     }
 
-    execFile('nginx.exe', { cwd: nginxDir }, (err, stdout, stderr) => {
-      if(err) {
-        return err.message
-      }
+    useExecFile('nginx.exe', null, { cwd: nginxDir })
+    // execFile('nginx.exe', { cwd: nginxDir }, (err, stdout, stderr) => {
+    //   if(err) {
+    //     return err.message
+    //   }
 
-      return stdout
-    })
+    //   return stdout
+    // })
   }
 
-  quitNginxProcess(): string[] {
+  quitNginxProcess(): string {
     let result: string = ''
-    let error: string = ''
 
-    try {
-      result = execSync('taskkill /im nginx.exe /f').toString()
-    } catch(err) {
-      error = err.stderr.toString()
-    }
+    result = useExecSync('taskkill /im nginx.exe /f', undefined)
 
-    return [result, error]
+    return result
   }
 
   findNginxProcess(): boolean {
     let result: string = ''
-    let error: string = ''
 
-    try {
-      result = execSync('tasklist /fi "imagename eq nginx.exe"').toString()
-    } catch (err) {
-      error = err.toString()
-    }
+    result = useExecSync('tasklist /fi "imagename eq nginx.exe"', undefined)
 
     const re = new RegExp('nginx.exe')
     return re.test(result)

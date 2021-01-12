@@ -7,7 +7,9 @@ import Component from 'vue-class-component'
 
 @Component
 export class ConfigMixin extends Vue {
-  async makeNginxConfString(recordOn: boolean, twitchOn: boolean, youtubeOn: boolean, additionalOn: boolean, recordingDir: string, fullTwitchUrl: string, fullYoutubeUrl: string, fullAdditionalRTMPUrl: string): Promise<string> {                                              // recordingDir.length === 0 이거나 recordOn이 false면 녹화를 끔
+  async makeNginxConfString(recordOn: boolean, twitchOn: boolean, youtubeOn: boolean, additionalOn: boolean, recordingDir: string, fullTwitchUrl: string, fullYoutubeUrl: string, fullAdditionalRTMPUrl: string): Promise<string> {
+
+    // recordingDir.length === 0 이거나 recordOn이 false면 녹화를 끔
     const recordOption = recordingDir.length !== 0 && recordOn ? '            record all;\n' +
                                                                  '            record_path "' + recordingDir.replace(/\\/g, '/') + '";\n' +
                                                                  '            record_unique on;' +
