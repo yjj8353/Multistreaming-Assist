@@ -88,12 +88,7 @@
 
     <!-- 경로에 한글이 포함되어 있을 경우 -->
     <div v-else>
-      <q-card class="my-card">
-        <q-card-section>
-          <span>경로에 한글이 포함되어 있는 것 같습니다</span><br />
-          <span>한글이 포함되어 있으면 Nginx가 실행되지 않습니다</span>
-        </q-card-section>
-      </q-card>
+      <ErrorNginxPath />
     </div>
 
   </q-layout>
@@ -110,6 +105,7 @@ import { Action, Getter, namespace } from 'vuex-class'
 
 // components
 import UpdateComponent from 'src/components/UpdateComponent.vue'
+import ErrorNginxPath from 'src/components/ErrorNginxPath.vue'
 
 // mixins
 import { CheckMixin } from 'src/mixins/CheckMixin'
@@ -120,7 +116,7 @@ const nginxStore = namespace('nginx')
 const optionStore = namespace('option')
 
 @Component({
-  components: { UpdateComponent }
+  components: { UpdateComponent, ErrorNginxPath }
 })
 export default class MainLayout extends mixins(CheckMixin, NginxMixin) {
   @dirStore.Action('dir') setDir!: (value: string) => void
