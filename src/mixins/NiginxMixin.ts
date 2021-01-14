@@ -11,12 +11,12 @@ import { useExec, useExecFile, useExecSync } from '../functions/ShellFunction'
 
 @Component
 export class NginxMixin extends Vue {
-  startNginxProcess(nginxDir: string, nginxLogsDir: string): void {
+  startNginxProcess(nginxDir: string, nginxLogsDir: string): void | [string, string]{
     if(!fs.existsSync(nginxLogsDir)) {
       fs.mkdirSync(nginxLogsDir)
     }
 
-    useExecFile('nginx.exe', null, { cwd: nginxDir })
+    return useExecFile('nginx.exe', null, { cwd: nginxDir })
     // execFile('nginx.exe', { cwd: nginxDir }, (err, stdout, stderr) => {
     //   if(err) {
     //     return err.message

@@ -94,12 +94,58 @@
 </template>
 
 <script lang="ts">
-import { NginxMixin } from 'src/mixins/NiginxMixin';
-import { mixins } from 'vue-class-component';
+import { NginxMixin } from 'src/mixins/NiginxMixin'
+import { QuasarMixin } from 'src/mixins/QuasarMixin'
+import { mixins } from 'vue-class-component'
 import { Vue, Component } from 'vue-property-decorator'
+import { namespace } from 'vuex-class'
+
+const dirStore = namespace('dir')
+const nginxStroe = namespace('nginx')
 
 @Component
-export default class StreamingPage extends mixins(NginxMixin) {
-  
+export default class StreamingPage extends mixins(NginxMixin, QuasarMixin) {
+  @dirStore.Action('nginxDir') getNginxDir!: string
+  @dirStore.Action('nginxLogsDir') getNginxLogsDir!: string
+
+  @nginxStroe.Action('nginxStatus') setNginxStatus!: (value: boolean) => void
+  @nginxStroe.Getter('nginxStatus') getNginxStatus!: boolean
+
+  get nginxStatus(): boolean { return this.getNginxStatus }
+  set nginxStatus(value: boolean) { this.setNginxStatus(value) }
+
+  get nginxDir(): string { return this.getNginxDir }
+
+  get nginxLogsDir(): string { return this.getNginxLogsDir }
+
+  data() {
+    return {
+      twitchIsPwd: false,
+      youtubeIsPwd: false,
+      additionalIsPwd: false
+    }
+  }
+
+  async nginxSwitch() {
+    if(!this.nginxStatus) {
+      if(!(await this.makeRTMPJSON())) return
+      if(!(await this.makeNginxConf())) return
+      
+      const err = this.startNginxProcess(this.nginxDir, this.nginxLogsDir)
+
+      if(err) {
+        this.nginxStatus = false
+        this.notify('negative', 'nginx 실행에 실패했습니다')
+      }
+
+      this.nginxStatus = true
+    } else {
+      try {
+        this.quitNginxProcess()
+      } finally {
+        this.nginxStatus = false
+      }
+    }
+  }
 }
 </script>
