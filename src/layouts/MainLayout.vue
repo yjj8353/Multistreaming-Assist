@@ -173,32 +173,32 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin) {
   }
 
   eventsSetting() {
-    window.addEventListener('resize', windowResizeEvent)
-    window.addEventListener('load', updateCheck)
-
-    function windowResizeEvent() {
-      if(this.win.isMaximized()) {
+    const windowResizeEvent = () => {
+      if(this.win !== null && this.win.isMaximized()) {
         this.isMaximized = true
       } else {
         this.isMaximized = false
       }
     }
 
-    function updateCheck() {
+    const updateCheck = () => {
       //
     }
+
+    window.addEventListener('resize', windowResizeEvent)
+    window.addEventListener('load', updateCheck)
   }
 
   minimize() {
-    if(process.env.MOD === 'electron') {
+    if(this.win !== null && process.env.MOD === 'electron') {
       this.win.minimize()
     }
   }
 
   maximize() {
-    if(process.env.MOD === 'electron') {
+    if(this.win !== null && process.env.MOD === 'electron') {
       if(this.win.isMaximized()) {
-        this.win.unmaximized()
+        this.win.unmaximize()
         this.isMaximized = false
       } else {
         this.win.maximize()
@@ -208,19 +208,22 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin) {
   }
 
   closeApp() {
-    this.win.close()
+    if(this.win !== null) {
+      this.win.close()
+    }
   }
 
-  how2Use() {
-    shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/quasar/README.md')
+  async how2Use() {
+    await shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/quasar/README.md')
   }
 
-  contributors() {
-    shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/quasar/%EA%B8%B0%EC%97%AC%EC%9E%90%EB%AA%A9%EB%A1%9D.md')
+  async contributors() {
+    await shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/quasar/%EA%B8%B0%EC%97%AC%EC%9E%90%EB%AA%A9%EB%A1%9D.md')
   }
 
   nginxIsWorking() {
     const result = this.findNginxProcess()
+    return result
   }
 
   checkPath() {
