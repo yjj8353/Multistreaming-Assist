@@ -4,7 +4,7 @@
     <!-- TWITCH RTMP KEY 입력 칸 -->
     <div class="row">
       <div class="col-11">
-        <q-input label="TWITCH RTMP KEY" v-model="twitchKey" :type="twitchIsPwd ? 'password' : 'text'" @input="checkTwitchKeykNull">
+        <q-input label="TWITCH RTMP KEY" v-model="twitchKey" :type="twitchIsPwd ? 'password' : 'text'" @input="checkTwitchKeyNull">
           <template v-slot:append>
             <q-icon
               :name="twitchIsPwd ? 'visibility_off' : 'visibility'"
@@ -94,42 +94,75 @@
 </template>
 
 <script lang="ts">
+import { ConfigMixin } from 'src/mixins/ConfigMixin'
 import { NginxMixin } from 'src/mixins/NiginxMixin'
 import { QuasarMixin } from 'src/mixins/QuasarMixin'
 import { mixins } from 'vue-class-component'
-import { Vue, Component } from 'vue-property-decorator'
+import { Component } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
 
 const dirStore = namespace('dir')
+const keyStore = namespace('keys')
 const nginxStroe = namespace('nginx')
+const toggleSwitchStore = namespace('toggleSwitch')
 
 @Component
-export default class StreamingPage extends mixins(NginxMixin, QuasarMixin) {
-  @dirStore.Action('nginxDir') getNginxDir!: string
-  @dirStore.Action('nginxLogsDir') getNginxLogsDir!: string
+export default class StreamingPage extends mixins(ConfigMixin, NginxMixin, QuasarMixin) {
+  @dirStore.Getter('nginxDir') getNginxDir!: string
+  @dirStore.Getter('nginxLogsDir') getNginxLogsDir!: string
 
-  @nginxStroe.Action('nginxStatus') setNginxStatus!: (value: boolean) => void
+  @keyStore.Getter('twitchKey') getTwitchKey!: string
+  @keyStore.Getter('youtubeKey') getYoutubeKey!: string
+  @keyStore.Getter('additionalRTMPUrl') getAdditionalRTMPUrl!: string
+  @keyStore.Getter('additionalRTMPKey') getAdditionalRTMPKey!: string
+  @keyStore.Action('twitchKey') setTwitchKey!: (value: string) => void
+  @keyStore.Action('youtubeKey') setYoutubeKey!: (value: string) => void
+  @keyStore.Action('additionalRTMPUrl') setAdditionalRTMPUrl!: (value: string) => void
+  @keyStore.Action('additionalRTMPKey') setAdditionalRTMPKey!: (value: string) => void
+
   @nginxStroe.Getter('nginxStatus') getNginxStatus!: boolean
+  @nginxStroe.Action('nginxStatus') setNginxStatus!: (value: boolean) => void
+
+  @toggleSwitchStore.Getter('twitchOn') getTwitchOn!: boolean
+  @toggleSwitchStore.Getter('youtubeOn') getYoutubeOn!: boolean
+  @toggleSwitchStore.Getter('additionalOn') getAdditionalOn!: boolean
+  @toggleSwitchStore.Action('twitchOn') setTwitchOn!: (value: boolean) => void
+  @toggleSwitchStore.Action('youtubeOn') setYoutubeOn!: (value: boolean) => void
+  @toggleSwitchStore.Action('additionalOn') setAdditionalOn!: (value: boolean) => void
+
+  get nginxDir(): string { return this.getNginxDir }
+  get nginxLogsDir(): string { return this.getNginxLogsDir }
+
+  get twitchKey(): string { return this.getTwitchKey }
+  set twitchKey(value: string) { this.setTwitchKey(value) }
+  get youtubeKey(): string { return this.getYoutubeKey }
+  set youtubeKey(value: string) { this.setYoutubeKey(value) }
+  get additionalRTMPUrl(): string { return this.getAdditionalRTMPUrl }
+  set additionalRTMPUrl(value: string) { this.setAdditionalRTMPUrl(value) }
+  get additionalRTMPKey(): string { return this.getAdditionalRTMPKey }
+  set additionalRTMPKey(value: string) { this.setAdditionalRTMPKey(value) }
 
   get nginxStatus(): boolean { return this.getNginxStatus }
   set nginxStatus(value: boolean) { this.setNginxStatus(value) }
 
-  get nginxDir(): string { return this.getNginxDir }
+  get twitchOn(): boolean { return this.getTwitchOn }
+  set twitchOn(value: boolean) { this.setTwitchOn(value) }
+  get youtubeOn(): boolean { return this.getYoutubeOn }
+  set youtubeOn(value: boolean) { this.setYoutubeOn(value) }
+  get additionalOn(): boolean { return this.getAdditionalOn }
+  set additionalOn(value: boolean) { this.setAdditionalOn(value) }
 
-  get nginxLogsDir(): string { return this.getNginxLogsDir }
+  twitchIsPwd = true
+  youtubeIsPwd = true
+  additionalIsPwd = true
 
-  data() {
-    return {
-      twitchIsPwd: false,
-      youtubeIsPwd: false,
-      additionalIsPwd: false
-    }
-  }
-
-  async nginxSwitch() {
+  nginxSwitch() {
     if(!this.nginxStatus) {
-      if(!(await this.makeRTMPJSON())) return
-      if(!(await this.makeNginxConf())) return
+      const keyData = this.makeKeyJSONString()
+      const nginxConfig = this.makeNginxConfString()
+
+      if(!keyData) { return }
+      if(!nginxConfig) { return }
       
       const err = this.startNginxProcess(this.nginxDir, this.nginxLogsDir)
 
@@ -145,6 +178,27 @@ export default class StreamingPage extends mixins(NginxMixin, QuasarMixin) {
       } finally {
         this.nginxStatus = false
       }
+    }
+  }
+
+  // twitchKey q-input 값이 비는 순간 스위치를 끔
+  checkTwitchKeyNull(value: string) {
+    if(!value) {
+      this.twitchOn = false
+    }
+  }
+
+  // youtubeKey q-input 값이 비는 순간 스위치를 끔
+  checkYoutubeKeyNull(value: string) {
+    if(!value) {
+      this.youtubeOn = false
+    }
+  }
+
+  // additionalRTMP의 url 혹은 key q-input 값이 비는 순간 스위치를 끔
+  checkAddtionalRTMPUrlOrKeyNull(value: string) {
+    if(!value) {
+      this.additionalOn = false
     }
   }
 }

@@ -2,9 +2,11 @@
  * Config File 관련기능
  */
 
-import Vue from 'vue'
-import Component from 'vue-class-component'
+// import Vue from 'vue'
+import Component, { mixins } from 'vue-class-component'
 import { namespace } from 'vuex-class'
+
+import { StoreMixin } from 'src/mixins/StoreMixin'
 
 const dirStore = namespace('dir')
 const keyStore = namespace('keys')
@@ -12,23 +14,23 @@ const optionStore = namespace('option')
 const toggleSwitchStore = namespace('toggleSwitch')
 
 @Component
-export class ConfigMixin extends Vue {
+export class ConfigMixin extends mixins(StoreMixin) {
   @dirStore.Getter('recordingDir') recordingDir!: string
 
-  @keyStore.Getter('twitchKey') twitchKey!: string
-  @keyStore.Getter('youtubeKey') youtubeKey!: string
-  @keyStore.Getter('additionalRTMPUrl') additionalRTMPUrl!: string
-  @keyStore.Getter('additionalRTMPKey') additionalRTMPKey!: string
-  @keyStore.Getter('fullTwitchUrl') fullTwitchUrl!: string
-  @keyStore.Getter('fullYoutubeUrl') fullYoutubeUrl!: string
-  @keyStore.Getter('fullAdditionalUrl') fullAdditionalUrl!: string
+  @keyStore.Getter('twitchKey') getTwitchKey!: string
+  @keyStore.Getter('youtubeKey') getYoutubeKey!: string
+  @keyStore.Getter('additionalRTMPUrl') getAdditionalRTMPUrl!: string
+  @keyStore.Getter('additionalRTMPKey') getAdditionalRTMPKey!: string
+  @keyStore.Getter('fullTwitchUrl') getFullTwitchUrl!: string
+  @keyStore.Getter('fullYoutubeUrl') getFullYoutubeUrl!: string
+  @keyStore.Getter('fullAdditionalUrl') getFullAdditionalUrl!: string
 
-  @optionStore.Getter('updatePopup') updatePopup!: boolean
+  @optionStore.Getter('updatePopup') getUpdatePopup!: boolean
 
-  @toggleSwitchStore.Getter('twitchOn') twitchOn!: boolean
-  @toggleSwitchStore.Getter('youtubeOn') youtubeOn!: boolean
-  @toggleSwitchStore.Getter('additionalOn') additionalOn!: boolean
-  @toggleSwitchStore.Getter('recordOn') recordOn!: boolean
+  @toggleSwitchStore.Getter('twitchOn') getTwitchOn!: boolean
+  @toggleSwitchStore.Getter('youtubeOn') getYoutubeOn!: boolean
+  @toggleSwitchStore.Getter('additionalOn') getAdditionalOn!: boolean
+  @toggleSwitchStore.Getter('recordOn') getRecordOn!: boolean
 
   makeNginxConfString(): string {
     // recordingDir.length === 0 이거나 recordOn이 false면 녹화를 끔
