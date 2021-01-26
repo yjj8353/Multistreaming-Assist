@@ -99,9 +99,8 @@
 import { shell } from 'electron'
 
 // vue
-import Vue from 'vue'
 import Component, { mixins } from 'vue-class-component'
-import { Action, Getter, namespace } from 'vuex-class'
+import { namespace } from 'vuex-class'
 
 // components
 import UpdateComponent from 'src/components/UpdateComponent.vue'
@@ -156,7 +155,7 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin) {
   get nginxStatus(): boolean { return this.getNginxStatus }
   set nginxStatus(value: boolean) { this.setNginxStatus(value) }
 
-  get win(): any { return this.$q.electron.remote.BrowserWindow.getFocusedWindow() }
+  get win(): Electron.BrowserWindow | null { return this.$q.electron.remote.BrowserWindow.getFocusedWindow() }
 
   isMaximized = false
   updateExist = false
@@ -174,20 +173,20 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin) {
   }
 
   eventsSetting() {
-    window.addEventListener('resize', this.windowResizeEvent)
-    window.addEventListener('load', this.updateCheck)
-  }
+    window.addEventListener('resize', windowResizeEvent)
+    window.addEventListener('load', updateCheck)
 
-  windowResizeEvent() {
-    if(this.win.isMaximized()) {
-      this.isMaximized = true
-    } else {
-      this.isMaximized = false
+    function windowResizeEvent() {
+      if(this.win.isMaximized()) {
+        this.isMaximized = true
+      } else {
+        this.isMaximized = false
+      }
     }
-  }
 
-  updateCheck() {
-
+    function updateCheck() {
+      //
+    }
   }
 
   minimize() {
