@@ -4,20 +4,42 @@
 
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import { namespace } from 'vuex-class'
+
+const dirStore = namespace('dir')
+const keyStore = namespace('keys')
+const optionStore = namespace('option')
+const toggleSwitchStore = namespace('toggleSwitch')
 
 @Component
 export class ConfigMixin extends Vue {
-  async makeNginxConfString(recordOn: boolean, twitchOn: boolean, youtubeOn: boolean, additionalOn: boolean, recordingDir: string, fullTwitchUrl: string, fullYoutubeUrl: string, fullAdditionalRTMPUrl: string): Promise<string> {
+  @dirStore.Getter('recordingDir') recordingDir!: string
 
+  @keyStore.Getter('twitchKey') twitchKey!: string
+  @keyStore.Getter('youtubeKey') youtubeKey!: string
+  @keyStore.Getter('additionalRTMPUrl') additionalRTMPUrl!: string
+  @keyStore.Getter('additionalRTMPKey') additionalRTMPKey!: string
+  @keyStore.Getter('fullTwitchUrl') fullTwitchUrl!: string
+  @keyStore.Getter('fullYoutubeUrl') fullYoutubeUrl!: string
+  @keyStore.Getter('fullAdditionalUrl') fullAdditionalUrl!: string
+
+  @optionStore.Getter('updatePopup') updatePopup!: boolean
+
+  @toggleSwitchStore.Getter('twitchOn') twitchOn!: boolean
+  @toggleSwitchStore.Getter('youtubeOn') youtubeOn!: boolean
+  @toggleSwitchStore.Getter('additionalOn') additionalOn!: boolean
+  @toggleSwitchStore.Getter('recordOn') recordOn!: boolean
+
+  makeNginxConfString(): string {
     // recordingDir.length === 0 이거나 recordOn이 false면 녹화를 끔
-    const recordOption = recordingDir.length !== 0 && recordOn ? '            record all;\n' +
-                                                                 '            record_path "' + recordingDir.replace(/\\/g, '/') + '";\n' +
-                                                                 '            record_unique on;' +
-                                                                 '            record_suffix .flv;\n' : '            record off;\n'
+    const recordOption = this.recordingDir.length !== 0 && this.recordOn ? '            record all;\n' +
+                                                                           '            record_path "' + this.recordingDir.replace(/\\/g, '/') + '";\n' +
+                                                                           '            record_unique on;' +
+                                                                           '            record_suffix .flv;\n' : '            record off;\n'
 
-    const twitchUrl = twitchOn ? fullTwitchUrl : ''
-    const youtubeUrl = youtubeOn ? fullYoutubeUrl : ''
-    const additionalRTMPUrl = additionalOn ? fullAdditionalRTMPUrl : ''
+    const twitchUrl = this.twitchOn ? this.fullTwitchUrl : ''
+    const youtubeUrl = this.youtubeOn ? this.fullYoutubeUrl : ''
+    const additionalRTMPUrl = this.additionalOn ? this.fullAdditionalUrl : ''
 
     const nginxConfig = 'worker_processes 1;\n' +
                         '\n' +
@@ -42,35 +64,33 @@ export class ConfigMixin extends Vue {
                         '            ' + additionalRTMPUrl + '\n' +
                         '        }\n' +
                         '    }\n' +
-                        '}\n' +
-                        '\n'
+                        '}\n'
 
     return nginxConfig
   }
 
-  async makeKeyJSONString(twitchKey: string, youtubeKey: string, additionalRTMPUrl: string, additionalRTMPKey: string): Promise<string> {
+  makeKeyJSONString(): string {
     const keyJSON = '{\n' +
-                    '    "twitch":' + '"' + twitchKey + '",\n' +
-                    '    "youtube":' + '"' + youtubeKey + '",\n' +
-                    '    "rtmpUrl":' + '"' + additionalRTMPUrl + '",\n' +
-                    '    "rtmpKey":' + '"' + additionalRTMPKey + '",\n' +
-                    '}'
-                    '\n'
+                    '    "twitch":' + '"' + this.twitchKey + '",\n' +
+                    '    "youtube":' + '"' + this.youtubeKey + '",\n' +
+                    '    "rtmpUrl":' + '"' + this.additionalRTMPUrl + '",\n' +
+                    '    "rtmpKey":' + '"' + this.additionalRTMPKey + '",\n' +
+                    '}\n'
 
     return keyJSON
   }
 
-  async makeOptionJONString(twitchOn: boolean, youtubeOn: boolean, additionalOn: boolean, recordingDir: string, recordOn: boolean, updatePopup: boolean): Promise<string> {
+  makeOptionJONString(): string {
     const optionJSON = '{\n' +
-                       '    "twitchOn":' + twitchOn + ',\n' +
-                       '    "youtubeOn":' + youtubeOn + ',\n' +
-                       '    "additionalOn":' + additionalOn + ',\n' +
+                       '    "twitchOn":' + this.twitchOn.toString() + ',\n' +
+                       '    "youtubeOn":' + this.youtubeOn.toString() + ',\n' +
+                       '    "additionalOn":' + this.additionalOn.toString() + ',\n' +
                        '\n' +                        // 역슬래시 이스케이프
-                       '    "recordingDir":' + '"' + recordingDir.replace(/\\/g, '\\\\') + '",\n' +
+                       '    "recordingDir":' + '"' + this.recordingDir.replace(/\\/g, '\\\\') + '",\n' +
                        '\n' +
-                       '    "recordOn":' + recordOn + ',\n' +
+                       '    "recordOn":' + this.recordOn.toString() + ',\n' +
                        '\n' +
-                       '    "updatePopup":' + updatePopup + '\n' +
+                       '    "updatePopup":' + this.updatePopup.toString() + '\n' +
                        '}' +
                        '\n'
 
