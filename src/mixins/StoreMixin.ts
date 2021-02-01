@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Component, { mixins } from 'vue-class-component'
+import Component from 'vue-class-component'
 import { namespace } from 'vuex-class'
 
 const dirStore = namespace('dir')
@@ -14,7 +14,7 @@ export class StoreMixin extends Vue {
   @dirStore.Getter('nginxDir') getNginxDir!: string
   @dirStore.Getter('nginxConfDir') getNginxConfDir!: string
   @dirStore.Getter('nginxLogsDir') getNginxLogsDir!: string
-  @dirStore.Getter('recordingDir') geRecordingDir!: string
+  @dirStore.Getter('recordingDir') getRecordingDir!: string
   @dirStore.Action('rootDir') setRootDir!: (value: string) => void
   @dirStore.Action('nginxDir') setNginxDir!: (value: string) => void
   @dirStore.Action('nginxConfDir') setNginxConfDir!: (value: string) => void
@@ -48,6 +48,7 @@ export class StoreMixin extends Vue {
   @toggleSwitchStore.Action('additionalOn') setAdditionalOn!: (value: boolean) => void
   @toggleSwitchStore.Action('recordOn') setRecordOn!: (vale: boolean) => void
 
+  // keyStore
   get twitchKey(): string { return this.getTwitchKey }
   set twitchKey(value: string) { this.setTwitchKey(value) }
   get youtubeKey(): string { return this.getYoutubeKey }
@@ -56,14 +57,37 @@ export class StoreMixin extends Vue {
   set additionalRTMPUrl(value: string) { this.setAdditionalRTMPUrl(value) }
   get additionalRTMPKey(): string { return this.getAdditionalRTMPKey }
   set additionalRTMPKey(value: string) { this.setAdditionalRTMPKey(value) }
+  get fullTwitchUrl(): string { return this.getFullTwitchUrl }
+  get fullYoutubeUrl(): string { return this.getFullYoutubeUrl }
+  get fullAdditionalUrl(): string { return this.getFullAdditionalUrl }
 
+  // dirStore
+  get rootDir(): string { return this.getRootDir }
+  set rootDir(value: string) { this.setRootDir(value) }
+  get nginxDir(): string { return this.getNginxDir }
+  set nginxDir(value: string) { this.setNginxDir(value) }
+  get nginxConfDir(): string { return this.getNginxConfDir }
+  set nginxConfDir(value: string) { this.setNginxConfDir(value) }
+  get nginxLogsDir(): string { return this.getNginxLogsDir }
+  set nginxLogsDir(value: string) { this.setNginxConfDir(value) }
+  get recordingDir(): string { return this.getRecordingDir }
+  set recordingDir(value: string) { this.setRecordingDir(value) }
+
+  // nginxStore
   get nginxStatus(): boolean { return this.getNginxStatus }
   set nginxStatus(value: boolean) { this.setNginxStatus(value) }
 
+  // optionStore
+  get updatePopup(): boolean { return this.getUpdatePopup }
+  set updatePopup(value: boolean) { this.setUpdatePopup(value) }
+
+  // toggleSwitchStore
   get twitchOn(): boolean { return this.getTwitchOn }
   set twitchOn(value: boolean) { this.setTwitchOn(value) }
   get youtubeOn(): boolean { return this.getYoutubeOn }
   set youtubeOn(value: boolean) { this.setYoutubeOn(value) }
   get additionalOn(): boolean { return this.getAdditionalOn }
   set additionalOn(value: boolean) { this.setAdditionalOn(value) }
+  get recordOn(): boolean { return this.getRecordOn }
+  set recordOn(value: boolean) { this.setRecordOn(value) }
 }
