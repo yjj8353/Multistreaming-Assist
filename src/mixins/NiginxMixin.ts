@@ -2,21 +2,19 @@
  * Nginx Control 관련 기능
  */
 
-import Vue from 'vue'
-import Component from 'vue-class-component'
-
 import fs from 'fs'
+import Component, { mixins } from 'vue-class-component'
+import { useExecFile, useExecSync } from '../functions/ShellFunction'
 
-import { useExec, useExecFile, useExecSync } from '../functions/ShellFunction'
-
+import { StoreMixin } from 'src/mixins/StoreMixin'
 @Component
-export class NginxMixin extends Vue {
-  startNginxProcess(nginxDir: string, nginxLogsDir: string): void | [string, string]{
-    if(!fs.existsSync(nginxLogsDir)) {
-      fs.mkdirSync(nginxLogsDir)
+export class NginxMixin extends mixins(StoreMixin) {
+  startNginxProcess(): void | [string, string] {
+    if(!fs.existsSync(this.nginxLogsDir)) {
+      fs.mkdirSync(this.nginxLogsDir)
     }
 
-    return useExecFile('nginx.exe', null, { cwd: nginxDir })
+    return useExecFile('nginx.exe', null, { cwd: this.nginxDir })
     // execFile('nginx.exe', { cwd: nginxDir }, (err, stdout, stderr) => {
     //   if(err) {
     //     return err.message
@@ -27,16 +25,14 @@ export class NginxMixin extends Vue {
   }
 
   quitNginxProcess(): string {
-    let result: string = ''
-
+    let result = ''
     result = useExecSync('taskkill /im nginx.exe /f', undefined)
 
     return result
   }
 
   findNginxProcess(): boolean {
-    let result: string = ''
-
+    let result = ''
     result = useExecSync('tasklist /fi "imagename eq nginx.exe"', undefined)
 
     const re = new RegExp('nginx.exe')

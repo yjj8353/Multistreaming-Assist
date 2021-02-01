@@ -10,6 +10,7 @@ const toggleSwitchStore = namespace('toggleSwitch')
 
 @Component
 export class StoreMixin extends Vue {
+  @dirStore.Getter('dir') getDir!: string
   @dirStore.Getter('rootDir') getRootDir!: string
   @dirStore.Getter('nginxDir') getNginxDir!: string
   @dirStore.Getter('nginxConfDir') getNginxConfDir!: string
@@ -48,6 +49,19 @@ export class StoreMixin extends Vue {
   @toggleSwitchStore.Action('additionalOn') setAdditionalOn!: (value: boolean) => void
   @toggleSwitchStore.Action('recordOn') setRecordOn!: (vale: boolean) => void
 
+  // dirStore
+  get dir(): string { return this.getDir }
+  get rootDir(): string { return this.getRootDir }
+  set rootDir(value: string) { this.setRootDir(value) }
+  get nginxDir(): string { return this.getNginxDir }
+  set nginxDir(value: string) { this.setNginxDir(value) }
+  get nginxConfDir(): string { return this.getNginxConfDir }
+  set nginxConfDir(value: string) { this.setNginxConfDir(value) }
+  get nginxLogsDir(): string { return this.getNginxLogsDir }
+  set nginxLogsDir(value: string) { this.setNginxConfDir(value) }
+  get recordingDir(): string { return this.getRecordingDir }
+  set recordingDir(value: string) { this.setRecordingDir(value) }
+
   // keyStore
   get twitchKey(): string { return this.getTwitchKey }
   set twitchKey(value: string) { this.setTwitchKey(value) }
@@ -60,18 +74,6 @@ export class StoreMixin extends Vue {
   get fullTwitchUrl(): string { return this.getFullTwitchUrl }
   get fullYoutubeUrl(): string { return this.getFullYoutubeUrl }
   get fullAdditionalUrl(): string { return this.getFullAdditionalUrl }
-
-  // dirStore
-  get rootDir(): string { return this.getRootDir }
-  set rootDir(value: string) { this.setRootDir(value) }
-  get nginxDir(): string { return this.getNginxDir }
-  set nginxDir(value: string) { this.setNginxDir(value) }
-  get nginxConfDir(): string { return this.getNginxConfDir }
-  set nginxConfDir(value: string) { this.setNginxConfDir(value) }
-  get nginxLogsDir(): string { return this.getNginxLogsDir }
-  set nginxLogsDir(value: string) { this.setNginxConfDir(value) }
-  get recordingDir(): string { return this.getRecordingDir }
-  set recordingDir(value: string) { this.setRecordingDir(value) }
 
   // nginxStore
   get nginxStatus(): boolean { return this.getNginxStatus }

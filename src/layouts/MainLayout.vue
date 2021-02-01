@@ -118,43 +118,6 @@ const optionStore = namespace('option')
   components: { UpdateComponent, ErrorNginxPath }
 })
 export default class MainLayout extends mixins(CheckMixin, NginxMixin) {
-  @dirStore.Action('dir') setDir!: (value: string) => void
-  @dirStore.Action('rootDir') setRootDir!: (value: string) => void
-  @dirStore.Action('nginxDir') setNginxDir!: (value: string) => void
-  @dirStore.Action('nginxConfDir') setNginxConfDir!: (value: string) => void
-  @dirStore.Action('nginxLogsDir') setNginxLogsDir!: (value: string) => void
-  @dirStore.Getter('dir') getDir!: string
-  @dirStore.Getter('rootDir') getRootDir!: string
-  @dirStore.Getter('nginxDir') getNginxDir!: string
-  @dirStore.Getter('nginxConfDir') getNginxConfDir!: string
-  @dirStore.Getter('nginxLogsDir') getNginxLogsDir!: string
-
-  @optionStore.Action('updatePopup') setUpdatePopup!: (value: boolean) => void
-  @optionStore.Getter('updatePopup') getUpdatePopup!: boolean
-
-  @nginxStore.Action('nginxStatus') setNginxStatus!: (value: boolean) => void
-  @nginxStore.Getter('nginxStatus') getNginxStatus!: boolean
-  
-  get dir(): string { return this.getDir }
-
-  get rootDir(): string { return this.getRootDir }
-  set rootDir(value: string) { this.setRootDir(value) }
-
-  get nginxDir(): string { return this.getNginxDir }
-  set nginxDir(value: string) { this.setNginxDir(value) }
-
-  get nginxConfDir(): string { return this.getNginxConfDir }
-  set nginxConfDir(value: string) { this.setNginxConfDir(value) }
-
-  get nginxLogsDir(): string { return this.getNginxLogsDir }
-  set nginxLogsDir(value: string) { this.setNginxLogsDir(value) }
-
-  get updatePopup(): boolean { return this.getUpdatePopup }
-  set updatePopup(value: boolean) { this.setUpdatePopup(value) }
-
-  get nginxStatus(): boolean { return this.getNginxStatus }
-  set nginxStatus(value: boolean) { this.setNginxStatus(value) }
-
   get win(): Electron.BrowserWindow | null { return this.$q.electron.remote.BrowserWindow.getFocusedWindow() }
 
   isMaximized = false

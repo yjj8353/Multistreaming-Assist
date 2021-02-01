@@ -4,34 +4,11 @@
 
 // import Vue from 'vue'
 import Component, { mixins } from 'vue-class-component'
-import { namespace } from 'vuex-class'
 
 import { StoreMixin } from 'src/mixins/StoreMixin'
 
-const dirStore = namespace('dir')
-const keyStore = namespace('keys')
-const optionStore = namespace('option')
-const toggleSwitchStore = namespace('toggleSwitch')
-
 @Component
 export class ConfigMixin extends mixins(StoreMixin) {
-  @dirStore.Getter('recordingDir') recordingDir!: string
-
-  @keyStore.Getter('twitchKey') getTwitchKey!: string
-  @keyStore.Getter('youtubeKey') getYoutubeKey!: string
-  @keyStore.Getter('additionalRTMPUrl') getAdditionalRTMPUrl!: string
-  @keyStore.Getter('additionalRTMPKey') getAdditionalRTMPKey!: string
-  @keyStore.Getter('fullTwitchUrl') getFullTwitchUrl!: string
-  @keyStore.Getter('fullYoutubeUrl') getFullYoutubeUrl!: string
-  @keyStore.Getter('fullAdditionalUrl') getFullAdditionalUrl!: string
-
-  @optionStore.Getter('updatePopup') getUpdatePopup!: boolean
-
-  @toggleSwitchStore.Getter('twitchOn') getTwitchOn!: boolean
-  @toggleSwitchStore.Getter('youtubeOn') getYoutubeOn!: boolean
-  @toggleSwitchStore.Getter('additionalOn') getAdditionalOn!: boolean
-  @toggleSwitchStore.Getter('recordOn') getRecordOn!: boolean
-
   makeNginxConfString(): string {
     // recordingDir.length === 0 이거나 recordOn이 false면 녹화를 끔
     const recordOption = this.recordingDir.length !== 0 && this.recordOn ? '            record all;\n' +
