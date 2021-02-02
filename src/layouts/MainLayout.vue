@@ -100,7 +100,6 @@ import { shell } from 'electron'
 
 // vue
 import Component, { mixins } from 'vue-class-component'
-import { namespace } from 'vuex-class'
 
 // components
 import UpdateComponent from 'src/components/UpdateComponent.vue'
