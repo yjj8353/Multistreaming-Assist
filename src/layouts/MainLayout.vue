@@ -109,15 +109,12 @@ import ErrorNginxPath from 'src/components/ErrorNginxPath.vue'
 // mixins
 import { CheckMixin } from 'src/mixins/CheckMixin'
 import { NginxMixin } from 'src/mixins/NiginxMixin'
-
-const dirStore = namespace('dir')
-const nginxStore = namespace('nginx')
-const optionStore = namespace('option')
+import { StoreMixin } from 'src/mixins/StoreMixin'
 
 @Component({
   components: { UpdateComponent, ErrorNginxPath }
 })
-export default class MainLayout extends mixins(CheckMixin, NginxMixin) {
+export default class MainLayout extends mixins(CheckMixin, NginxMixin, StoreMixin) {
   get win(): Electron.BrowserWindow | null { return this.$q.electron.remote.BrowserWindow.getFocusedWindow() }
 
   isMaximized = false

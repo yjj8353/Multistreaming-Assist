@@ -9,7 +9,7 @@ import { StoreMixin } from 'src/mixins/StoreMixin'
 
 @Component
 export class ConfigMixin extends mixins(StoreMixin) {
-  makeNginxConfString(): string {
+  makeNginxConfString(): string | boolean {
     // recordingDir.length === 0 이거나 recordOn이 false면 녹화를 끔
     const recordOption = this.recordingDir.length !== 0 && this.recordOn ? '            record all;\n' +
                                                                            '            record_path "' + this.recordingDir.replace(/\\/g, '/') + '";\n' +
@@ -48,7 +48,7 @@ export class ConfigMixin extends mixins(StoreMixin) {
     return nginxConfig
   }
 
-  makeKeyJSONString(): string {
+  makeKeyJSONString(): string | boolean {
     const keyJSON = '{\n' +
                     '    "twitch":' + '"' + this.twitchKey + '",\n' +
                     '    "youtube":' + '"' + this.youtubeKey + '",\n' +
