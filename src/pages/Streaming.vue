@@ -114,7 +114,8 @@ export default class StreamingPage extends mixins(ConfigMixin, NginxMixin, Quasa
       const keyData = this.makeKeyJSONString()
       const nginxConfig = this.makeNginxConfString()
 
-      fs.writeFileSync(path.join(this.nginxConfDir, 'nginx.conf'), config)
+      fs.writeFileSync(path.join(this.nginxConfDir, 'nginx.conf'), nginxConfig)
+      fs.writeFileSync(path.join(this.nginxConfDir, 'rtmp.json'), keyData)
 
       if(!keyData) { return }
       if(!nginxConfig) { return }
