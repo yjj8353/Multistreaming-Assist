@@ -94,6 +94,9 @@
 </template>
 
 <script lang="ts">
+import fs from 'fs'
+import path from 'path'
+
 import { ConfigMixin } from 'src/mixins/ConfigMixin'
 import { NginxMixin } from 'src/mixins/NiginxMixin'
 import { QuasarMixin } from 'src/mixins/QuasarMixin'
@@ -110,6 +113,9 @@ export default class StreamingPage extends mixins(ConfigMixin, NginxMixin, Quasa
     if(!this.nginxStatus) {
       const keyData = this.makeKeyJSONString()
       const nginxConfig = this.makeNginxConfString()
+
+      fs.writeFileSync(path.join(this.nginxConfDir, 'nginx.conf'), nginxConfig)
+      fs.writeFileSync(path.join(this.nginxConfDir, 'rtmp.json'), keyData)
 
       if(!keyData) { return }
       if(!nginxConfig) { return }
