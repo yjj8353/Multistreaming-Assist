@@ -20,4 +20,17 @@ export class CheckMixin extends Vue {
     const re = new RegExp('^[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}(-[a-z0-9]{4})?$')
     return re.test(key)
   }
+
+  checkAllToggleSwitchOff(...toggleSwitchs: Array<boolean>): boolean {
+    let result = true
+
+    for(const toggleSwitch of toggleSwitchs) {
+      if(toggleSwitch) {
+        result = false
+        break
+      }
+    }
+
+    return result
+  }
 }
