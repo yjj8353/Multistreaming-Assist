@@ -52,7 +52,7 @@ export class ConfigMixin extends mixins(StoreMixin) {
                     '    "twitch":' + '"' + this.twitchKey + '",\n' +
                     '    "youtube":' + '"' + this.youtubeKey + '",\n' +
                     '    "rtmpUrl":' + '"' + this.additionalRTMPUrl + '",\n' +
-                    '    "rtmpKey":' + '"' + this.additionalRTMPKey + '",\n' +
+                    '    "rtmpKey":' + '"' + this.additionalRTMPKey + '"\n' +
                     '}\n'
 
     return keyJSON

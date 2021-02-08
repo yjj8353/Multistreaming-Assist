@@ -15,28 +15,32 @@ const actions: ActionTree<DirStateInterface, StateInterface> = {
     } else {
       rootDir = dir.replace('resources\\app.asar', '')
     }
-
+    console.log(rootDir)
+    
     state.commit('rootDir', rootDir)
   },
 
   nginxDir (state: ActionContext<DirStateInterface, StateInterface>, rootDir: string) {
     const nginxDir = path.join(rootDir, 'nginx')
+    console.log(nginxDir)
     state.commit('nginxDir', nginxDir)
   },
 
   nginxConfDir (state: ActionContext<DirStateInterface, StateInterface>, nginxDir: string) {
     const nginxConfDir = path.join(nginxDir, 'conf')
+    console.log(nginxConfDir)
     state.commit('nginxConfDir', nginxConfDir)
   },
 
   nginxLogsDir (state: ActionContext<DirStateInterface, StateInterface>, nginxDir: string) {
     const nginxLogsDir = path.join(nginxDir, 'logs')
+    console.log(nginxLogsDir)
     state.commit('nginxLogsDir', nginxLogsDir)
   },
 
   recordingDir (state: ActionContext<DirStateInterface, StateInterface>, recordingDir: string) {
     state.commit('recordingDir', recordingDir)
-  },
+  }
 }
 
 export default actions
