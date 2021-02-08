@@ -1,8 +1,8 @@
 # Todo List
 
-1. Typescript로 전환
-~~2. Electron 윈도우 위치 기억 기능~~
-3. 리팩토링
+</br>1. Typescript로 전환
+</br>~~2. Electron 윈도우 위치 기억 기능~~
+</br>3. 리팩토링
 
 -----
 
