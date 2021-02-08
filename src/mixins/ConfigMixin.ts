@@ -2,7 +2,6 @@
  * Config File 관련기능
  */
 
-// import Vue from 'vue'
 import Component, { mixins } from 'vue-class-component'
 
 import { StoreMixin } from 'src/mixins/StoreMixin'

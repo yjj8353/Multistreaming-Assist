@@ -97,28 +97,34 @@
 import fs from 'fs'
 import path from 'path'
 
+import { CheckMixin } from 'src/mixins/CheckMixin'
 import { ConfigMixin } from 'src/mixins/ConfigMixin'
 import { NginxMixin } from 'src/mixins/NiginxMixin'
 import { QuasarMixin } from 'src/mixins/QuasarMixin'
+
 import { mixins } from 'vue-class-component'
 import { Component } from 'vue-property-decorator'
 
 @Component
-export default class StreamingPage extends mixins(ConfigMixin, NginxMixin, QuasarMixin) {
+export default class StreamingPage extends mixins(CheckMixin, ConfigMixin, NginxMixin, QuasarMixin) {
   twitchIsPwd = true
   youtubeIsPwd = true
   additionalIsPwd = true
 
   nginxSwitch() {
+    const allToggleSwitchOff = this.checkAllToggleSwitchOff(this.twitchOn, this.youtubeOn, this.additionalOn)
+
+    if(allToggleSwitchOff) {
+      this.notify('negative', '최소한 하나 이상의 플랫폼이 활성화돼야 합니다')
+      return
+    }
+
     if(!this.nginxStatus) {
       const keyData = this.makeKeyJSONString()
       const nginxConfig = this.makeNginxConfString()
 
-      fs.writeFileSync(path.join(this.nginxConfDir, 'nginx.conf'), nginxConfig)
       fs.writeFileSync(path.join(this.nginxConfDir, 'rtmp.json'), keyData)
-
-      if(!keyData) { return }
-      if(!nginxConfig) { return }
+      fs.writeFileSync(path.join(this.nginxConfDir, 'nginx.conf'), nginxConfig)
       
       const err = this.startNginxProcess()
 
@@ -134,27 +140,6 @@ export default class StreamingPage extends mixins(ConfigMixin, NginxMixin, Quasa
       } finally {
         this.nginxStatus = false
       }
-    }
-  }
-
-  // twitchKey q-input 값이 비는 순간 스위치를 끔
-  checkTwitchKeyNull(value: string) {
-    if(!value) {
-      this.twitchOn = false
-    }
-  }
-
-  // youtubeKey q-input 값이 비는 순간 스위치를 끔
-  checkYoutubeKeyNull(value: string) {
-    if(!value) {
-      this.youtubeOn = false
-    }
-  }
-
-  // additionalRTMP의 url 혹은 key q-input 값이 비는 순간 스위치를 끔
-  checkAddtionalRTMPUrlOrKeyNull(value: string) {
-    if(!value) {
-      this.additionalOn = false
     }
   }
 }
