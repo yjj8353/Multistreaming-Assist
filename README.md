@@ -23,9 +23,9 @@
 > ### nginx.conf 파일 생성하기
 > ![1](https://user-images.githubusercontent.com/38521736/76392598-3c4b0000-63b5-11ea-90a6-69ba3752cd82.png)
 > 1. 압축을 푼 후 'Multistreaming-Assist.exe' 실행
-> 2. twitch/youtube/기타 RTMP 주소 및 키 값을 채움 (필요한 것만 채우면 됩니다.)
-> ~~3. 좌측 하단의 'nginx.conf 생성' 버튼 클릭~~
-> ~~* nginx.conf 파일은 한번 생성하면 다시 'nginx.conf 생성' 버튼을 클릭하기 전까지 유지됩니다~~
+> 2. twitch/youtube/기타 RTMP 주소 및 키 값을 채움 (필요한 것만 채우면 됩니다.)  
+> ~~3. 좌측 하단의 'nginx.conf 생성' 버튼 클릭~~  
+> ~~* nginx.conf 파일은 한번 생성하면 다시 'nginx.conf 생성' 버튼을 클릭하기 전까지 유지됩니다~~  
 > * 더이상 'nginx.conf 생성' 버튼을 누를 필요가 없습니다.
    
 ***
