@@ -119,7 +119,7 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin, StoreMixi
   isMaximized = false
   updateExist = false
 
-  mount() {
+  mounted() {
     this.dirsSetting()
     this.eventsSetting()
   }
