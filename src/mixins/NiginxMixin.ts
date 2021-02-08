@@ -13,8 +13,8 @@ export class NginxMixin extends mixins(StoreMixin) {
     if(!fs.existsSync(this.nginxLogsDir)) {
       fs.mkdirSync(this.nginxLogsDir)
     }
-
-    return useExecFile('nginx.exe', null, { cwd: this.nginxDir })
+    
+    useExecFile('nginx.exe', null, { cwd: this.nginxDir })
     // execFile('nginx.exe', { cwd: nginxDir }, (err, stdout, stderr) => {
     //   if(err) {
     //     return err.message

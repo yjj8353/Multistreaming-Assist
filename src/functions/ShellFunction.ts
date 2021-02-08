@@ -8,12 +8,10 @@ import { execFile, /* execFileSync, */ exec, execSync } from 'child_process'
 
 // execFile(file[, args][, options][, callback])
 export function useExecFile(file: string, args: string[] | null | undefined, options: Object): void | [string, string] {
-  execFile(file, args, options, (err, stdout, stderr) => {
+  execFile(file, args, options, (err) => {
     if(err) {
-      return ['error', stderr]
+      return ['error', err.message]
     }
-
-    return ['success', stdout]
   })
 }
 
