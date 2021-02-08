@@ -58,7 +58,7 @@ export class StoreMixin extends Vue {
   get nginxConfDir(): string { return this.getNginxConfDir }
   set nginxConfDir(value: string) { this.setNginxConfDir(value) }
   get nginxLogsDir(): string { return this.getNginxLogsDir }
-  set nginxLogsDir(value: string) { this.setNginxConfDir(value) }
+  set nginxLogsDir(value: string) { this.setNginxLogsDir(value) }
   get recordingDir(): string { return this.getRecordingDir }
   set recordingDir(value: string) { this.setRecordingDir(value) }
 
