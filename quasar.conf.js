@@ -7,6 +7,8 @@
 // https://quasar.dev/quasar-cli/quasar-conf-js
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 const fs = require('fs')
 const path = require('path')
 const { configure } = require('quasar/wrappers')
@@ -100,7 +102,7 @@ module.exports = configure(function (ctx) {
         return false
       }
 
-      return new Promise((resolve, reject) => {
+      return new Promise((/* resolve, reject */) => {
         try {
           execSync('makensis "C:\\git\\javascript\\Multistreaming-Assist\\install.nsi"')
           console.log('설치 파일 생성이 완료 되었습니다.')
