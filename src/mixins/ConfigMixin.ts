@@ -54,7 +54,7 @@ export class ConfigMixin extends mixins(StoreMixin) {
                     '        "youtube":' + '"' + this.youtubeKey + '",\n' +
                     '        "rtmpUrl":' + '"' + this.additionalRTMPUrl + '",\n' +
                     '        "rtmpKey":' + '"' + this.additionalRTMPKey + '"\n' +
-                    '    }\n' +
+                    '    },\n' +
                     '\n' +
                     '    "options": {\n' +
                     '        "twitchOn":' + this.twitchOn.toString() + ',\n' +
@@ -65,7 +65,7 @@ export class ConfigMixin extends mixins(StoreMixin) {
                     '        "recordingDir":' + '"' + this.recordingDir.replace(/\\/g, '\\\\') + '",\n' +
                     '\n' +
                     '        "updatePopup":' + this.updatePopup.toString() + '\n' +
-                    '    }' +
+                    '    }\n' +
                     '}\n'
 
     return json
