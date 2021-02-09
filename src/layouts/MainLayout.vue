@@ -110,6 +110,12 @@ import { CheckMixin } from 'src/mixins/CheckMixin'
 import { NginxMixin } from 'src/mixins/NiginxMixin'
 import { StoreMixin } from 'src/mixins/StoreMixin'
 
+import fs from 'fs'
+import path from 'path'
+import { BroadcastOption } from 'src/object/broadcastOption'
+import { Keys } from 'src/object/keys'
+import { Options } from 'src/object/options'
+
 @Component({
   components: { UpdateComponent, ErrorNginxPath }
 })
@@ -122,6 +128,7 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin, StoreMixi
   mounted() {
     this.dirsSetting()
     this.eventsSetting()
+    this.parsingBroadcastOptionJson()
   }
 
   dirsSetting() {
@@ -146,6 +153,18 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin, StoreMixi
 
     window.addEventListener('resize', windowResizeEvent)
     window.addEventListener('load', updateCheck)
+  }
+
+  parsingBroadcastOptionJson() {
+    console.log(path.join(this.nginxConfDir, 'broadcastOption.json'))
+    const jsonFile: string = fs.readFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), 'utf-8')
+    const broadcastOption: BroadcastOption = JSON.parse(jsonFile)
+
+    const keys: Keys = broadcastOption.keys
+    const options: Options = broadcastOption.options
+
+    console.log(keys)
+    console.log(options)
   }
 
   minimize() {
