@@ -47,16 +47,16 @@ export class ConfigMixin extends mixins(StoreMixin) {
     return nginxConfig
   }
 
-  makeJSONString(): string {
-    const keyJSON = '{\n' +
-                    '    key: {\n' +
+  makeBroadcastOptionJsonString(): string {
+    const json = '{\n' +
+                    '    "keys": {\n' +
                     '        "twitch":' + '"' + this.twitchKey + '",\n' +
                     '        "youtube":' + '"' + this.youtubeKey + '",\n' +
                     '        "rtmpUrl":' + '"' + this.additionalRTMPUrl + '",\n' +
                     '        "rtmpKey":' + '"' + this.additionalRTMPKey + '"\n' +
                     '    }\n' +
                     '\n' +
-                    '    option: {\n' +
+                    '    "options": {\n' +
                     '        "twitchOn":' + this.twitchOn.toString() + ',\n' +
                     '        "youtubeOn":' + this.youtubeOn.toString() + ',\n' +
                     '        "additionalOn":' + this.additionalOn.toString() + ',\n' +
@@ -68,6 +68,6 @@ export class ConfigMixin extends mixins(StoreMixin) {
                     '    }' +
                     '}\n'
 
-    return keyJSON
+    return json
   }
 }

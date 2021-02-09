@@ -105,11 +105,27 @@ import { QuasarMixin } from 'src/mixins/QuasarMixin'
 import { mixins } from 'vue-class-component'
 import { Component } from 'vue-property-decorator'
 
+import { BroadcastOption } from 'src/object/broadcastOption'
+import { Keys } from 'src/object/keys'
+import { Options } from 'electron'
+
 @Component
 export default class StreamingPage extends mixins(CheckMixin, ConfigMixin, NginxMixin, QuasarMixin) {
   twitchIsPwd = true
   youtubeIsPwd = true
   additionalIsPwd = true
+
+  mounted() {
+    this.parsingBroadcastOptionJson()
+  }
+
+  parsingBroadcastOptionJson() {
+    const jsonFile = fs.readFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), 'utf-8')
+    const broadcastOption: BroadcastOption = JSON.parse(jsonFile)
+
+    const keys: Keys = broadcastOption.keys
+    const options: Options = broadcastOption.options
+  }
 
   nginxSwitch() {
     const allToggleSwitchOff = this.checkAllToggleSwitchOff(this.twitchOn, this.youtubeOn, this.additionalOn)
@@ -120,10 +136,10 @@ export default class StreamingPage extends mixins(CheckMixin, ConfigMixin, Nginx
     }
 
     if(!this.nginxStatus) {
-      const keyData = this.makeJSONString()
+      const broadcastOption = this.makeBroadcastOptionJsonString()
       const nginxConfig = this.makeNginxConfString()
 
-      fs.writeFileSync(path.join(this.nginxConfDir, 'rtmp.json'), keyData)
+      fs.writeFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), broadcastOption)
       fs.writeFileSync(path.join(this.nginxConfDir, 'nginx.conf'), nginxConfig)
       
       this.nginxStatus = true
