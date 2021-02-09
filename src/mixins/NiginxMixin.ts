@@ -4,38 +4,50 @@
 
 import fs from 'fs'
 import Component, { mixins } from 'vue-class-component'
-import { useExecFile, useExecSync } from '../functions/ShellFunction'
+import { execSync, spawn } from 'child_process'
 
-import { StoreMixin } from 'src/mixins/StoreMixin'
+import { StoreMixin } from './StoreMixin'
+import { QuasarMixin } from './QuasarMixin'
+
 @Component
-export class NginxMixin extends mixins(StoreMixin) {
-  startNginxProcess(): void | [string, string] {
+export class NginxMixin extends mixins(QuasarMixin, StoreMixin) {
+  startNginxProcess() {
     if(!fs.existsSync(this.nginxLogsDir)) {
       fs.mkdirSync(this.nginxLogsDir)
     }
-    
-    useExecFile('nginx.exe', null, { cwd: this.nginxDir })
-    // execFile('nginx.exe', { cwd: nginxDir }, (err, stdout, stderr) => {
-    //   if(err) {
-    //     return err.message
-    //   }
 
-    //   return stdout
-    // })
+    const childProcess = spawn('nginx.exe', undefined, { cwd: this.nginxDir })
+    
+    childProcess.on('error', (err) => {
+      if(err) {
+        this.nginxStatus = false
+        this.notify('negative', 'nginx 실행에 실패했습니다.')
+      }
+    })
   }
 
   quitNginxProcess(): string {
     let result = ''
-    result = useExecSync('taskkill /im nginx.exe /f', undefined)
+
+    try {
+      result = execSync('taskkill /im nginx.exe /f', undefined)
+    } catch(err) {
+      result = ('Error: '.concat(err))
+    }
 
     return result
   }
 
   findNginxProcess(): boolean {
-    let result = ''
-    result = useExecSync('tasklist /fi "imagename eq nginx.exe"', undefined)
+    let stdout = ''
+
+    try {
+      stdout = execSync('tasklist /fi "imagename eq nginx.exe"', undefined)
+    } catch(err) {
+      stdout = ('Error: '.concat(err))
+    }
 
     const re = new RegExp('nginx.exe')
-    return re.test(result)
+    return re.test(stdout)
   }
 }

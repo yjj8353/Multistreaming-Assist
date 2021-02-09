@@ -126,14 +126,9 @@ export default class StreamingPage extends mixins(CheckMixin, ConfigMixin, Nginx
       fs.writeFileSync(path.join(this.nginxConfDir, 'rtmp.json'), keyData)
       fs.writeFileSync(path.join(this.nginxConfDir, 'nginx.conf'), nginxConfig)
       
-      const err = this.startNginxProcess()
-
-      if(err) {
-        this.nginxStatus = false
-        this.notify('negative', 'nginx 실행에 실패했습니다')
-      }
-
       this.nginxStatus = true
+
+      this.startNginxProcess()
     } else {
       try {
         this.quitNginxProcess()
