@@ -120,7 +120,7 @@ export default class StreamingPage extends mixins(CheckMixin, ConfigMixin, Nginx
     }
 
     if(!this.nginxStatus) {
-      const keyData = this.makeKeyJSONString()
+      const keyData = this.makeJSONString()
       const nginxConfig = this.makeNginxConfString()
 
       fs.writeFileSync(path.join(this.nginxConfDir, 'rtmp.json'), keyData)

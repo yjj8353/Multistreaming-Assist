@@ -47,31 +47,27 @@ export class ConfigMixin extends mixins(StoreMixin) {
     return nginxConfig
   }
 
-  makeKeyJSONString(): string | boolean {
+  makeJSONString(): string {
     const keyJSON = '{\n' +
-                    '    "twitch":' + '"' + this.twitchKey + '",\n' +
-                    '    "youtube":' + '"' + this.youtubeKey + '",\n' +
-                    '    "rtmpUrl":' + '"' + this.additionalRTMPUrl + '",\n' +
-                    '    "rtmpKey":' + '"' + this.additionalRTMPKey + '"\n' +
+                    '    key: {\n' +
+                    '        "twitch":' + '"' + this.twitchKey + '",\n' +
+                    '        "youtube":' + '"' + this.youtubeKey + '",\n' +
+                    '        "rtmpUrl":' + '"' + this.additionalRTMPUrl + '",\n' +
+                    '        "rtmpKey":' + '"' + this.additionalRTMPKey + '"\n' +
+                    '    }\n' +
+                    '\n' +
+                    '    option: {\n' +
+                    '        "twitchOn":' + this.twitchOn.toString() + ',\n' +
+                    '        "youtubeOn":' + this.youtubeOn.toString() + ',\n' +
+                    '        "additionalOn":' + this.additionalOn.toString() + ',\n' +
+                    '        "recordOn":' + this.recordOn.toString() + ',\n' +
+                    '\n' +                        // 역슬래시 이스케이프
+                    '        "recordingDir":' + '"' + this.recordingDir.replace(/\\/g, '\\\\') + '",\n' +
+                    '\n' +
+                    '        "updatePopup":' + this.updatePopup.toString() + '\n' +
+                    '    }' +
                     '}\n'
 
     return keyJSON
-  }
-
-  makeOptionJONString(): string {
-    const optionJSON = '{\n' +
-                       '    "twitchOn":' + this.twitchOn.toString() + ',\n' +
-                       '    "youtubeOn":' + this.youtubeOn.toString() + ',\n' +
-                       '    "additionalOn":' + this.additionalOn.toString() + ',\n' +
-                       '\n' +                        // 역슬래시 이스케이프
-                       '    "recordingDir":' + '"' + this.recordingDir.replace(/\\/g, '\\\\') + '",\n' +
-                       '\n' +
-                       '    "recordOn":' + this.recordOn.toString() + ',\n' +
-                       '\n' +
-                       '    "updatePopup":' + this.updatePopup.toString() + '\n' +
-                       '}' +
-                       '\n'
-
-    return optionJSON
   }
 }
