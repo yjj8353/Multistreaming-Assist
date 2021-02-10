@@ -126,15 +126,9 @@ export default class StreamingPage extends mixins(CheckMixin, ConfigMixin, Nginx
       fs.writeFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), broadcastOption)
       fs.writeFileSync(path.join(this.nginxConfDir, 'nginx.conf'), nginxConfig)
       
-      this.nginxStatus = true
-
       this.startNginxProcess()
     } else {
-      try {
-        this.quitNginxProcess()
-      } finally {
-        this.nginxStatus = false
-      }
+      this.quitNginxProcess()
     }
   }
 }

@@ -157,9 +157,8 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin, StoreMixi
   }
 
   parsingBroadcastOptionJson() {
-    console.log(path.join(this.nginxConfDir, 'broadcastOption.json'))
     const jsonFile: string = fs.readFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), 'utf-8')
-    const broadcastOption: BroadcastOption = JSON.parse(jsonFile)
+    const broadcastOption: BroadcastOption = JSON.parse(jsonFile) as BroadcastOption
 
     const keys: Keys = broadcastOption.keys
     const options: Options = broadcastOption.options

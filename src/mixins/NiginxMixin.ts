@@ -16,6 +16,8 @@ export class NginxMixin extends mixins(QuasarMixin, StoreMixin) {
       fs.mkdirSync(this.nginxLogsDir)
     }
 
+    this.nginxStatus = true
+
     const childProcess = spawn('nginx.exe', undefined, { cwd: this.nginxDir })
     
     childProcess.on('error', (err) => {
@@ -26,16 +28,16 @@ export class NginxMixin extends mixins(QuasarMixin, StoreMixin) {
     })
   }
 
-  quitNginxProcess(): string {
-    let result = ''
-
+  quitNginxProcess() {
     try {
-      result = execSync('taskkill /im nginx.exe /f', undefined)
+      execSync('taskkill /im nginx.exe /f', undefined)
+      console.log('정상처리')
     } catch(err) {
-      result = ('Error: '.concat(err))
+      'Error: '.concat(err)
+      console.log(err)
     }
 
-    return result
+    this.nginxStatus = false
   }
 
   findNginxProcess(): boolean {
