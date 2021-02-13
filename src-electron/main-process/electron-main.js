@@ -33,6 +33,7 @@ function createWindow () {
     width: mainWindowState.width,
     height: mainWindowState.height,
 
+    frame: false,
     useContentSize: true,
     webPreferences: {
       // Change from /quasar.conf.js > electron > nodeIntegration;
