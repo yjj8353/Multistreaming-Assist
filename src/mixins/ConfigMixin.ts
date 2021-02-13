@@ -8,7 +8,7 @@ import { StoreMixin } from 'src/mixins/StoreMixin'
 
 @Component
 export class ConfigMixin extends mixins(StoreMixin) {
-  makeNginxConfString(): string | boolean {
+  makeNginxConfString(): string {
     // recordingDir.length === 0 이거나 recordOn이 false면 녹화를 끔
     const recordOption = this.recordingDir.length !== 0 && this.recordOn ? '            record all;\n' +
                                                                            '            record_path "' + this.recordingDir.replace(/\\/g, '/') + '";\n' +

@@ -44,12 +44,15 @@ import { StoreMixin } from 'src/mixins/StoreMixin'
 
 @Component
 export default class RecordingPage extends mixins(StoreMixin) {
+  // data
   originalRecordDir = ''
 
+  // mounted
   mounted() {
     this.originalRecordDir = this.recordingDir
   }
 
+  // methods
   recordingDirSelect() {
     const { dialog } = app.remote
     

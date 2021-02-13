@@ -192,11 +192,11 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin, StoreMixi
   }
 
   async how2Use() {
-    await shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/quasar/README.md')
+    await shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/master/README.md')
   }
 
   async contributors() {
-    await shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/quasar/%EA%B8%B0%EC%97%AC%EC%9E%90%EB%AA%A9%EB%A1%9D.md')
+    await shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/master/%EA%B8%B0%EC%97%AC%EC%9E%90%EB%AA%A9%EB%A1%9D.md')
   }
 
   nginxIsWorking() {
