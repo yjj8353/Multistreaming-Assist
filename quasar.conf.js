@@ -153,7 +153,7 @@ module.exports = configure(function (ctx) {
       workboxOptions: {}, // only for GenerateSW
       manifest: {
         name: 'Multistreaming-Assist',
-        short_name: 'Multistreaming-Assist',
+        short_name: 'MA',
         description: 'This is multistreaming assist tool',
         display: 'standalone',
         orientation: 'portrait',
@@ -220,6 +220,32 @@ module.exports = configure(function (ctx) {
         // https://www.electron.build/configuration/configuration
 
         appId: 'multistreaming-assist'
+        // artifactName: 'Multistreaming-Assist.exe',
+
+        // // NSIS Packaging
+        // win: {
+        //   target: [{
+        //     target: 'nsis',
+        //     arch: [
+        //       'x64'
+        //     ]
+        //   }],
+        //   icon: 'public/favicon.ico'
+        // },
+        // nsis: {
+        //   warningsAsErrors: false,
+        //   oneClick: false,
+        //   perMachine: true,
+        //   allowToChangeInstallationDirectory: true,
+        //   language: '1042',
+        //   include: 'nsisconf.nsh',
+        //   script: 'install.nsi',
+        //   shortcutName: 'Multistreaming-Assist'
+        // },
+        // directories: {
+        //   buildResources: 'dist/electron/Packaged/win-unpacked',
+        //   output: 'build'
+        // }
       },
 
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
