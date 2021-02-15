@@ -154,7 +154,6 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin, StoreMixi
       const lpvArray = latestProgramVersion.split('.')
       const tpvArray = thisProgramVersion.split('.')
       
-      // preRelease: Alpha/Beta/RC/RTM
       const lpvMajor = lpvArray[0]
       const lpvMinor = lpvArray[1]
       const lpvPatch = lpvArray[2].split('-')[0]
