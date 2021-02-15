@@ -1,10 +1,10 @@
 export interface Options {
-    twitchOn: boolean,
-    youtubeOn: boolean,
-    additionalOn: boolean,
-    recordOn: boolean,
+  twitchOn: boolean,
+  youtubeOn: boolean,
+  additionalOn: boolean,
+  recordOn: boolean,
 
-    recordingDir: string,
+  recordingDir: string,
 
-    updatePopup: boolean
+  updatePopup: boolean
 }
