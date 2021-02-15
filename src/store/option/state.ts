@@ -1,9 +1,9 @@
 export interface OptionStateInterface {
-  updatePopup: boolean
+  dontPopupUpdateMessage: boolean
 }
 
 const state: OptionStateInterface = {
-  updatePopup: false
+  dontPopupUpdateMessage: false
 }
 
 export default state

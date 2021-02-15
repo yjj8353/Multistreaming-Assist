@@ -37,8 +37,8 @@ export class StoreMixin extends Vue {
   @nginxStore.Getter('nginxStatus') getNginxStatus!: boolean
   @nginxStore.Action('nginxStatus') setNginxStatus!: (value: boolean) => void
 
-  @optionStore.Getter('updatePopup') getUpdatePopup!: boolean
-  @optionStore.Action('updatePopup') setUpdatePopup!: (value: boolean) => void
+  @optionStore.Getter('dontPopupUpdateMessage') getDontPopupUpdateMessage!: boolean
+  @optionStore.Action('dontPopupUpdateMessage') setDontPopupUpdateMessage!: (value: boolean) => void
 
   @toggleSwitchStore.Getter('twitchOn') getTwitchOn!: boolean
   @toggleSwitchStore.Getter('youtubeOn') getYoutubeOn!: boolean
@@ -80,8 +80,8 @@ export class StoreMixin extends Vue {
   set nginxStatus(value: boolean) { this.setNginxStatus(value) }
 
   // optionStore
-  get updatePopup(): boolean { return this.getUpdatePopup }
-  set updatePopup(value: boolean) { this.setUpdatePopup(value) }
+  get dontPopupUpdateMessage(): boolean { return this.getDontPopupUpdateMessage }
+  set dontPopupUpdateMessage(value: boolean) { this.setDontPopupUpdateMessage(value) }
 
   // toggleSwitchStore
   get twitchOn(): boolean { return this.getTwitchOn }

@@ -3,8 +3,8 @@ import { StateInterface } from '../index'
 import { OptionStateInterface } from './state'
 
 const getters: GetterTree<OptionStateInterface, StateInterface> = {
-  updatePopup (state: OptionStateInterface): boolean {
-    return state.updatePopup
+  dontPopupUpdateMessage (state: OptionStateInterface): boolean {
+    return state.dontPopupUpdateMessage
   }
 }
 

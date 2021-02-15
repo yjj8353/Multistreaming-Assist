@@ -80,9 +80,9 @@
       </q-page-container>
 
       <!-- 업데이트가 존재하고, 팝업금지가 체크되어 있지 않을 때 표시함 -->
-      <!-- <div v-if="updateExist && !updatePopup">
+      <div v-if="updateExist && !dontPopupUpdateMessage">
         <UpdateComponent />
-      </div> -->
+      </div>
 
     </div>
 
@@ -113,9 +113,11 @@ import { StoreMixin } from 'src/mixins/StoreMixin'
 import fs from 'fs'
 import path from 'path'
 
-import { BroadcastOption } from 'src/object/broadcastOption'
 import { Keys } from 'src/object/keys'
 import { Options } from 'src/object/options'
+import { BroadcastOption } from 'src/object/broadcastOption'
+
+import https from 'follow-redirects/https'
 
 @Component({
   components: { UpdateComponent, ErrorNginxPath }
@@ -125,11 +127,88 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin, StoreMixi
 
   isMaximized = false
   updateExist = false
+  keys: Keys | null = null
+  options: Options | null = null
 
   mounted() {
+    this.updateCheck()
     this.dirsSetting()
     this.eventsSetting()
     this.parsingBroadcastOptionJson()
+    this.setKeyValues()
+    this.setOptionValues()
+  }
+
+  updateCheck() {
+    let finalUrl: string
+    let thisProgramVersion: string
+    let latestProgramVersion: string
+    const request = https.request({
+      host: 'github.com',
+      path: '/yjj8353/Multistreaming-Assist/releases/latest'
+    }, response => {
+      finalUrl = response.responseUrl
+      latestProgramVersion = finalUrl.replace('https://github.com/yjj8353/Multistreaming-Assist/releases/tag/v', '')
+      thisProgramVersion = fs.readFileSync(path.join(this.getRootDir, 'version'), 'UTF-8')
+      
+      const lpvArray = latestProgramVersion.split('.')
+      const tpvArray = thisProgramVersion.split('.')
+      
+      // preRelease: Alpha/Beta/RC/RTM
+      const lpvMajor = lpvArray[0]
+      const lpvMinor = lpvArray[1]
+      const lpvPatch = lpvArray[2].split('-')[0]
+      const lpvPreRelease = lpvArray[2].split('-')[1] ? this.preReleaseNumbering(lpvArray[2].split('-')[1]) : this.preReleaseNumbering('')
+      const tpvMajor = tpvArray[0]
+      const tpvMinor = tpvArray[1]
+      const tpvPatch = tpvArray[2].split('-')[0]
+      const tpvPrerelease = tpvArray[2].split('-')[1] ? this.preReleaseNumbering(tpvArray[2].split('-')[1]) : this.preReleaseNumbering('')
+
+      if(parseInt(lpvMajor) > parseInt(tpvMajor)) {
+        // major version update 있음
+        this.updateExist = true
+      } else {
+        if(parseInt(lpvMinor) > parseInt(tpvMinor)) {
+          // minor version update 있음
+          this.updateExist = true
+        } else {
+          if(parseInt(lpvPatch) > parseInt(tpvPatch)) {
+            // patch version update 있음
+            this.updateExist = true
+          } else {
+            if(lpvPreRelease > tpvPrerelease) {
+              // pre release version update 있음
+              this.updateExist = true
+            } else {
+              // version 동일함
+              this.updateExist = false
+            }
+          }
+        }
+      }
+    }).on('error', err => {
+      console.log(err)
+    })
+    request.end()
+  }
+
+  preReleaseNumbering(preRelease: string): number {
+    // pre release는 Alpha -> Beta -> RC -> RTM 순으로 버전이 높다
+    const Alpha = 0
+    const Beta = 1
+    const RC = 2
+    const RTM = 3
+
+    switch(preRelease) {
+      case 'alpha':
+        return Alpha
+      case 'beta':
+        return Beta
+      case 'rc':
+        return RC
+      default:
+        return RTM
+    }
   }
 
   dirsSetting() {
@@ -148,23 +227,37 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin, StoreMixi
       }
     }
 
-    const updateCheck = () => {
-      //
-    }
-
     window.addEventListener('resize', windowResizeEvent)
-    window.addEventListener('load', updateCheck)
   }
 
   parsingBroadcastOptionJson() {
     const jsonFile: string = fs.readFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), 'utf-8')
     const broadcastOption: BroadcastOption = JSON.parse(jsonFile) as BroadcastOption
 
-    const keys: Keys = broadcastOption.keys
-    const options: Options = broadcastOption.options
+    this.keys = broadcastOption.keys
+    this.options = broadcastOption.options
+  }
 
-    console.log(keys)
-    console.log(options)
+  setKeyValues() {
+    if(this.keys) {
+      this.twitchKey = this.keys.twitch
+      this.youtubeKey = this.keys.youtube
+      this.additionalRTMPUrl = this.keys.rtmpUrl
+      this.additionalRTMPKey = this.keys.rtmpKey
+    }
+  }
+
+  setOptionValues() {
+    if(this.options) {
+      this.twitchOn = this.options.twitchOn
+      this.youtubeOn = this.options.youtubeOn
+      this.additionalOn = this.options.additionalOn
+      this.recordOn = this.options.recordOn
+
+      this.recordingDir = this.options.recordingDir
+
+      this.dontPopupUpdateMessage = this.options.dontPopupUpdateMessage
+    }
   }
 
   minimize() {

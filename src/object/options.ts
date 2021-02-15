@@ -6,5 +6,5 @@ export interface Options {
 
   recordingDir: string,
 
-  updatePopup: boolean
+  dontPopupUpdateMessage: boolean
 }

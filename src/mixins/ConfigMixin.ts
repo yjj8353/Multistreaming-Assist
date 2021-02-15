@@ -64,7 +64,7 @@ export class ConfigMixin extends mixins(StoreMixin) {
                     '\n' +                        // 역슬래시 이스케이프
                     '        "recordingDir":' + '"' + this.recordingDir.replace(/\\/g, '\\\\') + '",\n' +
                     '\n' +
-                    '        "updatePopup":' + this.updatePopup.toString() + '\n' +
+                    '        "dontPopupUpdateMessage":' + this.dontPopupUpdateMessage.toString() + '\n' +
                     '    }\n' +
                     '}\n'
 
