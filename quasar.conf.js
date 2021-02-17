@@ -83,7 +83,7 @@ module.exports = configure(function (ctx) {
       }
     },
 
-    afterBuild() {
+    afterBuild: function() {
       console.log('설치 파일을 만드는 중 입니다.')
 
       const projectDir = path.join(__dirname, '/dist/electron/Multistreaming-Assist-win32-x64')
@@ -100,7 +100,7 @@ module.exports = configure(function (ctx) {
 
       return new Promise((/* resolve, reject */) => {
         try {
-          execSync('makensis "C:\\git\\javascript\\Multistreaming-Assist\\install.nsi"')
+          execSync('makensis "C:\\git\\Multistreaming-Assist\\install.nsi"')
           console.log('설치 파일 생성이 완료 되었습니다.')
         } catch(e) {
           console.log(e)
