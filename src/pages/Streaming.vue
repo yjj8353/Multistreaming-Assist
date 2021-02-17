@@ -1,8 +1,9 @@
 <template>
   <q-page class="q-pa-md" style="background-color: white;">
 
-    <!-- TWITCH RTMP KEY 입력 칸 -->
+    <!-- TWITCH RTMP -->
     <div class="row">
+      <!-- TWITCH RTMP KEY 입력 칸 -->
       <div class="col-11">
         <q-input label="TWITCH RTMP KEY" v-model="twitchKey" :type="twitchIsPwd ? 'password' : 'text'" @input="checkTwitchKeyNull">
           <template v-slot:append>
@@ -23,8 +24,9 @@
 
     <p></p>
 
-    <!-- YOUTUBE RTMP KEY 입력 칸 -->
+    <!-- YOUTUBE RTMP -->
     <div class="row">
+      <!-- YOUTUBE RTMP KEY 입력 칸 -->
       <div class="col-11">
         <q-input label="YOUTUBE RTMP KEY" v-model="youtubeKey" :type="youtubeIsPwd ? 'password' : 'text'" @input="checkYoutubeKeyNull">
           <template v-slot:append>
@@ -37,7 +39,7 @@
         </q-input>
       </div>
 
-        <!-- YOUTUBE RTMP KEY 반영 토글 스위치 -->
+      <!-- YOUTUBE RTMP KEY 반영 토글 스위치 -->
       <div class="col-1" style="display: flex; align-items: center; justify-content: center;">
         <q-toggle v-model="youtubeOn" :disable="!youtubeKey" size="md" />
       </div>
@@ -45,8 +47,9 @@
 
     <p></p>
 
-    <!-- 추가적인 RTMP URL 입력 칸 -->
+    <!-- additional RTMP -->
     <div class="row">
+      <!-- 추가적인 RTMP URL 입력 칸 -->
       <div class="q-pr-md col">
         <q-input label="추가적인 RTMP URL" v-model="additionalRTMPUrl" type="text" @input="checkAddtionalRTMPUrlOrKeyNull">
           <template v-slot:append>

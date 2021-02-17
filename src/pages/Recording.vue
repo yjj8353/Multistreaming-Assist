@@ -2,6 +2,7 @@
   <q-page class="q-pa-md" style="background-color: white;">
     
     <div class="row">
+      <!-- 녹화 경로 입력 칸 -->
       <div class="col-11">
         <!-- setRecordingDir는 잘못 적은게 아니므로 수정하지 말 것. -->
         <q-input label="녹화 경로"
@@ -11,6 +12,7 @@
         />
       </div>
 
+      <!-- 녹화 여부 토글 스위치 -->
       <div class="col-1" style="display: flex; align-items: center; justify-content: center;">
         <q-toggle v-model="recordOn"
                   :disable="!recordingDir"
