@@ -3,8 +3,9 @@
  */
 
 import fs from 'fs'
-import Component, { mixins } from 'vue-class-component'
 import { execSync, spawn } from 'child_process'
+
+import Component, { mixins } from 'vue-class-component'
 
 import { StoreMixin } from './StoreMixin'
 import { QuasarMixin } from './QuasarMixin'

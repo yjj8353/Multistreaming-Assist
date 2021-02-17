@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import Component from 'vue-class-component'
 import { namespace } from 'vuex-class'
+import Component from 'vue-class-component'
 
 const dirStore = namespace('dir')
 const keyStore = namespace('keys')

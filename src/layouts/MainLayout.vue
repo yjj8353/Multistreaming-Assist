@@ -95,6 +95,11 @@
 </template>
 
 <script lang="ts">
+import fs from 'fs'
+import path from 'path'
+
+import https from 'follow-redirects/https'
+
 // electron
 import { shell } from 'electron'
 
@@ -102,22 +107,18 @@ import { shell } from 'electron'
 import Component, { mixins } from 'vue-class-component'
 
 // components
-import UpdateComponent from 'src/components/UpdateComponent.vue'
 import ErrorNginxPath from 'src/components/ErrorNginxPath.vue'
+import UpdateComponent from 'src/components/UpdateComponent.vue'
 
 // mixins
 import { CheckMixin } from 'src/mixins/CheckMixin'
-import { NginxMixin } from 'src/mixins/NiginxMixin'
 import { StoreMixin } from 'src/mixins/StoreMixin'
+import { NginxMixin } from 'src/mixins/NiginxMixin'
 
-import fs from 'fs'
-import path from 'path'
-
+// Object
 import { Keys } from 'src/object/keys'
 import { Options } from 'src/object/options'
 import { BroadcastOption } from 'src/object/broadcastOption'
-
-import https from 'follow-redirects/https'
 
 @Component({
   components: { UpdateComponent, ErrorNginxPath }
@@ -291,12 +292,11 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin, StoreMixi
     await shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/master/%EA%B8%B0%EC%97%AC%EC%9E%90%EB%AA%A9%EB%A1%9D.md')
   }
 
-  nginxIsWorking() {
-    const result = this.findNginxProcess()
-    return result
+  nginxIsWorking(): boolean {
+    return this.findNginxProcess()
   }
 
-  checkPath() {
+  checkPath(): boolean {
     return this.checkIncludeKoreanOnPath(this.dir)
   }
 }

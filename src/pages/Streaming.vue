@@ -98,8 +98,8 @@ import fs from 'fs'
 import path from 'path'
 
 import { CheckMixin } from 'src/mixins/CheckMixin'
-import { ConfigMixin } from 'src/mixins/ConfigMixin'
 import { NginxMixin } from 'src/mixins/NiginxMixin'
+import { ConfigMixin } from 'src/mixins/ConfigMixin'
 import { QuasarMixin } from 'src/mixins/QuasarMixin'
 
 import { mixins } from 'vue-class-component'

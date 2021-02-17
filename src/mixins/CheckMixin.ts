@@ -2,9 +2,9 @@
  * 확인/검증 관련 기능
  */
 
+import { StoreMixin } from 'src/mixins/StoreMixin'
 import Component, { mixins } from 'vue-class-component'
 
-import { StoreMixin } from 'src/mixins/StoreMixin'
 @Component
 export class CheckMixin extends mixins(StoreMixin) {
   checkIncludeKoreanOnPath = function(path: string): boolean {
