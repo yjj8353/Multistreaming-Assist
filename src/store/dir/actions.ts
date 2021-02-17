@@ -10,6 +10,7 @@ const actions: ActionTree<DirStateInterface, StateInterface> = {
 
     // 현재 ./dir의 위치에 따라 끝에 경로가 추가로 붙으므로 지워줘야 함
     // process.env.DEV는 quasar dev로 실행 했을 때 true가 된다
+    // Windows만 적용됨, MacOS/Linux는 \\가 아니라 /로 바꿔야 함
     if(process.env.DEV) {
       rootDir = dir.replace('src\\store\\dir', '')
     } else {
