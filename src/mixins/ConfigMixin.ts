@@ -11,10 +11,16 @@ import { StoreMixin } from 'src/mixins/StoreMixin'
 export class ConfigMixin extends mixins(StoreMixin) {
   makeNginxConfString(): string {
     // recordingDir.length === 0 이거나 recordOn이 false면 녹화를 끔
-    const recordOption = this.recordingDir.length !== 0 && this.recordOn ? '            record all;\n' +
-                                                                           '            record_path "' + this.recordingDir.replace(/\\/g, '/') + '";\n' +
-                                                                           '            record_unique on;' +
-                                                                           '            record_suffix .flv;\n' : '            record off;\n'
+    const recordOnOption = `
+                  record all;
+                  record_path "${this.recordingDir.replace(/\\/g, '/')}";
+                  record_unique on;
+                  record_suffix .flv;
+    `
+    const recordOffOption = `
+                  record off;
+    `
+    const recordOption = this.recordingDir.length !== 0 && this.recordOn ? recordOnOption : recordOffOption
 
     const twitchUrl = this.twitchOn ? this.fullTwitchUrl : ''
     const youtubeUrl = this.youtubeOn ? this.fullYoutubeUrl : ''
@@ -35,10 +41,8 @@ export class ConfigMixin extends mixins(StoreMixin) {
               chunk_size 4096;
       
               application live {
-                  live on;\n
-      
+                  live on;      
       ${recordOption}
-      
                   ${twitchUrl}
                   ${youtubeUrl}
                   ${additionalRTMPUrl}
