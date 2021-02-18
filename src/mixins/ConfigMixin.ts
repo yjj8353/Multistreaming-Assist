@@ -2,6 +2,7 @@
  * Config File 관련기능
  */
 
+import { stripIndent } from 'common-tags'
 import Component, { mixins } from 'vue-class-component'
 
 import { StoreMixin } from 'src/mixins/StoreMixin'
@@ -19,30 +20,32 @@ export class ConfigMixin extends mixins(StoreMixin) {
     const youtubeUrl = this.youtubeOn ? this.fullYoutubeUrl : ''
     const additionalRTMPUrl = this.additionalOn ? this.fullAdditionalUrl : ''
 
-    const nginxConfig = 'worker_processes 1;\n' +
-                        '\n' +
-                        'error_log logs/error.log error;\n' +
-                        '\n' +
-                        'events {\n' +
-                        '    worker_connections 1024;\n' +
-                        '}\n' +
-                        '\n' +
-                        'rtmp {\n' +
-                        '    server {\n' +
-                        '        listen 1935;\n' +
-                        '        chunk_size 4096;\n' +
-                        '\n' +
-                        '        application live {\n' +
-                        '            live on;\n' +
-                        '\n' +
-                        recordOption +
-                        '\n' +
-                        '            ' + twitchUrl + '\n' +
-                        '            ' + youtubeUrl + '\n' +
-                        '            ' + additionalRTMPUrl + '\n' +
-                        '        }\n' +
-                        '    }\n' +
-                        '}\n'
+    const nginxConfig = stripIndent(`
+      worker_processes 1;
+      
+      error_log logs/error.log error;
+      
+      events {
+          worker_connections 1024;
+      }
+      
+      rtmp {
+          server {
+              listen 1935;
+              chunk_size 4096;
+      
+              application live {
+                  live on;\n
+      
+      ${recordOption}
+      
+                  ${twitchUrl}
+                  ${youtubeUrl}
+                  ${additionalRTMPUrl}
+              }
+          }
+      }`
+    )
 
     return nginxConfig
   }
