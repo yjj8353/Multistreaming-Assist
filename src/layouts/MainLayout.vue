@@ -115,6 +115,7 @@ import path from 'path'
 
 import { Keys } from 'src/object/keys'
 import { Options } from 'src/object/options'
+import { LegacyRTMP } from 'src/object/legacyRTMP'
 import { BroadcastOption } from 'src/object/broadcastOption'
 
 import https from 'follow-redirects/https'
@@ -232,11 +233,51 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin, StoreMixi
   }
 
   parsingBroadcastOptionJson() {
-    const jsonFile: string = fs.readFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), 'utf-8')
-    const broadcastOption: BroadcastOption = JSON.parse(jsonFile) as BroadcastOption
+    // Legacy 프로그램에 존재하는 rtmp.json 파일이 존재할때 타는 로직
+    if(fs.existsSync(path.join(this.nginxConfDir, 'rtmp.json'))) {
+      const jsonFile: string = fs.readFileSync(path.join(this.nginxConfDir, 'rtmp.json'), 'utf-8')
+      const legacyRTMP: LegacyRTMP = JSON.parse(jsonFile) as LegacyRTMP
 
-    this.keys = broadcastOption.keys
-    this.options = broadcastOption.options
+      const {
+        // keys
+        twitch,
+        youtube,
+        rtmpUrl,
+        rtmpKey,
+
+        // options
+        twitchOn,
+        youtubeOn,
+        additionalOn,
+        recordingDir,
+        recordOn,
+        updatePopup
+      } = legacyRTMP
+
+      this.keys = {
+        twitch,
+        youtube,
+        rtmpUrl,
+        rtmpKey
+      }
+
+      // 기존 rtmp.json과 broadcastOptions.json의 recordOn, recodingDir 순서에 유의
+      this.options = {
+        twitchOn,
+        youtubeOn,
+        additionalOn,
+        recordOn,
+        recordingDir,
+        "dontPopupUpdateMessage": updatePopup
+      }
+
+    } else {
+      const jsonFile: string = fs.readFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), 'utf-8')
+      const broadcastOption: BroadcastOption = JSON.parse(jsonFile) as BroadcastOption
+  
+      this.keys = broadcastOption.keys
+      this.options = broadcastOption.options
+    }
   }
 
   setKeyValues() {
