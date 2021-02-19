@@ -32,7 +32,6 @@ export class NginxMixin extends mixins(QuasarMixin, StoreMixin) {
   quitNginxProcess() {
     try {
       execSync('taskkill /im nginx.exe /f', undefined)
-      console.log('정상처리')
     } catch(err) {
       'Error: '.concat(err)
       console.log(err)

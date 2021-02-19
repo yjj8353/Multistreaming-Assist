@@ -55,25 +55,27 @@ export class ConfigMixin extends mixins(StoreMixin) {
   }
 
   makeBroadcastOptionJsonString(): string {
-    const json = '{\n' +
-                    '    "keys": {\n' +
-                    '        "twitch":' + '"' + this.twitchKey + '",\n' +
-                    '        "youtube":' + '"' + this.youtubeKey + '",\n' +
-                    '        "rtmpUrl":' + '"' + this.additionalRTMPUrl + '",\n' +
-                    '        "rtmpKey":' + '"' + this.additionalRTMPKey + '"\n' +
-                    '    },\n' +
-                    '\n' +
-                    '    "options": {\n' +
-                    '        "twitchOn":' + this.twitchOn.toString() + ',\n' +
-                    '        "youtubeOn":' + this.youtubeOn.toString() + ',\n' +
-                    '        "additionalOn":' + this.additionalOn.toString() + ',\n' +
-                    '        "recordOn":' + this.recordOn.toString() + ',\n' +
-                    '\n' +                        // 역슬래시 이스케이프
-                    '        "recordingDir":' + '"' + this.recordingDir.replace(/\\/g, '\\\\') + '",\n' +
-                    '\n' +
-                    '        "dontPopupUpdateMessage":' + this.dontPopupUpdateMessage.toString() + '\n' +
-                    '    }\n' +
-                    '}\n'
+    const json = stripIndent(`
+      {
+          "keys": {
+              "twitch":"${this.twitchKey}",
+              "youtube":"${this.youtubeKey}",
+              "rtmpUrl":"${this.additionalRTMPUrl}",
+              "rtmpKey":"${this.additionalRTMPKey}"
+          },
+    
+          "options": {
+              "twitchOn":${this.twitchOn.toString()},
+              "youtubeOn":${this.youtubeOn.toString()},
+              "additionalOn":${this.additionalOn.toString()},
+              "recordOn":${this.recordOn.toString()},
+    
+              "recordingDir":"${this.recordingDir.replace(/\\/g, '\\\\')}",
+    
+              "dontPopupUpdateMessage":${this.dontPopupUpdateMessage.toString()}
+          }
+      }`
+    )
 
     return json
   }
