@@ -268,7 +268,7 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin, StoreMixi
         additionalOn,
         recordOn,
         recordingDir,
-        "dontPopupUpdateMessage": updatePopup
+        dontPopupUpdateMessage: updatePopup
       }
 
     } else {
