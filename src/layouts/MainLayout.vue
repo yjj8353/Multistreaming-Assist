@@ -270,7 +270,6 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin, StoreMixi
         recordingDir,
         dontPopupUpdateMessage: updatePopup
       }
-
     } else {
       const jsonFile: string = fs.readFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), 'utf-8')
       const broadcastOption: BroadcastOption = JSON.parse(jsonFile) as BroadcastOption
