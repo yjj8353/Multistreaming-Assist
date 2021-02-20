@@ -119,11 +119,12 @@ import { LegacyRTMP } from 'src/object/legacyRTMP'
 import { BroadcastOption } from 'src/object/broadcastOption'
 
 import https from 'follow-redirects/https'
+import { ConfigMixin } from 'src/mixins/ConfigMixin'
 
 @Component({
   components: { UpdateComponent, ErrorNginxPath }
 })
-export default class MainLayout extends mixins(CheckMixin, NginxMixin, StoreMixin) {
+export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMixin, StoreMixin) {
   get win(): Electron.BrowserWindow | null { return this.$q.electron.remote.BrowserWindow.getFocusedWindow() }
 
   isMaximized = false
@@ -269,6 +270,17 @@ export default class MainLayout extends mixins(CheckMixin, NginxMixin, StoreMixi
         recordOn,
         recordingDir,
         dontPopupUpdateMessage: updatePopup
+      }
+
+      const broadcastOption = this.makeBroadcastOptionJsonString()
+      
+      try {
+        fs.writeFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), broadcastOption)
+        fs.unlink(path.join(this.nginxConfDir, 'rtmp.json'), (err) => {
+          console.error(err)
+        })
+      } catch(e) {
+        console.error(e)
       }
     } else {
       const jsonFile: string = fs.readFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), 'utf-8')
