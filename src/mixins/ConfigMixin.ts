@@ -26,9 +26,8 @@ export class ConfigMixin extends mixins(StoreMixin) {
     const youtubeUrl = this.youtubeOn ? this.fullYoutubeUrl : ''
     const additionalRTMPUrl = this.additionalOn ? this.fullAdditionalUrl : ''
 
-    // striptIndet에 no-unsafe-call은 $를 쓰면 생기는 버그이므로 신경 쓰지 말 것
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    const nginxConfig = stripIndent(`
+    // 가끔 eslint 경고가 뜨는데, 버그이므로 신경쓰지 말 것
+    const nginxConfig = stripIndent`
       worker_processes 1;
       
       error_log logs/error.log error;
@@ -50,16 +49,15 @@ export class ConfigMixin extends mixins(StoreMixin) {
                   ${additionalRTMPUrl}
               }
           }
-      }`
-    ) as string
-
+      }
+    `
+    
     return nginxConfig
   }
 
   makeBroadcastOptionJsonString(): string {
-    // striptIndet에 no-unsafe-call은 $를 쓰면 생기는 버그이므로 신경 쓰지 말 것
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    const json = stripIndent(`
+    // 가끔 eslint 경고가 뜨는데, 버그이므로 신경쓰지 말 것
+    const json = stripIndent`
       {
           "keys": {
               "twitch":"${this.twitchKey}",
@@ -78,8 +76,8 @@ export class ConfigMixin extends mixins(StoreMixin) {
     
               "dontPopupUpdateMessage":${this.dontPopupUpdateMessage.toString()}
           }
-      }`
-    ) as string
+      }
+    `
 
     return json
   }
