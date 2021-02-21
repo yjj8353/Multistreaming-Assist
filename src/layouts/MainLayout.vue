@@ -334,6 +334,30 @@ export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMix
   closeApp() {
     if(this.win !== null) {
       this.win.close()
+    } else {
+      this.$q.dialog({
+        title: '저런...',
+        message: '어째서인지 Nginx가 꺼져있는거 같은데, 재기동 할까요?',
+        ok: {
+          push: true,
+          label: '물론이죠!'
+        },
+        cancel: {
+          push: true,
+          color: 'negative',
+          label: '처음 상태로 되돌려주세요!'
+        },
+        tersistent: true
+      }).onOk(() => {
+        const err = this.startNginxProcess()
+
+        if (err) {
+          this.nginxStatus = false
+          this.notify('negative', 'nginx 실행에 실패했습니다')
+        }
+      }, this).onCancel(() => {
+        this.nginxStatus = false
+      }, this)
     }
   }
 
@@ -347,7 +371,9 @@ export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMix
 
   nginxIsWorking() {
     const result = this.findNginxProcess()
-    return result
+    if(result) {
+      this.notify('positive', 'NGINX가 정상적으로 실행중 입니다!')
+    }
   }
 
   checkPath() {
