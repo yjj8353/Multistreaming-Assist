@@ -3,6 +3,7 @@
 node_modules
 
 # Nginx
+/nginx/conf/broadcastOption.json
 /nginx/conf/nginx.conf
 /nginx/conf/rtmp.json
 /nginx/logs
