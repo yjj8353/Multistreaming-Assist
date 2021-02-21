@@ -9,6 +9,10 @@ const getters: GetterTree<NginxStateInterface, StateInterface> = {
 
   nginxIsNotWorking(state: NginxStateInterface): boolean {
     return state.nginxIsNotWorking
+  },
+
+  checkBeforeCloseThisApp(state: NginxStateInterface): boolean {
+    return state.checkBeforeCloseThisApp
   }
 }
 

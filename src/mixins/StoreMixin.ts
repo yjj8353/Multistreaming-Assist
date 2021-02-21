@@ -36,8 +36,10 @@ export class StoreMixin extends Vue {
 
   @nginxStore.Getter('nginxStatus') getNginxStatus!: boolean
   @nginxStore.Getter('nginxIsNotWorking') getNginxIsNotWorking!: boolean
+  @nginxStore.Getter('checkBeforeCloseThisApp') getCheckBeforeCloseThisApp!: boolean
   @nginxStore.Action('nginxStatus') setNginxStatus!: (value: boolean) => void
   @nginxStore.Action('nginxIsNotWorking') setNginxIsNotWorking!: (value: boolean) => void
+  @nginxStore.Action('checkBeforeCloseThisApp') setCheckBeforeCloseThisApp!: (value: boolean) => void
 
   @optionStore.Getter('dontPopupUpdateMessage') getDontPopupUpdateMessage!: boolean
   @optionStore.Action('dontPopupUpdateMessage') setDontPopupUpdateMessage!: (value: boolean) => void
@@ -82,6 +84,8 @@ export class StoreMixin extends Vue {
   set nginxStatus(value: boolean) { this.setNginxStatus(value) }
   get nginxIsNotWorking(): boolean { return this.getNginxIsNotWorking }
   set nginxIsNotWorking(value: boolean) { this.setNginxIsNotWorking(value) }
+  get checkBeforeCloseThisApp(): boolean { return this.getCheckBeforeCloseThisApp }
+  set checkBeforeCloseThisApp(value: boolean) { this.setCheckBeforeCloseThisApp(value) }
 
   // optionStore
   get dontPopupUpdateMessage(): boolean { return this.getDontPopupUpdateMessage }
@@ -96,4 +100,7 @@ export class StoreMixin extends Vue {
   set additionalOn(value: boolean) { this.setAdditionalOn(value) }
   get recordOn(): boolean { return this.getRecordOn }
   set recordOn(value: boolean) { this.setRecordOn(value) }
+
+  // quasar
+  get win(): Electron.BrowserWindow | null { return this.$q.electron.remote.BrowserWindow.getFocusedWindow() }
 }

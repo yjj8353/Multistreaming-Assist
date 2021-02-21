@@ -8,6 +8,10 @@ const mutation: MutationTree<NginxStateInterface> = {
 
   nginxIsNotWorking(state: NginxStateInterface, nginxIsNotWorking: boolean) {
     state.nginxIsNotWorking = nginxIsNotWorking
+  },
+
+  checkBeforeCloseThisApp(state: NginxStateInterface, checkBeforeCloseThisApp: boolean) {
+    state.checkBeforeCloseThisApp = checkBeforeCloseThisApp
   }
 }
 

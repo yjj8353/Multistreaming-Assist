@@ -9,6 +9,10 @@ const actions: ActionTree<NginxStateInterface, StateInterface> = {
 
   nginxIsNotWorking(state: ActionContext<NginxStateInterface, StateInterface>, nginxIsNotWorking: boolean) {
     state.commit('nginxIsNotWorking', nginxIsNotWorking)
+  },
+
+  checkBeforeCloseThisApp(state: ActionContext<NginxStateInterface, StateInterface>, checkBeforeCloseThisApp: boolean) {
+    state.commit('checkBeforeCloseThisApp', checkBeforeCloseThisApp)
   }
 }
 

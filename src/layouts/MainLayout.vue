@@ -94,6 +94,10 @@
         <NginxStatusCheckComponent />
       </div>
 
+      <div v-if="checkBeforeCloseThisApp">
+        <CheckBeforeCloseAppComponent />
+      </div>
+
     </div>
   </q-layout>
 </template>
@@ -109,6 +113,7 @@ import Component, { mixins } from 'vue-class-component'
 import UpdateComponent from 'src/components/UpdateComponent.vue'
 import ErrorNginxPath from 'src/components/ErrorNginxPath.vue'
 import NginxStatusCheckComponent from 'src/components/NginxStatusCheckComponent.vue'
+import CheckBeforeCloseAppComponent from 'src/components/CheckBeforeColoseAppComponent.vue'
 
 // mixins
 import { CheckMixin } from 'src/mixins/CheckMixin'
@@ -127,11 +132,9 @@ import https from 'follow-redirects/https'
 import { ConfigMixin } from 'src/mixins/ConfigMixin'
 
 @Component({
-  components: { UpdateComponent, ErrorNginxPath, NginxStatusCheckComponent }
+  components: { UpdateComponent, ErrorNginxPath, NginxStatusCheckComponent, CheckBeforeCloseAppComponent }
 })
 export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMixin, StoreMixin) {
-  get win(): Electron.BrowserWindow | null { return this.$q.electron.remote.BrowserWindow.getFocusedWindow() }
-
   isMaximized = false
   updateExist = false
   keys: Keys | null = null
@@ -337,8 +340,8 @@ export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMix
   }
 
   closeApp() {
-    if(this.win !== null) {
-      this.win.close()
+    if(this.nginxStatus) {
+      this.checkBeforeCloseThisApp = true
     }
   }
 
