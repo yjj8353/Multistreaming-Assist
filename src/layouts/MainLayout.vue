@@ -84,13 +84,17 @@
         <UpdateComponent />
       </div>
 
-    </div>
+      <!-- 경로에 한글이 포함되어 있을 경우 -->
+      <div v-if=false>
+        <ErrorNginxPath />
+      </div>
 
-    <!-- 경로에 한글이 포함되어 있을 경우 -->
-    <div v-else>
-      <ErrorNginxPath />
-    </div>
+      <!-- NGINX 실행 확인 후, 꺼져있을 경우 뜨는 alert 창 -->
+      <div v-if="!nginxIsNotWorking">
+        <NginxStatusCheckComponent />
+      </div>
 
+    </div>
   </q-layout>
 </template>
 
@@ -104,6 +108,7 @@ import Component, { mixins } from 'vue-class-component'
 // components
 import UpdateComponent from 'src/components/UpdateComponent.vue'
 import ErrorNginxPath from 'src/components/ErrorNginxPath.vue'
+import NginxStatusCheckComponent from 'src/components/NginxStatusCheckComponent.vue'
 
 // mixins
 import { CheckMixin } from 'src/mixins/CheckMixin'
@@ -122,7 +127,7 @@ import https from 'follow-redirects/https'
 import { ConfigMixin } from 'src/mixins/ConfigMixin'
 
 @Component({
-  components: { UpdateComponent, ErrorNginxPath }
+  components: { UpdateComponent, ErrorNginxPath, NginxStatusCheckComponent }
 })
 export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMixin, StoreMixin) {
   get win(): Electron.BrowserWindow | null { return this.$q.electron.remote.BrowserWindow.getFocusedWindow() }
@@ -346,34 +351,10 @@ export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMix
   }
 
   nginxIsWorking() {
-    const result = this.findNginxProcess()
+    this.nginxIsNotWorking = this.findNginxProcess()
 
-    if(result) {
+    if(this.findNginxProcess()) {
       this.notify('positive', 'NGINX가 정상적으로 실행중 입니다!')
-    } else {
-      this.$q.dialog({
-        title: '저런...',
-        message: '어째서인지 Nginx가 꺼져있는거 같은데, 재기동 할까요?',
-        ok: {
-          push: true,
-          label: '물론이죠!'
-        },
-        cancel: {
-          push: true,
-          color: 'negative',
-          label: '처음 상태로 되돌려주세요!'
-        },
-        tersistent: true
-      }).onOk(() => {
-        const err = this.startNginxProcess()
-
-        if(err) {
-          this.nginxStatus = false
-          this.notify('negative', 'nginx 실행에 실패했습니다')
-        }
-      }, this).onCancel(() => {
-        this.nginxStatus = false
-      }, this)
     }
   }
 
