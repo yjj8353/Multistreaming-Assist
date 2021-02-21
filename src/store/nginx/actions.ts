@@ -3,8 +3,12 @@ import { StateInterface } from '../index'
 import { NginxStateInterface } from './state'
 
 const actions: ActionTree<NginxStateInterface, StateInterface> = {
-  nginxStatus (state: ActionContext<NginxStateInterface, StateInterface>, nginxStatus: boolean) {
+  nginxStatus(state: ActionContext<NginxStateInterface, StateInterface>, nginxStatus: boolean) {
     state.commit('nginxStatus', nginxStatus)
+  },
+
+  nginxIsNotWorking(state: ActionContext<NginxStateInterface, StateInterface>, nginxIsNotWorking: boolean) {
+    state.commit('nginxIsNotWorking', nginxIsNotWorking)
   }
 }
 

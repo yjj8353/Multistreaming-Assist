@@ -3,8 +3,12 @@ import { StateInterface } from '../index'
 import { NginxStateInterface } from './state'
 
 const getters: GetterTree<NginxStateInterface, StateInterface> = {
-  nginxStatus (state: NginxStateInterface): boolean {
+  nginxStatus(state: NginxStateInterface): boolean {
     return state.nginxStatus
+  },
+
+  nginxIsNotWorking(state: NginxStateInterface): boolean {
+    return state.nginxIsNotWorking
   }
 }
 

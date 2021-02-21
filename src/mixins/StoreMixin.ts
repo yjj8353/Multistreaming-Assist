@@ -35,7 +35,9 @@ export class StoreMixin extends Vue {
   @keyStore.Action('additionalRTMPKey') setAdditionalRTMPKey!: (value: string) => void
 
   @nginxStore.Getter('nginxStatus') getNginxStatus!: boolean
+  @nginxStore.Getter('nginxIsNotWorking') getNginxIsNotWorking!: boolean
   @nginxStore.Action('nginxStatus') setNginxStatus!: (value: boolean) => void
+  @nginxStore.Action('nginxIsNotWorking') setNginxIsNotWorking!: (value: boolean) => void
 
   @optionStore.Getter('dontPopupUpdateMessage') getDontPopupUpdateMessage!: boolean
   @optionStore.Action('dontPopupUpdateMessage') setDontPopupUpdateMessage!: (value: boolean) => void
@@ -78,6 +80,8 @@ export class StoreMixin extends Vue {
   // nginxStore
   get nginxStatus(): boolean { return this.getNginxStatus }
   set nginxStatus(value: boolean) { this.setNginxStatus(value) }
+  get nginxIsNotWorking(): boolean { return this.getNginxIsNotWorking }
+  set nginxIsNotWorking(value: boolean) { this.setNginxIsNotWorking(value) }
 
   // optionStore
   get dontPopupUpdateMessage(): boolean { return this.getDontPopupUpdateMessage }
