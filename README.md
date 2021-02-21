@@ -1,15 +1,28 @@
-# Todo List
+# Multistreaming-Assist (typescript)
 
 1. Typescript로 전환  
 ~~2. Electron 윈도우 위치 기억 기능~~  
 3. 리팩토링
 
------
+## Install the dependencies
+```bash
+yarn
+```
 
-# Multistreaming-Assist
+### Start the app in development mode (hot-code reloading, error reporting, etc.)
+```bash
+quasar dev
+```
 
-* Electron 6.13.7
+### Lint the files
+```bash
+yarn run lint
+```
 
+### Build the app for production
+```bash
+quasar build
+```
 
 
 ## 배포시 유의사항

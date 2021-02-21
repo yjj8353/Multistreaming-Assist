@@ -4,13 +4,13 @@ Unicode True
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Multistreaming-Assist"
-!define PRODUCT_VERSION "0.9.0"
+!define PRODUCT_VERSION "0.9.1-beta"
 !define PRODUCT_PUBLISHER "±¸´Ú´Ù¸®TV"
 !define PRODUCT_WEB_SITE "https://github.com/yjj8353/Multistreaming-Assist"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Multistreaming-Assist.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
-!define PRODUCT_ROOT_DIR "C:\git\javascript\Multistreaming-Assist"
+!define PRODUCT_ROOT_DIR "C:\git\Multistreaming-Assist"
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"

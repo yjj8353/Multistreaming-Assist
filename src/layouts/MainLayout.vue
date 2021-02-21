@@ -1,8 +1,8 @@
 <template>
   <q-layout class="shadow-2 rounded-borders">
-
+    
     <!-- 경로에 한글이 포함되어 있지 않을 경우 -->
-    <div v-if="checkIncludeKoreanOnPath()">
+    <div v-if="checkPath()">
       <q-header elevated>
         
         <!-- 상단 바 -->
@@ -80,241 +80,114 @@
       </q-page-container>
 
       <!-- 업데이트가 존재하고, 팝업금지가 체크되어 있지 않을 때 표시함 -->
-      <div v-if="updateExist && !updatePopup">
+      <div v-if="updateExist && !dontPopupUpdateMessage">
         <UpdateComponent />
       </div>
 
-    </div>
+      <!-- 경로에 한글이 포함되어 있을 경우 -->
+      <div v-if=false>
+        <ErrorNginxPath />
+      </div>
 
-    <!-- 경로에 한글이 포함되어 있을 경우 -->
-    <div v-else>
-      <q-card class="my-card">
-        <q-card-section>
-          <span>경로에 한글이 포함되어 있는 것 같습니다</span><br />
-          <span>한글이 포함되어 있으면 Nginx가 실행되지 않습니다</span>
-        </q-card-section>
-      </q-card>
-    </div>
+      <!-- NGINX 실행 확인 후, 꺼져있을 경우 뜨는 alert 창 -->
+      <div v-if="!nginxIsNotWorking">
+        <NginxStatusCheckComponent />
+      </div>
 
+      <div v-if="checkBeforeCloseThisApp">
+        <CheckBeforeCloseAppComponent />
+      </div>
+
+    </div>
   </q-layout>
 </template>
 
-<script>
+<script lang="ts">
+// electron
 import { shell } from 'electron'
-import { execFileSync } from 'child_process'
+
+// vue
+import Component, { mixins } from 'vue-class-component'
+
+// components
+import UpdateComponent from 'src/components/UpdateComponent.vue'
+import ErrorNginxPath from 'src/components/ErrorNginxPath.vue'
+import NginxStatusCheckComponent from 'src/components/NginxStatusCheckComponent.vue'
+import CheckBeforeCloseAppComponent from 'src/components/CheckBeforeColoseAppComponent.vue'
+
+// mixins
+import { CheckMixin } from 'src/mixins/CheckMixin'
+import { NginxMixin } from 'src/mixins/NiginxMixin'
+import { StoreMixin } from 'src/mixins/StoreMixin'
+
 import fs from 'fs'
 import path from 'path'
+
+import { Keys } from 'src/object/keys'
+import { Options } from 'src/object/options'
+import { LegacyRTMP } from 'src/object/legacyRTMP'
+import { BroadcastOption } from 'src/object/broadcastOption'
+
 import https from 'follow-redirects/https'
+import { ConfigMixin } from 'src/mixins/ConfigMixin'
 
-// Mixin
-import { NginxMixin } from 'src/mixins/NginxMixin'
-import { FunctionMixin } from 'src/mixins/FunctionMixin'
-
-// vuex
-import { mapActions } from 'vuex'
-import { mapGetters } from 'vuex'
-
-import UpdateComponent from 'src/components/UpdateComponent.vue'
-
-export default {
-  name: 'MainLayout',
-
-  mixins: [NginxMixin, FunctionMixin],
-
-  components: { UpdateComponent },
-
-  computed: {
-    ...mapGetters('option', {
-      getUpdatePopup: 'updatePopup'
-    }),
-
-    ...mapGetters('dir', {
-      getDir: 'dir',
-      getRootDir: 'rootDir',
-      getNginxDir: 'nginxDir',
-      getNginxConfDir: 'nginxConfDir',
-      getNginxLogsDir: 'nginxLogsDir'
-    }),
-
-    ...mapGetters('nginx', {
-      getNginxStatus: 'nginxStatus'
-    }),
-
-    dir: {
-      get() { return this.getDir }
-    },
-
-    rootDir: {
-      get() { return this.getRootDir },
-      set(value) { this.setRootDir(value) }
-    },
-
-    nginxDir: {
-      get() { return this.getNginxDir },
-      set(value) { this.setNginxDir(value) }
-    },
-
-    nginxConfDir: {
-      get() { return this.getNginxConfDir },
-      set(value) { this.setNginxConfDir(value) }
-    },
-
-    nginxLogsDir: {
-      get() { return this.getNginxLogsDir },
-      set(value) { this.setNginxLogsDir(value) }
-    },
-
-    nginxStatus: {
-      get() { return this.getNginxStatus },
-      set(value) { this.setNginxStatus(value) }
-    },
-
-    win: {
-      get() { return this.$q.electron.remote.BrowserWindow.getFocusedWindow() }
-    },
-
-    updatePopup: {
-      get() { return this.getUpdatePopup },
-      set(value) { return this.setUpdatePopup(value) }
-    }
-  },
+@Component({
+  components: { UpdateComponent, ErrorNginxPath, NginxStatusCheckComponent, CheckBeforeCloseAppComponent }
+})
+export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMixin, StoreMixin) {
+  isMaximized = false
+  updateExist = false
+  keys: Keys | null = null
+  options: Options | null = null
 
   mounted() {
-    // rootDir, nginxDir, nginxConfDir 값을 세팅
-    this.rootDir = this.dir
-    this.nginxDir = this.rootDir
-    this.nginxConfDir = this.nginxDir
-    this.nginxLogsDir = this.nginxDir
+    this.updateCheck()
+    this.dirsSetting()
+    this.eventsSetting()
+    this.parsingBroadcastOptionJson()
+    this.setKeyValues()
+    this.setOptionValues()
+  }
 
-    window.addEventListener('resize', this.windowResizeEvent)
+  updateCheck() {
+    let finalUrl: string
+    let thisProgramVersion: string
+    let latestProgramVersion: string
 
-    window.addEventListener('load', async() => {
-      await this.updateCheck()
-    })
-  },
+    const request = https.request({
+      host: 'github.com',
+      path: '/yjj8353/Multistreaming-Assist/releases/latest'
+    }, response => {
+      finalUrl = response.responseUrl
+      latestProgramVersion = finalUrl.replace('https://github.com/yjj8353/Multistreaming-Assist/releases/tag/v', '')
+      thisProgramVersion = fs.readFileSync(path.join(this.getRootDir, 'version'), 'UTF-8')
+      
+      const lpvArray = latestProgramVersion.split('.')
+      const tpvArray = thisProgramVersion.split('.')
+      
+      const lpvMajor = lpvArray[0]
+      const lpvMinor = lpvArray[1]
+      const lpvPatch = lpvArray[2].split('-')[0]
+      const lpvPreRelease = lpvArray[2].split('-')[1] ? this.preReleaseNumbering(lpvArray[2].split('-')[1]) : this.preReleaseNumbering('')
+      const tpvMajor = tpvArray[0]
+      const tpvMinor = tpvArray[1]
+      const tpvPatch = tpvArray[2].split('-')[0]
+      const tpvPrerelease = tpvArray[2].split('-')[1] ? this.preReleaseNumbering(tpvArray[2].split('-')[1]) : this.preReleaseNumbering('')
 
-  data () {
-    return {
-      // update 여부
-      updateExist: false,
-
-      // 현재 최대화 상태를 저장하는 변수
-      isMaximized: false
-    }
-  },
-
-  methods: {
-    ...mapActions('option', {
-      setUpdatePopup: 'updatePopup'
-    }),
-
-    ...mapActions('dir', {
-      setRootDir: 'rootDir',
-      setNginxDir: 'nginxDir', 
-      setNginxConfDir: 'nginxConfDir',
-      setNginxLogsDir: 'nginxLogsDir'
-    }),
-
-    ...mapActions('nginx', {
-      setNginxStatus: 'nginxStatus'
-    }),
-
-    /*
-    * minimize: 프로그램 창 최소화
-    * maximize: 프로그램 창 최대화
-    * closeApp: 프로그램 닫기
-    * windowResizeEvent: 프로그램 창 크기가 변경될시, isMaximize 변수를 갱신
-    * how2Use: 사용법 페이지 열기
-    * contributors: 기여자 목록 페이지 열기
-    * nginxIsWorking: 프로그램을 닫을시, 현재 nginx가 실행중인지 확인
-    * checkIncludeKoreanOnPath: 프로그램이 켜질시, 현재 프로그램 경로에 한글이 포함되었는지 확인
-    */
-    minimize() {
-      if (process.env.MODE === 'electron') {
-        this.win.minimize()
-      }
-    },
-
-    maximize() {
-      if (process.env.MODE === 'electron') {
-        if (this.win.isMaximized()) {
-          this.win.unmaximize()
-          this.isMaximized = false
-        } else {
-          this.win.maximize()
-          this.isMaximized = true
-        }
-      }
-    },
-
-    closeApp() {
-      if (this.nginxStatus) {
-        this.$q.dialog({
-          title: '잠깐만요!',
-          message: '아직 nginx가 켜져있는거 같습니다만... 정말로 종료할까요?',
-          ok: {
-            push: true,
-            label: '물론이죠!'
-          },
-          cancel: {
-            push: true,
-            color: 'negative',
-            label: '잠깐만요!'
-          },
-          tersistent: true
-        }).onOk(() => {
-          try {
-            execFileSync('./nginx.exe', ['-s', 'stop'], { cwd: this.nginxDir })
-          } catch (e) {
-
-          }
-          this.win.close()
-        }, this).onCancel(() => {
-          // 아무것도 하지 않음
-        }).onDismiss(() => {
-          // 아무것도 하지 않음
-        })
+      if(parseInt(lpvMajor) > parseInt(tpvMajor)) {
+        // major version update 있음
+        this.updateExist = true
       } else {
-        this.win.close()
-      }
-    },
-    
-    windowResizeEvent () {
-      if (this.win.isMaximized()) {
-        this.isMaximized = true
-      } else {
-        this.isMaximized = false
-      }
-    },
-
-    async updateCheck() {
-      let finalUrl
-      let thisProgramVersion
-      let latestProgramVersion
-
-      const request = https.request({
-        host: 'github.com',
-        path: '/yjj8353/Multistreaming-Assist/releases/latest'
-      }, async response => {
-        const re = /[0-9]+\.[0-9]+\.[0-9]+/
-
-        finalUrl = await response.responseUrl.toString()
-        latestProgramVersion = re.exec(finalUrl.replace('https://github.com/yjj8353/Multistreaming-Assist/releases/tag/', ''))[0]
-        thisProgramVersion = fs.readFileSync(path.join(this.getRootDir, 'version'), 'UTF-8')
-
-        const lpvArray = latestProgramVersion.split('.')
-        const tpvArray = thisProgramVersion.split('.')
-
-        if(parseInt(lpvArray[0]) > parseInt(tpvArray[0])) {
-          // major version update 있음
+        if(parseInt(lpvMinor) > parseInt(tpvMinor)) {
+          // minor version update 있음
           this.updateExist = true
         } else {
-          if(parseInt(lpvArray[1]) > parseInt(tpvArray[1])) {
-            // minor version update 있음
+          if(parseInt(lpvPatch) > parseInt(tpvPatch)) {
+            // patch version update 있음
             this.updateExist = true
           } else {
-            if(parseInt(lpvArray[2]) > parseInt(tpvArray[2])) {
-              // patch version update 있음
+            if(lpvPreRelease > tpvPrerelease) {
+              // pre release version update 있음
               this.updateExist = true
             } else {
               // version 동일함
@@ -322,57 +195,174 @@ export default {
             }
           }
         }
-      }).on('error', err => {
-        console.log(err)
-      })
-
-      request.end()
-    },
-
-    how2Use () {
-      shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/quasar/README.md')
-    },
-
-    contributors () {
-      shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/quasar/%EA%B8%B0%EC%97%AC%EC%9E%90%EB%AA%A9%EB%A1%9D.md')
-    },
-
-    nginxIsWorking () {
-      const result = this.findNginxProcess()
-
-      if (result) {
-        this.notify('positive', 'Nginx는 정상적으로 실행 중 입니다')
-      } else {
-        this.$q.dialog({
-          title: '저런...',
-          message: '어째서인지 Nginx가 꺼져있는거 같은데, 재기동 할까요?',
-          ok: {
-            push: true,
-            label: '물론이죠!'
-          },
-          cancel: {
-            push: true,
-            color: 'negative',
-            label: '처음 상태로 되돌려주세요!'
-          },
-          tersistent: true
-        }).onOk(() => {
-          const err = this.startNginxProcess()
-
-          if (err) {
-            this.nginxStatus = false
-            this.notify('negative', 'nginx 실행에 실패했습니다')
-          }
-        }, this).onCancel(() => {
-          this.nginxStatus = false
-        }, this)
       }
-    },
+    }).on('error', err => {
+      console.log(err)
+    })
+    
+    request.end()
+  }
 
-    checkIncludeKoreanOnPath() {
-      const re = new RegExp('[ㄱ-ㅎ|ㅏ-ㅑ|가-힣]')
-      return !(re.test(this.dir))
+  preReleaseNumbering(preRelease: string): number {
+    // pre release는 Alpha -> Beta -> RC -> RTM 순으로 버전이 높다
+    const Alpha = 0
+    const Beta = 1
+    const RC = 2
+    const RTM = 3
+
+    switch(preRelease) {
+      case 'alpha':
+        return Alpha
+      case 'beta':
+        return Beta
+      case 'rc':
+        return RC
+      default:
+        return RTM
     }
+  }
+
+  dirsSetting() {
+    this.rootDir = this.dir
+    this.nginxDir = this.rootDir
+    this.nginxConfDir = this.nginxDir
+    this.nginxLogsDir = this.nginxDir
+  }
+
+  eventsSetting() {
+    const windowResizeEvent = () => {
+      if(this.win !== null && this.win.isMaximized()) {
+        this.isMaximized = true
+      } else {
+        this.isMaximized = false
+      }
+    }
+
+    window.addEventListener('resize', windowResizeEvent)
+  }
+
+  parsingBroadcastOptionJson() {
+    // Legacy 프로그램에 존재하는 rtmp.json 파일이 존재할때 타는 로직
+    if(fs.existsSync(path.join(this.nginxConfDir, 'rtmp.json'))) {
+      const jsonFile: string = fs.readFileSync(path.join(this.nginxConfDir, 'rtmp.json'), 'utf-8')
+      const legacyRTMP: LegacyRTMP = JSON.parse(jsonFile) as LegacyRTMP
+
+      const {
+        // keys
+        twitch,
+        youtube,
+        rtmpUrl,
+        rtmpKey,
+
+        // options
+        twitchOn,
+        youtubeOn,
+        additionalOn,
+        recordingDir,
+        recordOn,
+        updatePopup
+      } = legacyRTMP
+
+      this.keys = {
+        twitch,
+        youtube,
+        rtmpUrl,
+        rtmpKey
+      }
+
+      // 기존 rtmp.json과 broadcastOptions.json의 recordOn, recodingDir 순서에 유의
+      this.options = {
+        twitchOn,
+        youtubeOn,
+        additionalOn,
+        recordOn,
+        recordingDir,
+        dontPopupUpdateMessage: updatePopup
+      }
+
+      const broadcastOption = this.makeBroadcastOptionJsonString()
+      
+      try {
+        fs.writeFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), broadcastOption)
+        fs.unlink(path.join(this.nginxConfDir, 'rtmp.json'), (err) => {
+          console.error(err)
+        })
+      } catch(e) {
+        console.error(e)
+      }
+    } else {
+      const jsonFile: string = fs.readFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), 'utf-8')
+      const broadcastOption: BroadcastOption = JSON.parse(jsonFile) as BroadcastOption
+  
+      this.keys = broadcastOption.keys
+      this.options = broadcastOption.options
+    }
+  }
+
+  setKeyValues() {
+    if(this.keys) {
+      this.twitchKey = this.keys.twitch
+      this.youtubeKey = this.keys.youtube
+      this.additionalRTMPUrl = this.keys.rtmpUrl
+      this.additionalRTMPKey = this.keys.rtmpKey
+    }
+  }
+
+  setOptionValues() {
+    if(this.options) {
+      this.twitchOn = this.options.twitchOn
+      this.youtubeOn = this.options.youtubeOn
+      this.additionalOn = this.options.additionalOn
+      this.recordOn = this.options.recordOn
+
+      this.recordingDir = this.options.recordingDir
+
+      this.dontPopupUpdateMessage = this.options.dontPopupUpdateMessage
+    }
+  }
+
+  minimize() {
+    if(this.win !== null && process.env.MOD === 'electron') {
+      this.win.minimize()
+    }
+  }
+
+  maximize() {
+    if(this.win !== null && process.env.MOD === 'electron') {
+      if(this.win.isMaximized()) {
+        this.win.unmaximize()
+        this.isMaximized = false
+      } else {
+        this.win.maximize()
+        this.isMaximized = true
+      }
+    }
+  }
+
+  closeApp() {
+    if(this.nginxStatus) {
+      this.checkBeforeCloseThisApp = true
+    }
+  }
+
+  async how2Use() {
+    await shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/master/README.md')
+  }
+
+  async contributors() {
+    await shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/blob/master/%EA%B8%B0%EC%97%AC%EC%9E%90%EB%AA%A9%EB%A1%9D.md')
+  }
+
+  nginxIsWorking() {
+    this.nginxIsNotWorking = this.findNginxProcess()
+
+    if(this.findNginxProcess()) {
+      this.notify('positive', 'NGINX가 정상적으로 실행중 입니다!')
+    }
+  }
+
+  checkPath() {
+    return this.checkIncludeKoreanOnPath(this.dir)
   }
 }
 </script>

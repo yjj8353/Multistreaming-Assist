@@ -19,32 +19,34 @@ let mainWindow
 // electron x, y 좌표 및 width, height 정보를 기억하는 모듈
 const windowStateKeeper = require('electron-window-state')
 
-// 기본 윈도우 크기
-function createWindow () {  
+// 기본 윈도우
+function createWindow () {
   let mainWindowState = windowStateKeeper({
     defaultWidth: 480,
     defaultHeight: 600
   })
 
-  mainWindow = new BrowserWindow({   
-    // mainWindowState에 electron의 크기 및 위치 정보를 저장함 
+  mainWindow = new BrowserWindow({
+    // mainWindowState에 electron의 크기 및 위치 정보를 저장
     x: mainWindowState.x,
     y: mainWindowState.y,
     width: mainWindowState.width,
     height: mainWindowState.height,
-    
-    useContentSize: true,
+
     frame: false,
+    useContentSize: true,
     webPreferences: {
       // Change from /quasar.conf.js > electron > nodeIntegration;
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
       nodeIntegration: process.env.QUASAR_NODE_INTEGRATION,
-      nodeIntegrationInWorker: process.env.QUASAR_NODE_INTEGRATION
+      nodeIntegrationInWorker: process.env.QUASAR_NODE_INTEGRATION,
 
       // More info: /quasar-cli/developing-electron-apps/electron-preload-script
       // preload: path.resolve(__dirname, 'electron-preload.js')
     }
   })
+  
+  // mainWindow를 mainWindowState로 관리
   mainWindowState.manage(mainWindow)
 
   mainWindow.loadURL(process.env.APP_URL)

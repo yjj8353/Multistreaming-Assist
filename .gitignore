@@ -5,7 +5,7 @@ node_modules
 # Nginx
 /nginx/conf/broadcastOption.json
 /nginx/conf/nginx.conf
-/nginx/conf/rtmp.json
+/nginx/conf/broadcastOption.json
 /nginx/logs
 
 # Quasar core related directories
@@ -42,3 +42,4 @@ yarn-error.log*
 .vscode
 
 MA-Setup.exe
+/version

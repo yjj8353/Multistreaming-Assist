@@ -2,6 +2,7 @@
   <q-page class="q-pa-md" style="background-color: white;">
     
     <div class="row">
+      <!-- 녹화 경로 입력 칸 -->
       <div class="col-11">
         <!-- setRecordingDir는 잘못 적은게 아니므로 수정하지 말 것. -->
         <q-input label="녹화 경로"
@@ -11,6 +12,7 @@
         />
       </div>
 
+      <!-- 녹화 여부 토글 스위치 -->
       <div class="col-1" style="display: flex; align-items: center; justify-content: center;">
         <q-toggle v-model="recordOn"
                   :disable="!recordingDir"
@@ -34,72 +36,43 @@
   </q-page>
 </template>
 
-<script>
+<script lang="ts">
 import app from 'electron'
 
-// vuex
-import { mapActions } from 'vuex'
-import { mapGetters } from 'vuex'
+import { mixins } from 'vue-class-component'
+import { Component } from 'vue-property-decorator'
 
-export default {
-  name: 'RecordingPage',
+import { StoreMixin } from 'src/mixins/StoreMixin'
 
-  computed: {
-    ...mapGetters('dir', {
-      getRecordingDir: 'recordingDir'
-    }),
+@Component
+export default class RecordingPage extends mixins(StoreMixin) {
+  // data
+  originalRecordDir = ''
 
-    ...mapGetters('toggleSwitch', {
-      getRecordOn: 'recordOn'
-    }),
-
-    recordingDir: {
-      get() { return this.getRecordingDir },
-      set(value) { this.setRecordingDir(value) }
-    },
-
-    recordOn: {
-      get() { return this.getRecordOn },
-      set(value) { this.setRecordOn(value) }
-    }
-  },
-
+  // mounted
   mounted() {
     this.originalRecordDir = this.recordingDir
-  },
+  }
 
-  data() {
-    return {
-      originalRecordDir: ''
-    }
-  },
+  // methods
+  recordingDirSelect() {
+    const { dialog } = app.remote
+    
+    dialog.showOpenDialog({ 
+      properties: ['openDirectory']
+    }).then(result => {
+      this.changeRecordingDir(result.filePaths)
+    }).catch(error => {
+      console.error(error)
+    })
+  }
 
-  methods: {
-    ...mapActions('dir', {
-      setRecordingDir: 'recordingDir'
-    }),
-
-    ...mapActions('toggleSwitch', {
-      setRecordOn: 'recordOn'
-    }),
-
-    recordingDirSelect() {
-      const { dialog } = app.remote
-      
-      dialog.showOpenDialog({ 
-        properties: ['openDirectory']
-      }).then(result => {
-        this.changeRecordingDir(result.filePaths)
-      })
-    },
-
-    changeRecordingDir(value) {
-      if(value.length === 0 && this.originalRecordDir !== '') {
-        this.recordingDir = this.originalRecordDir
-      } else {
-        this.recordingDir = value
-        this.originalRecordDir = value
-      }
+  changeRecordingDir(value: string[]) {
+    if(value.length === 0 && this.originalRecordDir !== '') {
+      this.recordingDir = this.originalRecordDir
+    } else {
+      this.recordingDir = value[0]
+      this.originalRecordDir = value[0]
     }
   }
 }

@@ -1,11 +1,13 @@
 <template>
-  <q-page class="q-pa-md" style="background-color: white;">
-    <p>도움 페이지</p>
+  <q-page padding>
+    <!-- content -->
   </q-page>
 </template>
 
-<script>
-export default {
-  name: 'HelpPage'
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator'
+
+@Component
+export default class HelpPage extends Vue {
 }
 </script>

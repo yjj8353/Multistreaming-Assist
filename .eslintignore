@@ -4,5 +4,8 @@
 /src-cordova
 /.quasar
 /node_modules
-/src/function
-/src/store
+/src-ssr
+
+/src-electron/main-process
+
+/quasar.conf.js

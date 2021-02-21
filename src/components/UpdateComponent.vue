@@ -18,55 +18,36 @@
   </div>
 </template>
 
-<script>
-// electron
+<script lang="ts">
+import fs from 'fs'
+import path from 'path'
+
+import { mixins } from 'vue-class-component'
+import { Component } from 'vue-property-decorator'
+
 import { shell } from 'electron'
+import { ConfigMixin } from 'src/mixins/ConfigMixin'
 
-import { mapActions } from 'vuex'
-import { mapGetters } from 'vuex'
+@Component
+export default class UpdateComponent extends mixins(ConfigMixin) {
+  seamless = true
+  screwYouUpdate = false
 
-import { FunctionMixin } from '../mixins/FunctionMixin'
+  async openUpdatePage() {
+    await shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/releases/latest')
+    this.dontPopupUpdateMessage = this.screwYouUpdate
+    this.seamless = false
 
-export default {
-  name: 'UpdateComponent',
+    const broadcastOption = this.makeBroadcastOptionJsonString()
+    fs.writeFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), broadcastOption)
+  }
 
-  mixins: [FunctionMixin],
+  closeUpdatePopup() {
+    this.dontPopupUpdateMessage = this.screwYouUpdate
+    this.seamless = false
 
-  computed: {
-    ...mapGetters('option', {
-      getUpdatePopup: 'updatePopup'
-    }),
-
-    updatePopup: {
-      get() { return this.getUpdatePopup },
-      set(value) { this.setUpdatePopup(value) }
-    }
-  },
-
-  data () {
-    return {
-      seamless: true,
-      screwYouUpdate: false
-    }
-  },
-
-  methods: {
-    ...mapActions('option', {
-      setUpdatePopup: 'updatePopup'
-    }),
-
-    openUpdatePage() {
-      shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/releases/latest')
-      this.updatePopup = this.screwYouUpdate
-      this.seamless = false
-      this.makeRTMPJSON()
-    },
-
-    closeUpdatePopup() {
-      this.updatePopup = this.screwYouUpdate
-      this.seamless = false
-      this.makeRTMPJSON()
-    }
+    const broadcastOption = this.makeBroadcastOptionJsonString()
+    fs.writeFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), broadcastOption)
   }
 }
 </script>
