@@ -9,7 +9,7 @@ import Component, { mixins } from 'vue-class-component'
 export class CheckMixin extends mixins(StoreMixin) {
   checkIncludeKoreanOnPath = function(path: string): boolean {
     const re = new RegExp('[ㄱ-ㅎ|ㅏ-ㅑ|가-힣]')
-    return !(re.test(path))
+    return re.test(path)
   }
 
   checkTwitchKeyPattern(key: string): boolean {

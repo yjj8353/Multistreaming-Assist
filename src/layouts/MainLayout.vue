@@ -84,11 +84,6 @@
         <UpdateComponent />
       </div>
 
-      <!-- 경로에 한글이 포함되어 있을 경우 -->
-      <div v-if=false>
-        <ErrorNginxPath />
-      </div>
-
       <!-- NGINX 실행 확인 후, 꺼져있을 경우 뜨는 alert 창 -->
       <div v-if="!nginxIsNotWorking">
         <NginxStatusCheckComponent />
@@ -98,6 +93,10 @@
         <CheckBeforeCloseAppComponent />
       </div>
 
+    </div>
+    <!-- 경로에 한글이 포함되어 있을 경우 -->
+    <div v-else>
+      <ErrorNginxPath />
     </div>
   </q-layout>
 </template>
@@ -342,6 +341,10 @@ export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMix
   closeApp() {
     if(this.nginxStatus) {
       this.checkBeforeCloseThisApp = true
+    } else {
+      if(this.win !== null) {
+        this.win.close()
+      }
     }
   }
 
@@ -362,7 +365,7 @@ export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMix
   }
 
   checkPath() {
-    return this.checkIncludeKoreanOnPath(this.dir)
+    return !this.checkIncludeKoreanOnPath(this.dir)
   }
 }
 </script>
