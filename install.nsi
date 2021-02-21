@@ -10,7 +10,7 @@ Unicode True
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Multistreaming-Assist.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
-!define PRODUCT_ROOT_DIR "C:\git\javascript\Multistreaming-Assist"
+!define PRODUCT_ROOT_DIR "C:\git\Multistreaming-Assist"
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"

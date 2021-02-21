@@ -347,7 +347,10 @@ export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMix
 
   nginxIsWorking() {
     const result = this.findNginxProcess()
-    return result
+    
+    if(result) {
+      this.notify('positive', 'NGINX가 정상적으로 실행중 입니다!')
+    }
   }
 
   checkPath() {
