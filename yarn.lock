@@ -942,10 +942,10 @@
   resolved "https://registry.yarnpkg.com/@positron/stack-trace/-/stack-trace-1.0.0.tgz#14fcc712a530038ef9be1ce6952315a839f466a8"
   integrity sha1-FPzHEqUwA475vhzmlSMVqDn0Zqg=
 
-"@quasar/app@^2.1.14":
-  version "2.1.14"
-  resolved "https://registry.yarnpkg.com/@quasar/app/-/app-2.1.14.tgz#1922d6b81d6c38caaff5bd92d0985c395f659a73"
-  integrity sha512-NaUTJ7tuTMpObEwFfGrPYFFLs11i8yBFHVVMeM3qbjBoMrNLBATaQ9UCSGdgxVD3DpeoXfm81eLIVyJ20vAGzw==
+"@quasar/app@^2.1.15":
+  version "2.1.15"
+  resolved "https://registry.yarnpkg.com/@quasar/app/-/app-2.1.15.tgz#fb00a92128c9e42e3f7327876ba8b88175493554"
+  integrity sha512-wWgTwQYUWNurEYocw6EjnBj4zlX8TkONLx88Q+0ie9Pt7OuVZ2FVI1Wnv3A886IU0wIV87+lMKyjHuOuuUxqbw==
   dependencies:
     "@quasar/babel-preset-app" "2.0.1"
     "@quasar/fastclick" "1.1.4"
@@ -996,6 +996,7 @@
     postcss-loader "3.0.0"
     postcss-rtl "1.7.3"
     postcss-safe-parser "4.0.2"
+    pretty-error "^2.1.1"
     register-service-worker "1.7.1"
     sass "1.29.0"
     sass-loader "10.1.0"
@@ -7368,10 +7369,10 @@ qs@6.7.0:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==
 
-quasar@^1.15.3:
-  version "1.15.3"
-  resolved "https://registry.yarnpkg.com/quasar/-/quasar-1.15.3.tgz#6dc65d473b09ee75e83262fa8a4ce1d1fff9de69"
-  integrity sha512-WJil2QRNu3VSkw+gg1AMEwizzkCUBa7i36CQRHxPeHfFyKkiCZ4Fi25FNHGGjpuUYuJaMDQztb21ZyNK4mQhRQ==
+quasar@^1.15.4:
+  version "1.15.4"
+  resolved "https://registry.yarnpkg.com/quasar/-/quasar-1.15.4.tgz#f52d61e4ab738455d441de765efc59957fccd6d3"
+  integrity sha512-m5oXG2qrsOCJVY00+v4qxFQ/q8BRONQWqhomxEhxB+VdYpgdg4tQ3VVyKZREUS0CQK9NTTl8seEiZpjJampI7g==
 
 query-string@^4.1.0:
   version "4.3.4"
