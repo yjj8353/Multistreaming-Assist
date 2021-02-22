@@ -13,7 +13,7 @@
     "@quasar/extras": "^1.9.17",
     "@types/follow-redirects": "^1.13.0",
     "@vue/composition-api": "^0.6.4",
-    "axios": "^0.18.1",
+    "axios": "0.21.1",
     "child_process": "^1.0.2",
     "common-tags": "^1.8.0",
     "core-js": "^3.6.5",
