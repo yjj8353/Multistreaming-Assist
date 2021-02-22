@@ -1,9 +1,5 @@
 # Multistreaming-Assist (typescript)
 
-1. Typescript로 전환  
-~~2. Electron 윈도우 위치 기억 기능~~  
-3. 리팩토링
-
 
 
 ## 배포시 유의사항
