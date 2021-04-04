@@ -10,15 +10,21 @@
 
 ## 사용법
 
-> ### RTMP Key 정보 입력하고 nginx.exe 실행하기  
+> ### 방송 송츨 세팅  
 > ![스트리밍](https://user-images.githubusercontent.com/38521736/113496929-975c1180-9539-11eb-808b-a41b9ae3708d.png)  
-> 1. 상단 입력칸에 본인이 송출을 원하는 RTMP Key 값을 입력하고, 우측 토글 스위치를 클릭해서 킵니다  
+> 1. 상단 입력칸에 본인이 송출을 원하는 RTMP Key 값을 입력하고, 우측 토글 스위치를 활성화해서 킵니다  
 > 2. 'NGINX 실행' 버튼을 클릭해 nginx.exe를 실행합니다
 > 
 > ![스트리밍2](https://user-images.githubusercontent.com/38521736/113496931-9dea8900-9539-11eb-8e7a-1335a4a71cb0.png)  
 > 1. nginx.exe가 실행되면 우측 하단의 버튼이 붉은색으로 변하면서 'NGINX 정지' 버튼으로 변경됩니다  
->
    
+***
+
+> ### 녹화 세팅
+> ![녹화](https://user-images.githubusercontent.com/38521736/113497937-494c0b80-9543-11eb-9387-93cb0a2a7518.png)
+> 1. '경로 설정' 버튼을 클릭하고, 녹화 파일을 저장할 경로를 설정해 줍니다, 직접 입력해도 상관 없으나 경로 설정을 이용한 설정을 권장합니다
+> 2. 우측 토글 버튼을 활성화 해서 녹화를 킵니다
+
 ***
    
 > ### OBS 연동
@@ -45,5 +51,9 @@
 > A. '도구' > 'NGINX 프로세스 확인' 탭을 클릭하면 됩니다  
 > ![확인1](https://user-images.githubusercontent.com/38521736/113497803-3b49bb00-9542-11eb-894a-15d47f5536e3.png)  
 > ![확인2](https://user-images.githubusercontent.com/38521736/113497806-3f75d880-9542-11eb-856b-bd39714937fb.png)
-
-
+> 
+> ### Q. 녹화 기능은 뭔가요?
+> A. nginx RTMP 모듈의 포함된 기능인 record를 사용한 기능입니다, 해당 기능은 nginx.exe를 통한 스트리밍 영상을 자동으로 자신의 컴퓨터에 기록해 줍니다
+> 
+> ### Q. 아프리카TV 플랫폼에서 송출이 되지 않습니다
+> A. 아프리카TV는 nginx.exe를 통한 스트리밍을 막고 있습니다
