@@ -41,9 +41,9 @@
 > (1) 유효하지 않은 twitch/youtbe 키 값 및 추가적인 rtmp 서버/키 값이 입력된 경우
 > (2) Windows Defender 외의 서드파티 백신을 사용 할 경우
 > 
-> ### Q. nginx.exe가 실행중인지 확인하는 방법이 있나요?
-> A. '도구' > 'NGINX 프로세스 확인' 탭을 클릭하면 됩니다
-> ![확인1](https://user-images.githubusercontent.com/38521736/113497803-3b49bb00-9542-11eb-894a-15d47f5536e3.png)
+> ### Q. nginx.exe가 실행중인지 확인하는 방법이 있나요?  
+> A. '도구' > 'NGINX 프로세스 확인' 탭을 클릭하면 됩니다  
+> ![확인1](https://user-images.githubusercontent.com/38521736/113497803-3b49bb00-9542-11eb-894a-15d47f5536e3.png)  
 > ![확인2](https://user-images.githubusercontent.com/38521736/113497806-3f75d880-9542-11eb-856b-bd39714937fb.png)
 
 
