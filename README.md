@@ -9,13 +9,13 @@
 
 
 ## 사용법
-   
-> ### RTMP Key 정보 입력하고 nginx.exe 실행하기
-> ![녹화](https://user-images.githubusercontent.com/38521736/113496836-a2fb0880-9538-11eb-8772-aa7784fae250.png)
-> 1. 상단 입력칸(1)에 원하는 RTMP Key 값을 입력하고 'NGINX 실행' 버튼(2)을 클릭
+
+> ### RTMP Key 정보 입력하고 nginx.exe 실행하기  
+> ![스트리밍](https://user-images.githubusercontent.com/38521736/113496929-975c1180-9539-11eb-808b-a41b9ae3708d.png)  
+> 1. 상단 입력칸(1)에 원하는 RTMP Key 값을 입력하고 'NGINX 실행' 버튼(2)을 클릭  
 > 
-> ![녹화2](https://user-images.githubusercontent.com/38521736/113496890-1bfa6000-9539-11eb-9316-6b6a2e900f3b.png)
-> 2. nginx.exe가 실행되면 우측 하단의 버튼이 붉은색으로 변하면서 'NGINX 정지' 버튼으로 변경된다
+> ![스트리밍2](https://user-images.githubusercontent.com/38521736/113496931-9dea8900-9539-11eb-8e7a-1335a4a71cb0.png)  
+> 2. nginx.exe가 실행되면 우측 하단의 버튼이 붉은색으로 변하면서 'NGINX 정지' 버튼으로 변경된다  
 >
    
 ***
