@@ -131,19 +131,32 @@ import https from 'follow-redirects/https'
 import { ConfigMixin } from 'src/mixins/ConfigMixin'
 
 @Component({
-  components: { UpdateComponent, ErrorNginxPath, NginxStatusCheckComponent, CheckBeforeCloseAppComponent }
+  components: {
+    ErrorNginxPath,
+    UpdateComponent,
+    NginxStatusCheckComponent,
+    CheckBeforeCloseAppComponent
+  }
 })
 export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMixin, StoreMixin) {
+  isMaximized = false
   updateExist = false
   keys: Keys | null = null
   options: Options | null = null
 
   mounted() {
+    this.checkIsMaximized()
     this.updateCheck()
     this.dirsSetting()
     this.parsingBroadcastOptionJson()
     this.setKeyValues()
     this.setOptionValues()
+  }
+
+  checkIsMaximized() {
+    if(this.win !== null && process.env.MODE === 'electron') {
+      this.isMaximized = this.win.isMaximized()
+    }
   }
 
   updateCheck() {
@@ -308,7 +321,6 @@ export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMix
 
   minimize() {
     if(this.win !== null && process.env.MODE === 'electron') {
-      console.log('최소화')
       this.win.minimize()
     }
   }
@@ -317,8 +329,10 @@ export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMix
     if(this.win !== null && process.env.MODE === 'electron') {
       if(this.win.isMaximized()) {
         this.win.unmaximize()
+        this.isMaximized = false
       } else {
         this.win.maximize()
+        this.isMaximized = true
       }
     }
   }
