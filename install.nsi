@@ -5,7 +5,7 @@ Unicode True
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Multistreaming-Assist"
 !define PRODUCT_VERSION "0.9.1-beta"
-!define PRODUCT_PUBLISHER "±¸´Ú´Ù¸®TV"
+!define PRODUCT_PUBLISHER "ï¿½ï¿½ï¿½Ú´Ù¸ï¿½TV"
 !define PRODUCT_WEB_SITE "https://github.com/yjj8353/Multistreaming-Assist"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Multistreaming-Assist.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -23,7 +23,7 @@ Unicode True
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
-!insertmacro MUI_PAGE_LICENSE "${PRODUCT_ROOT_DIR}\¶óÀÌ¼¾½º.txt"
+!insertmacro MUI_PAGE_LICENSE "${PRODUCT_ROOT_DIR}\ï¿½ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½.txt"
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
@@ -47,7 +47,7 @@ InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
-Section "ÇÊ¼ö ¼³Ä¡" SEC01
+Section "ï¿½Ê¼ï¿½ ï¿½ï¿½Ä¡" SEC01
   SetOutPath "$INSTDIR"
   File "${PRODUCT_ROOT_DIR}\dist\electron\Multistreaming-Assist-win32-x64\chrome_100_percent.pak"
   File "${PRODUCT_ROOT_DIR}\dist\electron\Multistreaming-Assist-win32-x64\chrome_200_percent.pak"
@@ -154,11 +154,11 @@ SectionEnd
 
 Function un.onUninstSuccess
   HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name)´Â(Àº) ¿ÏÀüÈ÷ Á¦°ÅµÇ¾ú½À´Ï´Ù."
+  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name)ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ÅµÇ¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."
 FunctionEnd
 
 Function un.onInit
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "$(^Name)À»(¸¦) Á¦°ÅÇÏ½Ã°Ú½À´Ï±î?" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "$(^Name)ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?" IDYES +2
   Abort
 FunctionEnd
 
