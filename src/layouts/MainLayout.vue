@@ -134,7 +134,6 @@ import { ConfigMixin } from 'src/mixins/ConfigMixin'
   components: { UpdateComponent, ErrorNginxPath, NginxStatusCheckComponent, CheckBeforeCloseAppComponent }
 })
 export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMixin, StoreMixin) {
-  isMaximized = false
   updateExist = false
   keys: Keys | null = null
   options: Options | null = null
@@ -142,7 +141,6 @@ export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMix
   mounted() {
     this.updateCheck()
     this.dirsSetting()
-    this.eventsSetting()
     this.parsingBroadcastOptionJson()
     this.setKeyValues()
     this.setOptionValues()
@@ -228,18 +226,6 @@ export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMix
     this.nginxLogsDir = this.nginxDir
   }
 
-  eventsSetting() {
-    const windowResizeEvent = () => {
-      if(this.win !== null && this.win.isMaximized()) {
-        this.isMaximized = true
-      } else {
-        this.isMaximized = false
-      }
-    }
-
-    window.addEventListener('resize', windowResizeEvent)
-  }
-
   parsingBroadcastOptionJson() {
     // Legacy 프로그램에 존재하는 rtmp.json 파일이 존재할때 타는 로직
     if(fs.existsSync(path.join(this.nginxConfDir, 'rtmp.json'))) {
@@ -321,19 +307,18 @@ export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMix
   }
 
   minimize() {
-    if(this.win !== null && process.env.MOD === 'electron') {
+    if(this.win !== null && process.env.MODE === 'electron') {
+      console.log('최소화')
       this.win.minimize()
     }
   }
 
   maximize() {
-    if(this.win !== null && process.env.MOD === 'electron') {
+    if(this.win !== null && process.env.MODE === 'electron') {
       if(this.win.isMaximized()) {
         this.win.unmaximize()
-        this.isMaximized = false
       } else {
         this.win.maximize()
-        this.isMaximized = true
       }
     }
   }

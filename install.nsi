@@ -4,8 +4,8 @@ Unicode True
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Multistreaming-Assist"
-!define PRODUCT_VERSION "0.9.1-beta"
-!define PRODUCT_PUBLISHER "ï¿½ï¿½ï¿½Ú´Ù¸ï¿½TV"
+!define PRODUCT_VERSION "1.0.0"
+!define PRODUCT_PUBLISHER "±¸´Ú´Ù¸®TV"
 !define PRODUCT_WEB_SITE "https://github.com/yjj8353/Multistreaming-Assist"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Multistreaming-Assist.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
