@@ -102,6 +102,11 @@
 </template>
 
 <script lang="ts">
+
+// node.js 기본 기능
+import fs from 'fs'
+import path from 'path'
+
 // electron
 import { shell } from 'electron'
 
@@ -118,19 +123,19 @@ import CheckBeforeCloseAppComponent from 'src/components/CheckBeforeColoseAppCom
 import { CheckMixin } from 'src/mixins/CheckMixin'
 import { NginxMixin } from 'src/mixins/NiginxMixin'
 import { StoreMixin } from 'src/mixins/StoreMixin'
+import { ConfigMixin } from 'src/mixins/ConfigMixin'
 
-import fs from 'fs'
-import path from 'path'
-
+// store
 import { Keys } from 'src/object/keys'
 import { Options } from 'src/object/options'
 import { LegacyRTMP } from 'src/object/legacyRTMP'
 import { BroadcastOption } from 'src/object/broadcastOption'
 
+//https
 import https from 'follow-redirects/https'
-import { ConfigMixin } from 'src/mixins/ConfigMixin'
 
 @Component({
+  // template 부분에서 사용될 컴포넌트들
   components: {
     ErrorNginxPath,
     UpdateComponent,
@@ -138,6 +143,34 @@ import { ConfigMixin } from 'src/mixins/ConfigMixin'
     CheckBeforeCloseAppComponent
   }
 })
+
+/************************************************************************************************************
+ *  변수
+ *  변수명            자료형         용도
+ ************************************************************************************************************
+ *  isMaximized     boolean     어플리케이션 화면 최대화 여부를 확인하는 변수
+ *  updateExist     boolean     업데이트가 있는지 확인하는 변수
+ *  keys            object      rtmp key 값을 담는 JSON object 객체
+ *  options         object      nginx option 값을 담는 JSON object 객체
+ ************************************************************************************************************
+ *  함수
+ *  함수명                          매개변수(자료형)           반환자료형     용도
+ ************************************************************************************************************
+ *  checkIsMaximized              없음                    없음          프로그램 시작 시, 창이 최대화 된 상태인지 확인함
+ *  updateCheck                   없음                    없음          프로그램 시작 시, 업데이트가 있는지 확인함
+ *  preReleaseNumbering           preRelease(string)     number       pre-release의 enum을 반환함
+ *  dirsSetting                   없음                    없음          
+ *  parsingBroadcastOptionJson    없음                    없음
+ *  setKeyValues                  없음                    없음
+ *  setOptionValues               없음                    없음
+ *  minimize                      없음                    없음
+ *  maximize                      없음                    없음
+ *  closeApp                      없음                    없음
+ *  how2Use                       없음                    없음
+ *  contributors                  없음                    없음
+ *  nginxIsWorking                없음                    없음
+ *  checkPath                     없음                    없음
+ ************************************************************************************************************/
 export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMixin, StoreMixin) {
   isMaximized = false
   updateExist = false
@@ -214,21 +247,23 @@ export default class MainLayout extends mixins(CheckMixin, ConfigMixin, NginxMix
   }
 
   preReleaseNumbering(preRelease: string): number {
-    // pre release는 Alpha -> Beta -> RC -> RTM 순으로 버전이 높다
-    const Alpha = 0
-    const Beta = 1
-    const RC = 2
-    const RTM = 3
+    const pr = {
+      Alpha: 0,
+      Beta: 1,
+      RC: 2,
+      RTM: 3
+    }
 
+    // pre release는 Alpha -> Beta -> RC -> RTM 순으로 버전이 높다
     switch(preRelease) {
       case 'alpha':
-        return Alpha
+        return pr.Alpha
       case 'beta':
-        return Beta
+        return pr.Beta
       case 'rc':
-        return RC
+        return pr.RC
       default:
-        return RTM
+        return pr.RTM
     }
   }
 
