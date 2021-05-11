@@ -4,7 +4,7 @@ Unicode True
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Multistreaming-Assist"
-!define PRODUCT_VERSION "1.0.0"
+!define PRODUCT_VERSION "1.0.1"
 !define PRODUCT_PUBLISHER "±¸´Ú´Ù¸®TV"
 !define PRODUCT_WEB_SITE "https://github.com/yjj8353/Multistreaming-Assist"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Multistreaming-Assist.exe"
@@ -23,7 +23,7 @@ Unicode True
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
-!insertmacro MUI_PAGE_LICENSE "${PRODUCT_ROOT_DIR}\ï¿½ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½.txt"
+!insertmacro MUI_PAGE_LICENSE "${PRODUCT_ROOT_DIR}\license.txt"
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
