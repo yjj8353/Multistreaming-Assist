@@ -23,7 +23,7 @@ Unicode True
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
-!insertmacro MUI_PAGE_LICENSE "${PRODUCT_ROOT_DIR}\SoftwareLicense.txt"
+!insertmacro MUI_PAGE_LICENSE "${PRODUCT_ROOT_DIR}\라이센스.txt"
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
