@@ -131,7 +131,7 @@ import { Options } from 'src/object/options'
 import { LegacyRTMP } from 'src/object/legacyRTMP'
 import { BroadcastOption } from 'src/object/broadcastOption'
 
-//https
+// https
 import https from 'follow-redirects/https'
 
 @Component({
