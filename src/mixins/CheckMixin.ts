@@ -17,7 +17,7 @@ export class CheckMixin extends mixins(StoreMixin) {
     return re.test(key)
   }
 
-  checkYoutubeKeyPatter(key: string): boolean {
+  checkYoutubeKeyPattern(key: string): boolean {
     const re = new RegExp('^[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}(-[a-z0-9]{4})?$')
     return re.test(key)
   }
