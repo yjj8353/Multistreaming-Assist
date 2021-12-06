@@ -4,18 +4,16 @@
     <div class="row">
       <!-- 녹화 경로 입력 칸 -->
       <div class="col-11">
-        <!-- setRecordingDir는 잘못 적은게 아니므로 수정하지 말 것. -->
         <q-input label="녹화 경로"
-                 v-model="recordingDir"
-                 @input="setRecordingDir"
-                 :change="changeRecordingDir"
+                 readonly
+                 v-model="recordingPath"
         />
       </div>
 
       <!-- 녹화 여부 토글 스위치 -->
       <div class="col-1" style="display: flex; align-items: center; justify-content: center;">
-        <q-toggle v-model="recordOn"
-                  :disable="!recordingDir"
+        <q-toggle v-model="recordingOn"
+                  :disable="!recordingPath"
                   size="md"
         />
       </div>
@@ -28,7 +26,7 @@
         <q-btn size="lg"
                class="float-right bg-grey-5"
                label="경로 설정"
-               @click="recordingDirSelect"
+               @click="recordingPathSelect"
         />
       </div>
     </div>
@@ -36,43 +34,17 @@
   </q-page>
 </template>
 
-<script lang="ts">
-import app from 'electron'
+<script>
+export default {
+  name: 'Recoding',
 
-import { mixins } from 'vue-class-component'
-import { Component } from 'vue-property-decorator'
-
-import { StoreMixin } from 'src/mixins/StoreMixin'
-
-@Component
-export default class RecordingPage extends mixins(StoreMixin) {
-  // data
-  originalRecordDir = ''
-
-  // mounted
   mounted() {
-    this.originalRecordDir = this.recordingDir
-  }
+  },
 
-  // methods
-  recordingDirSelect() {
-    const { dialog } = app.remote
-    
-    dialog.showOpenDialog({ 
-      properties: ['openDirectory']
-    }).then(result => {
-      this.changeRecordingDir(result.filePaths)
-    }).catch(error => {
-      console.error(error)
-    })
-  }
-
-  changeRecordingDir(value: string[]) {
-    if(value.length === 0 && this.originalRecordDir !== '') {
-      this.recordingDir = this.originalRecordDir
-    } else {
-      this.recordingDir = value[0]
-      this.originalRecordDir = value[0]
+  methods: {
+    recordingPathSelect() {
+      const result = window.app.openDialog()
+      this.recordingPath = result
     }
   }
 }

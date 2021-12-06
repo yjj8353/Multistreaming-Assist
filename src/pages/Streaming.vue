@@ -5,7 +5,7 @@
     <div class="row">
       <!-- TWITCH RTMP KEY 입력 칸 -->
       <div class="col-11">
-        <q-input label="TWITCH RTMP KEY" v-model="twitchKey" :type="twitchIsPwd ? 'password' : 'text'" @input="checkTwitchKeyNull">
+        <q-input label="TWITCH RTMP KEY" v-model="twitchKey" :type="twitchIsPwd ? 'password' : 'text'" @update:model-value="checkTwitchKeyEmpty">
           <template v-slot:append>
             <q-icon
               :name="twitchIsPwd ? 'visibility_off' : 'visibility'"
@@ -28,7 +28,7 @@
     <div class="row">
       <!-- YOUTUBE RTMP KEY 입력 칸 -->
       <div class="col-11">
-        <q-input label="YOUTUBE RTMP KEY" v-model="youtubeKey" :type="youtubeIsPwd ? 'password' : 'text'" @input="checkYoutubeKeyNull">
+        <q-input label="YOUTUBE RTMP KEY" v-model="youtubeKey" :type="youtubeIsPwd ? 'password' : 'text'" @update:model-value="checkYoutubeKeyEmpty">
           <template v-slot:append>
             <q-icon
               :name="youtubeIsPwd ? 'visibility_off' : 'visibility'"
@@ -51,7 +51,7 @@
     <div class="row">
       <!-- 추가적인 RTMP URL 입력 칸 -->
       <div class="q-pr-md col">
-        <q-input label="추가적인 RTMP URL" v-model="additionalRTMPUrl" type="text" @input="checkAddtionalRTMPUrlOrKeyNull">
+        <q-input label="추가적인 RTMP URL" v-model="additionalRTMPUrl" type="text" @update:model-value="checkAdditionalRTMPUrlOrKeyEmpty">
           <template v-slot:append>
           </template>
         </q-input>
@@ -59,7 +59,7 @@
 
       <!-- 추가적은 RTMP KEY 입력 칸 -->
       <div class="q-pl-md col">
-        <q-input label="추가적인 RTMP KEY" v-model="additionalRTMPKey" :type="additionalIsPwd ? 'password' : 'text'" @input="checkAddtionalRTMPUrlOrKeyNull">
+        <q-input label="추가적인 RTMP KEY" v-model="additionalRTMPKey" :type="additionalIsPwd ? 'password' : 'text'" @update:model-value="checkAdditionalRTMPUrlOrKeyEmpty">
           <template v-slot:append>
             <q-icon
               :name="additionalIsPwd ? 'visibility_off' : 'visibility'"
@@ -74,7 +74,7 @@
       <div class="col-1" style="display: flex; align-items: center; justify-content: center;">
         <q-toggle size="md"
                   v-model="additionalOn"
-                  :disable="!additionalRTMPUrl || !additionalRTMPKey"
+                  :disable="!additionalRTMPUrl && !additionalRTMPKey"
         />
       </div>
     </div>
@@ -86,8 +86,8 @@
       <div class="q-pl-md col">
         <q-btn size="lg"
                 class="float-right"
-                :color="nginxStatus ? 'red' : 'primary'"
-                :label="nginxStatus ? 'Nginx 종료' : 'Nginx 시작'"
+                :color="isNginxRunning ? 'red' : 'primary'"
+                :label="isNginxRunning ? 'Nginx 종료' : 'Nginx 시작'"
                 @click="nginxSwitch"
         />
       </div>
@@ -96,42 +96,117 @@
   </q-page>
 </template>
 
-<script lang="ts">
-import fs from 'fs'
-import path from 'path'
+<script>
+export default {
+  name: 'Streaming',
 
-import { CheckMixin } from 'src/mixins/CheckMixin'
-import { NginxMixin } from 'src/mixins/NiginxMixin'
-import { ConfigMixin } from 'src/mixins/ConfigMixin'
-import { QuasarMixin } from 'src/mixins/QuasarMixin'
+  mounted() {
+    this.settingPath(),
+    this.settingBroadcastOption()
+  },
 
-import { mixins } from 'vue-class-component'
-import { Component } from 'vue-property-decorator'
-
-@Component
-export default class StreamingPage extends mixins(CheckMixin, ConfigMixin, NginxMixin, QuasarMixin) {
-  twitchIsPwd = true
-  youtubeIsPwd = true
-  additionalIsPwd = true
-
-  nginxSwitch() {
-    const allToggleSwitchOff = this.checkAllToggleSwitchOff(this.twitchOn, this.youtubeOn, this.additionalOn)
-
-    if(allToggleSwitchOff) {
-      this.notify('negative', '최소한 하나 이상의 플랫폼이 활성화돼야 합니다')
-      return
+  data() {
+    return {
+      twitchIsPwd: true,
+      youtubeIsPwd: true,
+      additionalIsPwd: true
     }
+  },
 
-    if(!this.nginxStatus) {
-      const broadcastOption = this.makeBroadcastOptionJsonString()
-      const nginxConfig = this.makeNginxConfString()
+  methods: {
+    settingPath() {
+      this.rootPath = this.dirname
+      this.nginxPath = this.rootPath
+      this.nginxConfPath = this.nginxPath
+      this.nginxLogsPath = this.nginxPath
+    },
 
-      fs.writeFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), broadcastOption)
-      fs.writeFileSync(path.join(this.nginxConfDir, 'nginx.conf'), nginxConfig)
+    settingBroadcastOption() {
+      const result = window.read.broadcastOption('broadcast-option', { nginxConfPath: this.nginxConfPath })
+
+      if(result) {
+        this.twitchKey = result.keys.twitch
+        this.youtubeKey = result.keys.youtube
+        this.additionalRTMPUrl = result.keys.rtmpUrl
+        this.additionalRTMPKey = result.keys.rtmpKey
+
+        this.twitchOn = result.options.twitchOn
+        this.youtubeOn = result.options.youtubeOn
+        this.additionalOn = result.options.additionalOn
+        this.recordingOn = result.options.recordingOn
+
+        this.recordingPath = result.options.recordingPath
+        
+        this.isUpdatePopupEnable = result.options.isUpdatePopupEnable
+      }
+    },
+
+    nginxSwitch() {
+      // window.api.example("넘긴값", { value:1234, key:'key', calback: (result) => {
+      //   console.log('요청 후 결과 값 : ', result);
+      // }})
+
+      const nginxConf = {
+        path: this.nginxConfPath,
+        data: this.makeNginxConfString()
+      }
+
+      const broadcastOption = {
+        path: this.nginxConfPath,
+        data: this.makeBroadcastOptionJsonString()
+      }
+
+      const result1 = window.write.makeNginxConf('make-nginx-conf', nginxConf)
+      const result2 = window.write.makeBroadcastOption('make-broadcast-option', broadcastOption)
+
+      if(!result1 || !result2) {
+        this.notify('negative', '옵션 파일을 생성하는데 실패했습니다')
+        return
+      }
+
+      if(!this.isNginxRunning) {
+        const option = {
+          nginxLogsPath: this.nginxLogsPath,
+          nginxPath: this.nginxPath
+        }
+
+        const result = window.nginx.start(option)
+        const re = result.result
+
+        if(re) {
+          this.isNginxRunning = true
+        } else {
+          this.notify(re.type, re.message)
+        }
+      } else {
+        window.nginx.stop()
+        this.isNginxRunning = false
+      }
+    },
+
+    checkTwitchKeyEmpty() {
+      const result = this.isTwitchKeyEmpty(this.twitchKey)
       
-      this.startNginxProcess()
-    } else {
-      this.quitNginxProcess()
+      if(result) {
+        this.twitchOn = false
+      }
+    },
+
+    checkYoutubeKeyEmpty() {
+      const result = this.isYoutubeKeyEmpty(this.youtubeKey)
+
+      if(result) {
+        this.youtubeOn = false
+      }
+    },
+
+    checkAdditionalRTMPUrlOrKeyEmpty() {
+      const result1 = this.isAdditionalRTMPUrlEmpty(this.additionalRTMPUrl)
+      const result2 = this.isAdditionalKeyEmpty(this.additionalRTMPKey)
+
+      if(result1 && result2) {
+        this.additionalOn =  false
+      } 
     }
   }
 }

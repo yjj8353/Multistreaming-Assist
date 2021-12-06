@@ -1,12 +1,21 @@
 <template>
-  <div id="q-app">
-    <router-view />
-  </div>
+  <q-layout class="shadow-2 rounded-borders">
+    <Header />
+    <q-page-container>
+      <Body />
+    </q-page-container>
+  </q-layout>
 </template>
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api'
 
-export default defineComponent({
-  name: 'App'
-})
+<script>
+import Header from './layouts/Header.vue'
+import Body from './layouts/Body.vue'
+export default {
+  name: 'App',
+
+  components: {
+    Header,
+    Body
+  }
+}
 </script>

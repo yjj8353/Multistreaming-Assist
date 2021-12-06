@@ -2,12 +2,6 @@
 .thumbs.db
 node_modules
 
-# Nginx
-/nginx/conf/broadcastOption.json
-/nginx/conf/nginx.conf
-/nginx/conf/rtmp.json
-/nginx/logs
-
 # Quasar core related directories
 .quasar
 /dist
@@ -38,8 +32,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 
-# vscode
-.vscode
-
-MA-Setup.exe
-/version
+nginx/conf/broadcastOption.json
+nginx/conf/nginx.conf
+nginx/logs

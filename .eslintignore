@@ -4,8 +4,5 @@
 /src-cordova
 /.quasar
 /node_modules
-/src-ssr
-
-/src-electron/main-process
-
-/quasar.conf.js
+.eslintrc.js
+babel.config.js
