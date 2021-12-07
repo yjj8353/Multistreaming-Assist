@@ -20,7 +20,7 @@
       <div class="cursor-pointer non-selectable">
         도구
         <q-menu>
-          <q-list v-if="nginxStatus" dense style="min-width: 100px">
+          <q-list v-if="isNginxRunning" dense style="min-width: 100px">
             <q-item clickable v-close-popup>
               <q-item-section @click="nginxProcessCheck">NGINX 프로세스 확인</q-item-section>
             </q-item>
@@ -124,10 +124,6 @@ export default {
 
     handleResize() {
       this.isMaximized = window.app.isMaximized()
-    },
-
-    nginxIsWorking() {
-      window.nginx.isWorking()
     }
   }
 }

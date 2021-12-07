@@ -1,6 +1,6 @@
 <template>
   <!-- 앱 설치 경로에 한글이 포함되어 있을 경우 띄우는 경고창 -->
-  <div v-if="this.openPathErrorAlert">
+  <div v-if="openPathErrorAlert">
     <path-error-alert />
   </div>
 
@@ -8,17 +8,17 @@
     <router-view />
 
     <!-- nginx 프로세스 확인 기능 사용 시, nginx 프로세스가 없는 경우 띄우는 경고창 -->
-    <div v-if="this.openNginxStatusAlert">
+    <div v-if="openNginxStatusAlert">
       <nginx-status-alert />
     </div>
 
     <!-- 앱 종료시, nginx 프로세스가 실행중일 때 띄우는 경고창 -->
-    <div v-if="this.openNginxStillRunningAlert">
+    <div v-if="openNginxStillRunningAlert">
       <nginx-still-running-alert />
     </div>
 
     <!-- 업데이트가 있을 때 띄우는 알림 창 -->
-    <div v-if="this.openUpdateAlert">
+    <div v-if="openUpdateAlert">
       <update-alert />
     </div>
   </div>
