@@ -22,7 +22,7 @@
         <q-menu>
           <q-list v-if="nginxStatus" dense style="min-width: 100px">
             <q-item clickable v-close-popup>
-              <q-item-section @click="nginxIsWorking">NGINX 프로세스 확인</q-item-section>
+              <q-item-section @click="nginxProcessCheck">NGINX 프로세스 확인</q-item-section>
             </q-item>
           </q-list>
           <q-list v-else dense style="min-width: 100px">
@@ -114,6 +114,12 @@ export default {
 
     nginxProcessCheck() {
       const isNginxWorking = window.nginx.isWorking()
+      
+      if(isNginxWorking) {
+        this.notify('positive', 'NGINX가 정상적으로 실행되고 있습니다')
+      } else {
+        this.openNginxStatusAlert = true
+      }
     },
 
     handleResize() {
