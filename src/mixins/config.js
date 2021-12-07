@@ -64,7 +64,7 @@ export const ConfigMixin = {
                 "additionalOn":${this.additionalOn},
                 "recordingOn":${this.recordingOn},
       
-                "recordingDir":"${this.recordingPath.replace(/\\/g, '\\\\')}",
+                "recordingPath":"${this.recordingPath.replace(/\\/g, '\\\\')}",
       
                 "isUpdatePopupEnable":${this.isUpdatePopupEnable}
             }
