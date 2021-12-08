@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="alert">
+  <q-dialog v-model="openNginxStillRunningAlert">
     <q-card style="width: 400px">
       <q-card-section>
         <div class="text-h6">잠깐만요!</div>
@@ -21,12 +21,6 @@
 export default {
   name: 'NginxStillRunningAlert',
   
-  data() {
-    return {
-      alert: true
-    }
-  },
-
   methods: {
     ok() {
       try {
@@ -39,7 +33,7 @@ export default {
     },
 
     cancle() {
-      
+      this.openNginxStillRunningAlert = false
     }
   }
 }

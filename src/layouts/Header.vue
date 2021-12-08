@@ -101,7 +101,13 @@ export default {
 
     // 앱 닫기
     appClose() {
-      window.app.close()
+      const result = window.nginx.isWorking()
+
+      if(result) {
+        this.openNginxStillRunningAlert = true
+      } else {
+        window.app.close()
+      }
     },
 
     how2Use() {

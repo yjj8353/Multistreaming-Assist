@@ -8,14 +8,10 @@
     <router-view />
 
     <!-- nginx 프로세스 확인 기능 사용 시, nginx 프로세스가 없는 경우 띄우는 경고창 -->
-    <div v-if="openNginxStatusAlert">
-      <nginx-status-alert />
-    </div>
+    <nginx-status-alert />
 
     <!-- 앱 종료시, nginx 프로세스가 실행중일 때 띄우는 경고창 -->
-    <div v-if="openNginxStillRunningAlert">
-      <nginx-still-running-alert />
-    </div>
+    <nginx-still-running-alert />
 
     <!-- 업데이트가 있을 때 띄우는 알림 창 -->
     <div v-if="openUpdateAlert">
