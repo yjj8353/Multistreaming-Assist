@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="alert">
+  <q-dialog v-model="openNginxStatusAlert">
     <q-card style="width: 400px">
       <q-card-section>
         <div class="text-h6">저런...</div>
@@ -21,21 +21,29 @@
 export default {
   name: 'NginxStatusAlert',
   
-  data() {
-    return {
-      alert: false
-    }
-  },
-
   methods: {
     ok() {
-      this.startNginxProcess()
-      this.nginxIsNotWorking = true
+      const option = {
+        nginxLogsPath: this.nginxLogsPath,
+        nginxPath: this.nginxPath
+      }
+
+      const result = window.nginx.start(option)
+      const re =result.result
+      
+      if(re) {
+        this.isNginxRunning = true
+      } else {
+        this.isNginxRunning = false
+        this.notify(re.type, re.message)
+      }
+      
+      this.openNginxStatusAlert = false
     },
 
     cancel() {
-      this.nginxStatus = false
-      this.nginxIsNotWorking = true
+      this.isNginxRunning = false
+      this.openNginxStatusAlert = false
     }
   }
 }

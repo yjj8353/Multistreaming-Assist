@@ -176,6 +176,7 @@ export default {
         if(re) {
           this.isNginxRunning = true
         } else {
+          this.isNginxRunning = false
           this.notify(re.type, re.message)
         }
       } else {

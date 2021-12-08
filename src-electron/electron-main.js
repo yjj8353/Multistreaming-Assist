@@ -103,8 +103,6 @@ ipcMain.on('nginx-start', (event, args) => {
     fs.mkdirSync(args.nginxLogsPath)
   }
 
-  console.log(args.nginxPath)
-
   const childProcess = spawn('nginx.exe', undefined, { cwd: args.nginxPath })
   // const childProcess = spawn('nginx.exe', undefined, { cwd: 'C:\\Git\\javascript\\Multistreaming-Assist-V2-Quasar\\nginx' })
   
