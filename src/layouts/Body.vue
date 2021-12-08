@@ -14,9 +14,7 @@
     <nginx-still-running-alert />
 
     <!-- 업데이트가 있을 때 띄우는 알림 창 -->
-    <div v-if="openUpdateAlert">
-      <update-alert />
-    </div>
+    <update-alert />
   </div>
 </template>
 

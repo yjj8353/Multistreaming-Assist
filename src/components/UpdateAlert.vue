@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="seamless" seamless position="bottom">
+  <q-dialog v-model="openUpdateAlert" seamless position="bottom">
     <q-card style="width: 400px">
       <q-card-section class="row items-center no-wrap text-weight-bold">
         업데이트가 있습니다, 다운로드 하시겠습니까?
@@ -22,7 +22,6 @@ export default {
 
   data() {
     return {
-      seamless: true,
       screwYouUpdate: false
     }
   },
