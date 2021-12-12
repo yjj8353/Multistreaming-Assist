@@ -110,10 +110,6 @@ export default {
 
   methods: {
     nginxSwitch() {
-      // window.api.example("넘긴값", { value:1234, key:'key', calback: (result) => {
-      //   console.log('요청 후 결과 값 : ', result);
-      // }})
-
       const nginxConf = {
         path: this.nginxConfPath,
         data: this.makeNginxConfString()
@@ -133,23 +129,9 @@ export default {
       }
 
       if(!this.isNginxRunning) {
-        const option = {
-          nginxLogsPath: this.nginxLogsPath,
-          nginxPath: this.nginxPath
-        }
-
-        const result = window.nginx.start(option)
-        const re = result.result
-
-        if(re) {
-          this.isNginxRunning = true
-        } else {
-          this.isNginxRunning = false
-          this.notify(re.type, re.message)
-        }
+        this.startNginxProcess()
       } else {
-        window.nginx.stop()
-        this.isNginxRunning = false
+        this.killNginxProcess()
       }
     },
 

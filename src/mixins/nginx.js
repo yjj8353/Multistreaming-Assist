@@ -8,15 +8,28 @@ export const NginxMixin = {
         nginxDir: this.nginxDir
       }
 
-      this.nginxIsRunning = window.nginx.start(option)
+      const result = window.nginx.start(option)
+
+      if(result.isSuccess) {
+        this.isNginxRunning = true
+      } else {
+        this.isNginxRunning = false
+        this.notify(re.type, re.message)
+      }
     },
 
     killNginxProcess() {
-      this.nginxIsRunning = window.nginx.stop()
+      const result = window.nginx.stop()
+
+      if(result) {
+        this.isNginxRunning = false
+      }
     },
 
     findNginxProcess() {
       const result = window.nginx.isWorking()
+
+      return result
     }
   }
 }

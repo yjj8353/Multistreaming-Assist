@@ -104,27 +104,30 @@ ipcMain.on('nginx-start', (event, args) => {
   }
 
   const childProcess = spawn('nginx.exe', undefined, { cwd: args.nginxPath })
-  // const childProcess = spawn('nginx.exe', undefined, { cwd: 'C:\\Git\\javascript\\Multistreaming-Assist-V2-Quasar\\nginx' })
   
   childProcess.on('error', (err) => {
     if(err) {
-      event.returnValue = { type: 'negative', message: 'nginx 실행에 실패했습니다.', result: false }
+      event.returnValue = { type: 'negative', message: 'nginx 실행에 실패했습니다.', isSuccess: false }
       console.error(err)
     }
   })
   
-  event.returnValue = { result: true }
+  event.returnValue = { isSuccess: true }
 })
 
 // nginx 정지
 ipcMain.on('nginx-stop', (event, args) => {
+  let isSuccess
+
   try {
     execSync('taskkill /im nginx.exe /f', undefined)
+    isSuccess = true
   } catch(err) {
     console.err(err)
+    isSuccess = false
+  } finally {
+    event.returnValue = isSuccess
   }
-
-  event.returnValue = false
 })
 
 // nginx 프로세스가 존재하는지 확인
