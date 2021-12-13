@@ -89,11 +89,11 @@ contextBridge.exposeInMainWorld(
 
 contextBridge.exposeInMainWorld(
   'write', {
-    makeNginxConf: (event, data) => {
+    nginxConf: (event, data) => {
       return ipcRenderer.sendSync(event, data)
     },
 
-    makeBroadcastOption: (event, data) => {
+    broadcastOption: (event, data) => {
       return ipcRenderer.sendSync(event, data)
     }
   }

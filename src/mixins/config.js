@@ -4,7 +4,7 @@ export const ConfigMixin = {
   name: 'ConfigMixin',
 
   methods: {
-    makeNginxConfString() {
+    _makeNginxConfString() {
       const recordingOnOption = `
                     record all;
                     record_path "${this.recordingPath.replace(/\\/g, '/')}";
@@ -48,7 +48,7 @@ export const ConfigMixin = {
       return nginxConfig
     },
 
-    makeBroadcastOptionJsonString() {
+    _makeBroadcastOptionJsonString() {
       const json = stripIndent`
         {
             "keys": {
@@ -72,6 +72,32 @@ export const ConfigMixin = {
       `
 
       return json
+    },
+
+    writeBroadcastOption() {
+      const broadcastOption = {
+        path: this.nginxConfPath,
+        data: this._makeBroadcastOptionJsonString()
+      }
+
+      window.write.broadcastOption('make-broadcast-option', broadcastOption)
+    },
+
+    writeNginxConf() {
+      const nginxConf = {
+        path: this.nginxConfPath,
+        data: this._makeNginxConfString()
+      }
+
+      window.write.nginxConf('make-nginx-conf', nginxConf)
+    },
+
+    readBroadcastOption() {
+      return window.read.broadcastOption('broadcast-option', { nginxConfPath: this.nginxConfPath })
+    },
+
+    readContributors() {
+      return window.read.contributors('contributors', this.rootPath)
     }
   }
 }

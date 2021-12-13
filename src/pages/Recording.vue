@@ -43,7 +43,7 @@ export default {
 
   methods: {
     recordingPathSelect() {
-      const result = window.app.openDialog()
+      const result = this.openDialog()
       this.recordingPath = result
     }
   }

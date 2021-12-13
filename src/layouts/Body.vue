@@ -23,22 +23,9 @@ import NginxStatusAlert from 'src/components/NginxStatusAlert.vue'
 import NginxStillRunningAlert from 'src/components/NginxStillRunningAlert.vue'
 import PathErrorAlert from 'src/components/PathErrorAlert.vue'
 import UpdateAlert from 'src/components/UpdateAlert.vue'
-import { CheckMixin } from 'src/mixins/check'
-import { ConfigMixin } from 'src/mixins/config'
-import { MapperMixin } from 'src/mixins/mapper'
-import { NginxMixin } from 'src/mixins/nginx'
-import { QuasarMixin } from 'src/mixins/quasar'
 
 export default {
   name: 'Body',
-
-  mixins: [
-    CheckMixin,
-    ConfigMixin,
-    MapperMixin,
-    NginxMixin,
-    QuasarMixin
-  ],
 
   components: {
     NginxStatusAlert,

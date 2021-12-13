@@ -56,7 +56,7 @@ export default {
     },
 
     getMarkdown() {
-      const data = window.read.contributors('contributors', this.rootPath)
+      const data = this.readContributors()
       this.contributors = marked(data)
 
       const $ = cheerio.load(this.contributors)

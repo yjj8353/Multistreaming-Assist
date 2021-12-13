@@ -32,7 +32,7 @@ export default {
     },
     
     settingBroadcastOption() {
-      const result = window.read.broadcastOption('broadcast-option', { nginxConfPath: this.nginxConfPath })
+      const result = this.readBroadcastOption()
 
       if(result) {
         this.twitchKey = result.keys.twitch

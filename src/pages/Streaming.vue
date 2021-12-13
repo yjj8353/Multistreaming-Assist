@@ -110,18 +110,8 @@ export default {
 
   methods: {
     nginxSwitch() {
-      const nginxConf = {
-        path: this.nginxConfPath,
-        data: this.makeNginxConfString()
-      }
-
-      const broadcastOption = {
-        path: this.nginxConfPath,
-        data: this.makeBroadcastOptionJsonString()
-      }
-
-      const result1 = window.write.makeNginxConf('make-nginx-conf', nginxConf)
-      const result2 = window.write.makeBroadcastOption('make-broadcast-option', broadcastOption)
+      const result1 = this.writeNginxConf()
+      const result2 = this.writeBroadcastOption()
 
       if(!result1 || !result2) {
         this.notify('negative', '옵션 파일을 생성하는데 실패했습니다')
