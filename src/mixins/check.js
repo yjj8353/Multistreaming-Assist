@@ -57,6 +57,14 @@ export const CheckMixin = {
       }
 
       return true
+    },
+
+    isNginxWorking() {
+      return window.nginx.isWorking()
+    },
+
+    isWindowMaximized() {
+      return window.app.isMaximized()
     }
   }
 }

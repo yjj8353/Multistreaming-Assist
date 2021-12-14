@@ -28,7 +28,7 @@ export default {
 
   methods: {
     async openUpdatePage() {
-      window.shell.openExternal('https://github.com/yjj8353/Multistreaming-Assist/releases/latest')
+      this.openExternal('https://github.com/yjj8353/Multistreaming-Assist/releases/latest')
       this.dontPopupUpdateMessage = this.screwYouUpdate
       this.seamless = false
 

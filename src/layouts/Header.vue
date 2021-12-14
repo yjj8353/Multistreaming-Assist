@@ -8,9 +8,9 @@
       <q-space />
 
       <!-- 최소화, 최대화, 닫기 버튼 -->
-      <q-btn dense flat icon="minimize" @click="appMinimize" />
-      <q-btn dense flat :icon="isMaximized ? 'filter_none' : 'crop_square'" @click="appMaximize" />
-      <q-btn dense flat icon="close" @click="appClose" />
+      <q-btn dense flat icon="minimize" @click="minimizeApp" />
+      <q-btn dense flat :icon="isMaximized ? 'filter_none' : 'crop_square'" @click="maximizeApp" />
+      <q-btn dense flat icon="close" @click="closeApp" />
     </q-bar>
 
     <!-- Tool Bar -->
@@ -84,34 +84,14 @@ export default {
   },
 
   mounted() {
+
+    // window resize 이벤트 등록
     window.addEventListener('resize', this.handleResize)
   },
 
   methods: {
-
-    // 앱 최소화
-    appMinimize() {
-      window.app.minimize()
-    },
-
-    // 앱 최대화 및 이전크기로 되돌리기
-    appMaximize() {
-      window.app.maximize()
-    },
-
-    // 앱 닫기
-    appClose() {
-      const result = window.nginx.isWorking()
-
-      if(result) {
-        this.openNginxStillRunningAlert = true
-      } else {
-        window.app.close()
-      }
-    },
-
     how2Use() {
-      window.app.openWebPage('open-web-page', 'https://github.com/yjj8353/Multistreaming-Assist/wiki')
+      this.openWebPage('https://github.com/yjj8353/Multistreaming-Assist/wiki')
     },
 
     contributors() {
@@ -119,9 +99,7 @@ export default {
     },
 
     nginxProcessCheck() {
-      const isNginxWorking = window.nginx.isWorking()
-      
-      if(isNginxWorking) {
+      if(this.isNginxWorking()) {
         this.notify('positive', 'NGINX가 정상적으로 실행되고 있습니다')
       } else {
         this.openNginxStatusAlert = true
@@ -129,7 +107,7 @@ export default {
     },
 
     handleResize() {
-      this.isMaximized = window.app.isMaximized()
+      this.isMaximized = this.isWindowMaximized()
     }
   }
 }

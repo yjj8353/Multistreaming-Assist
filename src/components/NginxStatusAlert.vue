@@ -23,21 +23,7 @@ export default {
   
   methods: {
     ok() {
-      const option = {
-        nginxLogsPath: this.nginxLogsPath,
-        nginxPath: this.nginxPath
-      }
-
-      const result = window.nginx.start(option)
-      const re =result.result
-      
-      if(re) {
-        this.isNginxRunning = true
-      } else {
-        this.isNginxRunning = false
-        this.notify(re.type, re.message)
-      }
-      
+      this.startNginxProcess()      
       this.openNginxStatusAlert = false
     },
 

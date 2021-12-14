@@ -24,11 +24,11 @@ export default {
   methods: {
     ok() {
       try {
-        window.nginx.stop()
+        this.killNginxProcess()
       } catch(err) {
         console.error(err)
       } finally {
-        window.app.close()
+        this.closeApp()
       }
     },
 
