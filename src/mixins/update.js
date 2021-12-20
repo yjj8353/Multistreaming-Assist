@@ -3,7 +3,7 @@ export const UpdateMixin = {
 
   methods: {
     isUpdateExist() {
-      
+      window.app.isUpdateExist('program-version', this.rootPath)
     }
   }
 }

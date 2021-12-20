@@ -19,8 +19,9 @@ export default {
   },
 
   mounted() {
-    this.settingPath(),
+    this.settingPath()
     this.settingBroadcastOption()
+    this.isUpdateExist()
   },
 
   methods: {

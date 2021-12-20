@@ -43,6 +43,10 @@ contextBridge.exposeInMainWorld(
 
     openWebPage: (event, data) => {
       ipcRenderer.send(event, data)
+    },
+
+    isUpdateExist: (event, data) => {
+      ipcRenderer.sendSync(event, data)
     }
   }
 )
@@ -106,6 +110,10 @@ contextBridge.exposeInMainWorld(
     },
 
     contributors: (event, data) => {
+      return ipcRenderer.sendSync(event, data)
+    },
+
+    programVersion: (event, data) => {
       return ipcRenderer.sendSync(event, data)
     }
   }

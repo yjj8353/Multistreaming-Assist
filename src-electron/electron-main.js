@@ -1,5 +1,6 @@
 import { app, BrowserWindow, nativeTheme, ipcMain, shell, dialog } from 'electron'
 import path from 'path'
+import https from 'https'
 
 import { spawn, execSync } from 'child_process'
 
@@ -214,4 +215,67 @@ ipcMain.on('contributors', (event, args) => {
 
 ipcMain.on('open-web-page', (event, args) => {
   require('electron').shell.openExternal(args)
+})
+
+ipcMain.on('program-version', (event, args) => {
+  return fs.readFileSync(path.join(args, 'version'), 'UTF-8')
+})
+
+ipcMain.on('is-update-exist', (event, args) => {
+  let redirectedUrl = null
+  let thisProgramVersion = null
+  let latestProgramVersion = null
+  let updateExist = false
+
+  const request = https.request({
+    host: 'github.com',
+    path: '/yjj8353/Multistreaming-Assist/releases/latest'
+  }, response => {
+    redirectedUrl = response.responseUrl
+    latestProgramVersion = redirectedUrl.replace('https://github.com/yjj8353/Multistreaming-Assist/releases/tag/v', '')
+    thisProgramVersion = window.read.programVersion('program-version', args)
+
+    const lpvArray = latestProgramVersion.split('.')
+    const tpvArray = thisProgramVersion.split('.')
+
+    const lpvMajor = lpvArray[0]
+    const lpvMinor = lpvArray[1]
+    const lpvPatch = lpvArray[2].split('-')[0]
+    const lpvPreRelease = lpvArray[2].split('-')[1] ? this.preReleaseNumbering(lpvArray[2].split('-')[1]) : this.preReleaseNumbering('')
+    const tpvMajor = tpvArray[0]
+    const tpvMinor = tpvArray[1]
+    const tpvPatch = tpvArray[2].split('-')[0]
+    const tpvPreRelease = tpvArray[2].split('-')[1] ? this.preReleaseNumbering(tpvArray[2].split('-')[1]) : this.preReleaseNumbering('')
+
+    console.log([lpvMajor, lpvMinor, lpvPatch, lpvPreRelease, tpvMajor, tpvMinor, tpvPatch, tpvPreRelease])
+
+    if(parseInt(lpvMajor) > parseInt(tpvMajor)) {
+      // major version update 있음
+      updateExist = true
+    } else {
+      if(parseInt(lpvMinor) > parseInt(tpvMinor)) {
+        // minor version update 있음
+        updateExist = true
+      } else {
+        if(parseInt(lpvPatch) > parseInt(tpvPatch)) {
+          // patch version update 있음
+          updateExist = true
+        } else {
+          if(lpvPreRelease > tpvPrerelease) {
+            // pre release version update 있음
+            updateExist = true
+          } else {
+            // version 동일함
+            updateExist = false
+          }
+        }
+      }
+    }
+  }).on('error', err => {
+    console.log(err)
+  })
+
+  request.end()
+
+  event.returnValue = updateExist
 })
