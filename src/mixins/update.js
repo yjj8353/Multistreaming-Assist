@@ -3,7 +3,8 @@ export const UpdateMixin = {
 
   methods: {
     isUpdateExist() {
-      window.app.isUpdateExist('program-version', this.rootPath)
+      console.log('실행됨')
+      window.app.isUpdateExist('is-update-exist', this.rootPath)
     }
   }
 }

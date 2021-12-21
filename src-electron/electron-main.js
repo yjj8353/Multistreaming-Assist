@@ -217,11 +217,28 @@ ipcMain.on('open-web-page', (event, args) => {
   require('electron').shell.openExternal(args)
 })
 
-ipcMain.on('program-version', (event, args) => {
-  return fs.readFileSync(path.join(args, 'version'), 'UTF-8')
-})
-
 ipcMain.on('is-update-exist', (event, args) => {
+  function preReleaseNumbering(preRelease) {
+    const pr = {
+      Alpha: 0,
+      Beta: 1,
+      RC: 2,
+      RTM: 3
+    }
+  
+    // pre release는 Alpha -> Beta -> RC -> RTM 순으로 버전이 높다
+    switch(preRelease) {
+      case 'alpha':
+        return pr.Alpha
+      case 'beta':
+        return pr.Beta
+      case 'rc':
+        return pr.RC
+      default:
+        return pr.RTM
+    }
+  }
+
   let redirectedUrl = null
   let thisProgramVersion = null
   let latestProgramVersion = null
@@ -231,9 +248,10 @@ ipcMain.on('is-update-exist', (event, args) => {
     host: 'github.com',
     path: '/yjj8353/Multistreaming-Assist/releases/latest'
   }, response => {
-    redirectedUrl = response.responseUrl
+    redirectedUrl = response.request.uri
+    console.log(redirectedUrl)
     latestProgramVersion = redirectedUrl.replace('https://github.com/yjj8353/Multistreaming-Assist/releases/tag/v', '')
-    thisProgramVersion = window.read.programVersion('program-version', args)
+    thisProgramVersion = fs.readFileSync(path.join(args, 'version'), 'UTF-8')
 
     const lpvArray = latestProgramVersion.split('.')
     const tpvArray = thisProgramVersion.split('.')
@@ -241,11 +259,11 @@ ipcMain.on('is-update-exist', (event, args) => {
     const lpvMajor = lpvArray[0]
     const lpvMinor = lpvArray[1]
     const lpvPatch = lpvArray[2].split('-')[0]
-    const lpvPreRelease = lpvArray[2].split('-')[1] ? this.preReleaseNumbering(lpvArray[2].split('-')[1]) : this.preReleaseNumbering('')
+    const lpvPreRelease = lpvArray[2].split('-')[1] ? preReleaseNumbering(lpvArray[2].split('-')[1]) : preReleaseNumbering('')
     const tpvMajor = tpvArray[0]
     const tpvMinor = tpvArray[1]
     const tpvPatch = tpvArray[2].split('-')[0]
-    const tpvPreRelease = tpvArray[2].split('-')[1] ? this.preReleaseNumbering(tpvArray[2].split('-')[1]) : this.preReleaseNumbering('')
+    const tpvPreRelease = tpvArray[2].split('-')[1] ? preReleaseNumbering(tpvArray[2].split('-')[1]) : preReleaseNumbering('')
 
     console.log([lpvMajor, lpvMinor, lpvPatch, lpvPreRelease, tpvMajor, tpvMinor, tpvPatch, tpvPreRelease])
 

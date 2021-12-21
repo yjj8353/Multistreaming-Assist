@@ -111,10 +111,6 @@ contextBridge.exposeInMainWorld(
 
     contributors: (event, data) => {
       return ipcRenderer.sendSync(event, data)
-    },
-
-    programVersion: (event, data) => {
-      return ipcRenderer.sendSync(event, data)
     }
   }
 )
