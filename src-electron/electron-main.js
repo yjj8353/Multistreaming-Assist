@@ -1,6 +1,5 @@
 import { app, BrowserWindow, nativeTheme, ipcMain, shell, dialog } from 'electron'
 import path from 'path'
-import https from 'https'
 
 import { spawn, execSync } from 'child_process'
 
@@ -248,7 +247,7 @@ ipcMain.on('is-update-exist', (event, args) => {
     host: 'github.com',
     path: '/yjj8353/Multistreaming-Assist/releases/latest'
   }, response => {
-    redirectedUrl = response.request.uri
+    redirectedUrl = response.responseUrl
     console.log(redirectedUrl)
     latestProgramVersion = redirectedUrl.replace('https://github.com/yjj8353/Multistreaming-Assist/releases/tag/v', '')
     thisProgramVersion = fs.readFileSync(path.join(args, 'version'), 'UTF-8')
