@@ -4,6 +4,7 @@ import path from 'path'
 import { spawn, execSync } from 'child_process'
 
 import fs from 'fs'
+import https from 'follow-redirects/https'
 
 try {
   if (process.platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
@@ -248,7 +249,6 @@ ipcMain.on('is-update-exist', (event, args) => {
     path: '/yjj8353/Multistreaming-Assist/releases/latest'
   }, response => {
     redirectedUrl = response.responseUrl
-    console.log(redirectedUrl)
     latestProgramVersion = redirectedUrl.replace('https://github.com/yjj8353/Multistreaming-Assist/releases/tag/v', '')
     thisProgramVersion = fs.readFileSync(path.join(args, 'version'), 'UTF-8')
 
@@ -264,8 +264,6 @@ ipcMain.on('is-update-exist', (event, args) => {
     const tpvPatch = tpvArray[2].split('-')[0]
     const tpvPreRelease = tpvArray[2].split('-')[1] ? preReleaseNumbering(tpvArray[2].split('-')[1]) : preReleaseNumbering('')
 
-    console.log([lpvMajor, lpvMinor, lpvPatch, lpvPreRelease, tpvMajor, tpvMinor, tpvPatch, tpvPreRelease])
-
     if(parseInt(lpvMajor) > parseInt(tpvMajor)) {
       // major version update 있음
       updateExist = true
@@ -278,7 +276,7 @@ ipcMain.on('is-update-exist', (event, args) => {
           // patch version update 있음
           updateExist = true
         } else {
-          if(lpvPreRelease > tpvPrerelease) {
+          if(lpvPreRelease > tpvPreRelease) {
             // pre release version update 있음
             updateExist = true
           } else {
@@ -288,11 +286,11 @@ ipcMain.on('is-update-exist', (event, args) => {
         }
       }
     }
+
+    event.returnValue = updateExist
   }).on('error', err => {
-    console.log(err)
+    console.error(err)
   })
 
   request.end()
-
-  event.returnValue = updateExist
 })

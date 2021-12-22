@@ -50,10 +50,10 @@ export default {
     },
 
     checkUpdate() {
-      this.isUpdateExist = false
-      this.isUpdatePopupEnable = false
+      const isUpdateExist = this.isUpdateExist()
+      const isUpdatePopupEnable = this.isUpdatePopupEnable
 
-      if(this.isUpdateExist && this.isUpdatePopupEnable) {
+      if(isUpdateExist && isUpdatePopupEnable) {
         this.openUpdateAlert = true
       }
     }

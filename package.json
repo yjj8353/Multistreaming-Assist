@@ -15,7 +15,7 @@
     "cheerio": "^1.0.0-rc.10",
     "common-tags": "^1.8.1",
     "core-js": "^3.6.5",
-    "https": "^1.0.0",
+    "follow-redirects": "^1.14.6",
     "marked": "^4.0.5",
     "quasar": "^2.3.1",
     "vuex": "^4.0.1"

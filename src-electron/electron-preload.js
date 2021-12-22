@@ -46,7 +46,7 @@ contextBridge.exposeInMainWorld(
     },
 
     isUpdateExist: (event, data) => {
-      ipcRenderer.sendSync(event, data)
+      return ipcRenderer.sendSync(event, data)
     }
   }
 )
