@@ -21,6 +21,7 @@ export default {
   mounted() {
     this.settingPath()
     this.settingBroadcastOption()
+    this.checkUpdate()
   },
 
   methods: {
@@ -48,6 +49,15 @@ export default {
         this.recordingPath = result.options.recordingPath
         
         this.isUpdatePopupEnable = result.options.isUpdatePopupEnable
+      }
+    },
+
+    checkUpdate() {
+      const isUpdateExist = this.isUpdateExist()
+      const isUpdatePopupEnable = this.isUpdatePopupEnable
+
+      if(isUpdateExist && isUpdatePopupEnable) {
+        this.openUpdateAlert = true
       }
     }
   }

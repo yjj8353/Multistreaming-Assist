@@ -250,7 +250,15 @@ ipcMain.on('is-update-exist', (event, args) => {
   }, response => {
     redirectedUrl = response.responseUrl
     latestProgramVersion = redirectedUrl.replace('https://github.com/yjj8353/Multistreaming-Assist/releases/tag/v', '')
-    thisProgramVersion = fs.readFileSync(path.join(args, 'version'), 'UTF-8')
+    
+    try {
+      thisProgramVersion = fs.readFileSync(path.join(args, 'version'), 'UTF-8')
+    } catch(e) {
+      console.error(e)
+      event.returnValue = false
+      
+      retrun
+    }
 
     const lpvArray = latestProgramVersion.split('.')
     const tpvArray = thisProgramVersion.split('.')

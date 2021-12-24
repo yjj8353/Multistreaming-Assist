@@ -27,21 +27,19 @@ export default {
   },
 
   methods: {
-    async openUpdatePage() {
+    openUpdatePage() {
       this.openExternal('https://github.com/yjj8353/Multistreaming-Assist/releases/latest')
-      this.dontPopupUpdateMessage = this.screwYouUpdate
-      this.seamless = false
+      this.isUpdatePopupEnable = !this.screwYouUpdate
+      this.openUpdateAlert = false
 
-      const broadcastOption = this.makeBroadcastOptionJsonString()
-      fs.writeFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), broadcastOption)
+      this.writeBroadcastOption()
     },
 
     closeUpdatePopup() {
-      this.dontPopupUpdateMessage = this.screwYouUpdate
-      this.seamless = false
+      this.isUpdatePopupEnable = !this.screwYouUpdate
+      this.openUpdateAlert = false
 
-      const broadcastOption = this.makeBroadcastOptionJsonString()
-      fs.writeFileSync(path.join(this.nginxConfDir, 'broadcastOption.json'), broadcastOption)
+      this.writeBroadcastOption()
     }
   }
 }

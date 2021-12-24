@@ -41,21 +41,11 @@ export default {
 
   mounted() {
     this.checkPath()
-    this.checkUpdate()
   },
 
   methods: {
     checkPath() {
       this.openPathErrorAlert = this.isIncludeKoreanOnPath(this.rootPath)
-    },
-
-    checkUpdate() {
-      const isUpdateExist = this.isUpdateExist()
-      const isUpdatePopupEnable = this.isUpdatePopupEnable
-
-      if(isUpdateExist && isUpdatePopupEnable) {
-        this.openUpdateAlert = true
-      }
     }
   }
 }
