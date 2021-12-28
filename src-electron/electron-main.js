@@ -266,11 +266,14 @@ ipcMain.on('is-update-exist', (event, args) => {
     const lpvMajor = lpvArray[0]
     const lpvMinor = lpvArray[1]
     const lpvPatch = lpvArray[2].split('-')[0]
-    const lpvPreRelease = lpvArray[2].split('-')[1] ? preReleaseNumbering(lpvArray[2].split('-')[1]) : preReleaseNumbering('')
+    const lpvPreRelease = lpvArray[2].split('-')[1] ? preReleaseNumbering(lpvArray[2].split('-')[1].replace(/[0-9]*/g, '')) : preReleaseNumbering('')
+    const lpvPreReleaseNumber = lpvArray[2].split('-')[1] ? ~~lpvArray[2].split('-')[1].replace(/[^0-9]*/g, '') : 0
+
     const tpvMajor = tpvArray[0]
     const tpvMinor = tpvArray[1]
     const tpvPatch = tpvArray[2].split('-')[0]
-    const tpvPreRelease = tpvArray[2].split('-')[1] ? preReleaseNumbering(tpvArray[2].split('-')[1]) : preReleaseNumbering('')
+    const tpvPreRelease = tpvArray[2].split('-')[1] ? preReleaseNumbering(tpvArray[2].split('-')[1].replace(/[0-9]*/g, '')) : preReleaseNumbering('')
+    const tpvPreReleaseNumber = tpvArray[2].split('-')[1] ? ~~tpvArray[2].split('-')[1].replace(/[^0-9]*/g, '') : 0
 
     if(parseInt(lpvMajor) > parseInt(tpvMajor)) {
       // major version update 있음
@@ -288,8 +291,13 @@ ipcMain.on('is-update-exist', (event, args) => {
             // pre release version update 있음
             updateExist = true
           } else {
-            // version 동일함
-            updateExist = false
+            if(lpvPreReleaseNumber > tpvPreReleaseNumber) {
+              // pre release numbering update 있음
+              updateExist = true
+            } else {
+              // version 동일함
+              updateExist = false
+            }            
           }
         }
       }
