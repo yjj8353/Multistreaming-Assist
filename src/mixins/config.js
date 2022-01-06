@@ -80,7 +80,7 @@ export const ConfigMixin = {
         data: this._makeBroadcastOptionJsonString()
       }
 
-      window.write.broadcastOption('make-broadcast-option', broadcastOption)
+      return window.write.broadcastOption('make-broadcast-option', broadcastOption)
     },
 
     writeNginxConf() {
@@ -89,7 +89,7 @@ export const ConfigMixin = {
         data: this._makeNginxConfString()
       }
 
-      window.write.nginxConf('make-nginx-conf', nginxConf)
+      return window.write.nginxConf('make-nginx-conf', nginxConf)
     },
 
     readBroadcastOption() {

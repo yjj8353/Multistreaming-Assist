@@ -4,8 +4,8 @@ export const NginxMixin = {
   methods: {
     startNginxProcess() {
       const option = {
-        nginxLogsDir: this.nginxLogsDir,
-        nginxDir: this.nginxDir
+        nginxLogsPath: this.nginxLogsPath,
+        nginxPath: this.nginxPath
       }
 
       const result = window.nginx.start(option)
@@ -22,6 +22,9 @@ export const NginxMixin = {
       const result = window.nginx.stop()
 
       if(result) {
+        this.isNginxRunning = false
+      } else {
+        this.notify('negative', 'nginx.exe 프로세스가 존재하지 않습니다')
         this.isNginxRunning = false
       }
     },

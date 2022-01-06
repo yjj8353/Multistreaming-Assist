@@ -162,7 +162,7 @@ ipcMain.on('make-nginx-conf', (event, args) => {
     result = true;
   } catch(e) {
     console.error(e)
-    result = false;
+    result = false
   } finally {
     event.returnValue = result
   }

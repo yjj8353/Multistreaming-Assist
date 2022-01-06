@@ -58,7 +58,7 @@ contextBridge.exposeInMainWorld(
     },
 
     stop: (event, data) => {
-      ipcRenderer.send('nginx-stop')
+      return ipcRenderer.sendSync('nginx-stop')
     },
 
     isWorking: (event, data) => {
