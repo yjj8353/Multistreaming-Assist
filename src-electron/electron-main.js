@@ -2,7 +2,6 @@ import { app, BrowserWindow, nativeTheme, ipcMain, shell, dialog } from 'electro
 import path from 'path'
 
 import { spawn, execSync } from 'child_process'
-import { stripIndent } from 'common-tags'
 
 import fs from 'fs'
 import https from 'follow-redirects/https'
@@ -192,34 +191,32 @@ ipcMain.on('open-dialog', (event, args) => {
 
 ipcMain.on('broadcast-option', (event, args) => {
   let parsingData
-  const defaultBroadcastOption = stripIndent`
-    {
-        "keys": {
-            "twitch":"",
-            "youtube":"",
-            "rtmpUrl":"",
-            "rtmpKey":""
-        },
-  
-        "options": {
-            "twitchOn":false,
-            "youtubeOn":false,
-            "additionalOn":false,
-            "recordingOn":false,
-  
-            "recordingPath":"",
-  
-            "isUpdatePopupEnable":true
-        }
+  const defaultBroadcastOption = {
+    'keys': {
+      'twitch':'',
+      'youtube':'',
+      'rtmpUrl':'',
+      'rtmpKey':''
+    },
+
+    'options': {
+      'twitchOn':false,
+      'youtubeOn':false,
+      'additionalOn':false,
+      'recordingOn':false,
+
+      'recordingPath':'',
+
+      'isUpdatePopupEnable':true
     }
-  `
+  }
 
   try {
     const data = fs.readFileSync(args.nginxConfPath + '\\broadcastOption.json', 'UTF-8')
     parsingData = JSON.parse(data)
   } catch(e) {
     console.error(e)
-    parsingData = JSON.parse(defaultBroadcastOption)
+    parsingData = defaultBroadcastOption
   }
 
   event.returnValue = parsingData
