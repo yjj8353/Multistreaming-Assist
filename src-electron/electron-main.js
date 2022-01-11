@@ -6,6 +6,8 @@ import { spawn, execSync } from 'child_process'
 import fs from 'fs'
 import https from 'follow-redirects/https'
 
+import windowStateKeeper from 'electron-window-state'
+
 try {
   if (process.platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
     require('fs').unlinkSync(require('path').join(app.getPath('userData'), 'DevTools Extensions'))
@@ -18,9 +20,17 @@ function createWindow () {
   /**
    * Initial window options
    */
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 480,
+    defaultHeight: 600
+  })
+
   mainWindow = new BrowserWindow({
-    width: 480,
-    height: 600,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
+    
     resizable: true,
     frame: false,
     useContentSize: true,
@@ -31,6 +41,7 @@ function createWindow () {
     }
   })
 
+  mainWindowState.manage(mainWindow)
   mainWindow.loadURL(process.env.APP_URL)
 
   if (process.env.DEBUGGING) {
