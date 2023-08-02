@@ -1,65 +1,52 @@
+<script setup lang="ts">
+// This starter template is using Vue 3 <script setup> SFCs
+// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+import Greet from "./components/Greet.vue";
+</script>
+
 <template>
-  <q-layout class="shadow-2 rounded-borders">
-    <Header />
-    <q-page-container>
-      <Body />
-    </q-page-container>
-  </q-layout>
+  <div class="container">
+    <h1>Welcome to Tauri!</h1>
+
+    <div class="row">
+      <a href="https://vitejs.dev" target="_blank">
+        <img src="/vite.svg" class="logo vite" alt="Vite logo" />
+      </a>
+      <a href="https://tauri.app" target="_blank">
+        <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
+      </a>
+      <a href="https://vuejs.org/" target="_blank">
+        <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
+      </a>
+    </div>
+
+    <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
+
+    <p>
+      Recommended IDE setup:
+      <a href="https://code.visualstudio.com/" target="_blank">VS Code</a>
+      +
+      <a href="https://github.com/johnsoncodehk/volar" target="_blank">Volar</a>
+      +
+      <a href="https://github.com/tauri-apps/tauri-vscode" target="_blank"
+        >Tauri</a
+      >
+      +
+      <a href="https://github.com/rust-lang/rust-analyzer" target="_blank"
+        >rust-analyzer</a
+      >
+    </p>
+
+    <Greet />
+  </div>
 </template>
 
-<script>
-import Header from './layouts/Header.vue'
-import Body from './layouts/Body.vue'
-export default {
-  name: 'App',
-
-  components: {
-    Header,
-    Body
-  },
-
-  mounted() {
-    this.settingPath()
-    this.settingBroadcastOption()
-    this.checkUpdate()
-  },
-
-  methods: {
-    settingPath() {
-      this.rootPath = this.dirname
-      this.nginxPath = this.rootPath
-      this.nginxConfPath = this.nginxPath
-      this.nginxLogsPath = this.nginxPath
-    },
-    
-    settingBroadcastOption() {
-      const result = this.readBroadcastOption()
-
-      if(result) {
-        this.twitchKey = result.keys.twitch
-        this.youtubeKey = result.keys.youtube
-        this.additionalRTMPUrl = result.keys.rtmpUrl
-        this.additionalRTMPKey = result.keys.rtmpKey
-
-        this.twitchOn = result.options.twitchOn
-        this.youtubeOn = result.options.youtubeOn
-        this.additionalOn = result.options.additionalOn
-        this.recordingOn = result.options.recordingOn
-
-        this.recordingPath = result.options.recordingPath
-        
-        this.isUpdatePopupEnable = result.options.isUpdatePopupEnable
-      }
-    },
-
-    checkUpdate() {
-      const isUpdateExist = this.isUpdateExist()
-      const isUpdatePopupEnable = this.isUpdatePopupEnable
-
-      if(isUpdateExist && isUpdatePopupEnable) {
-        this.openUpdateAlert = true
-      }
-    }
-  }
+<style scoped>
+.logo.vite:hover {
+  filter: drop-shadow(0 0 2em #747bff);
 }
-</script>
+
+.logo.vue:hover {
+  filter: drop-shadow(0 0 2em #249b73);
+}
+</style>

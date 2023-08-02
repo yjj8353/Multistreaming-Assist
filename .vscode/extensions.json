@@ -1,12 +1,7 @@
 {
   "recommendations": [
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "octref.vetur"
-  ],
-  "unwantedRecommendations": [
-    "hookyqr.beautify",
-    "dbaeumer.jshint",
-    "ms-vscode.vscode-typescript-tslint-plugin"
+    "Vue.volar",
+    "tauri-apps.tauri-vscode",
+    "rust-lang.rust-analyzer"
   ]
 }
