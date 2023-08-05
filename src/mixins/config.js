@@ -1,24 +1,33 @@
-import { stripIndent } from 'common-tags'
+import { stripIndent } from "common-tags";
+import { invoke } from "@tauri-apps/api";
+import { StoreMixin } from "./store";
 
 export const ConfigMixin = {
-  name: 'ConfigMixin',
+  name: "ConfigMixin",
+
+  mixins: [StoreMixin],
 
   methods: {
     _makeNginxConfString() {
       const recordingOnOption = `
                     record all;
-                    record_path "${this.recordingPath.replace(/\\/g, '/')}";
+                    record_path "${this.recordingPath.replace(/\\/g, "/")}";
                     record_unique on;
                     record_suffix .flv;
-      `
+      `;
       const recordingOffOption = `
                     record off;
-      `
-      const recordingOption = this.recordingPath.length !== 0 && this.recordingOn ? recordingOnOption : recordingOffOption
+      `;
+      const recordingOption =
+        this.recordingPath.length !== 0 && this.isRecordingOn
+          ? recordingOnOption
+          : recordingOffOption;
 
-      const twitchUrl = this.twitchOn ? this.fullTwitchUrl : ''
-      const youtubeUrl = this.youtubeOn ? this.fullYoutubeUrl : ''
-      const additionalRTMPUrl = this.additionalOn ? this.fullAdditionalUrl : ''
+      const twitchUrl = this.isTwitchOn ? this.fullTwitchUrl : "";
+      const youtubeUrl = this.isYoutubeOn ? this.fullYoutubeUrl : "";
+      const additionalRTMPUrl = this.isAdditionalOn
+        ? this.fullAdditionalUrl
+        : "";
 
       const nginxConfig = stripIndent`
         worker_processes 1;
@@ -43,9 +52,9 @@ export const ConfigMixin = {
                 }
             }
         }
-      `
+      `;
 
-      return nginxConfig
+      return nginxConfig;
     },
 
     _makeBroadcastOptionJsonString() {
@@ -59,45 +68,53 @@ export const ConfigMixin = {
             },
       
             "options": {
-                "twitchOn":${this.twitchOn},
-                "youtubeOn":${this.youtubeOn},
-                "additionalOn":${this.additionalOn},
-                "recordingOn":${this.recordingOn},
+                "twitchOn":${this.isTwitchOn},
+                "youtubeOn":${this.isYoutubeOn},
+                "additionalOn":${this.isAdditionalOn},
+                "recordingOn":${this.isRecordingOn},
       
-                "recordingPath":"${this.recordingPath.replace(/\\/g, '\\\\')}",
+                "recordingPath":"${this.recordingPath.replace(/\\/g, "\\\\")}",
       
                 "isUpdatePopupEnable":${this.isUpdatePopupEnable}
             }
         }
-      `
+      `;
 
-      return json
+      return json;
     },
 
-    writeBroadcastOption() {
+    async writeBroadcastOption() {
       const broadcastOption = {
         path: this.nginxConfPath,
-        data: this._makeBroadcastOptionJsonString()
-      }
+        data: this._makeBroadcastOptionJsonString(),
+      };
 
-      return window.write.broadcastOption('make-broadcast-option', broadcastOption)
+      return await invoke("write_broadcast_option", {
+        filePath: broadcastOption.path,
+        data: broadcastOption.data,
+      });
     },
 
-    writeNginxConf() {
+    async writeNginxConf() {
       const nginxConf = {
         path: this.nginxConfPath,
-        data: this._makeNginxConfString()
-      }
+        data: this._makeNginxConfString(),
+      };
 
-      return window.write.nginxConf('make-nginx-conf', nginxConf)
+      return await invoke("write_nginx_conf", {
+        filePath: nginxConf.path,
+        data: nginxConf.data,
+      });
     },
 
-    readBroadcastOption() {
-      return window.read.broadcastOption('broadcast-option', { nginxConfPath: this.nginxConfPath })
+    async readBroadcastOption() {
+      // return invoke('broadcast-option', { nginxConfPath: this.nginxConfPath })
     },
 
-    readContributors() {
-      return window.read.contributors('contributors', this.rootPath)
-    }
-  }
-}
+    async readContributors() {
+      return await invoke("read_contributors", {
+        path: "D:\\git\\rust\\Multistreaming Assist V2\\contributors.md",
+      });
+    },
+  },
+};

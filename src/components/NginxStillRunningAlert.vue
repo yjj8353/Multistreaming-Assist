@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="openNginxStillRunningAlert">
+  <q-dialog v-model="isOpenNginxStillRunningAlert">
     <q-card style="width: 400px">
       <q-card-section>
         <div class="text-h6">잠깐만요!</div>
@@ -18,23 +18,29 @@
 </template>
 
 <script>
+import { ElectronMixin } from "src/mixins/electron";
+import { NginxMixin } from "src/mixins/nginx";
+import { StoreMixin } from "src/mixins/store";
+
 export default {
-  name: 'NginxStillRunningAlert',
-  
+  name: "NginxStillRunningAlert",
+
+  mixins: [StoreMixin, NginxMixin, ElectronMixin],
+
   methods: {
     ok() {
       try {
-        this.killNginxProcess()
-      } catch(err) {
-        console.error(err)
+        this.killNginxProcess();
+      } catch (err) {
+        console.error(err);
       } finally {
-        this.closeApp()
+        this.closeApp();
       }
     },
 
     cancle() {
-      this.openNginxStillRunningAlert = false
-    }
-  }
-}
+      this.closeNginxStillRunningAlert();
+    },
+  },
+};
 </script>

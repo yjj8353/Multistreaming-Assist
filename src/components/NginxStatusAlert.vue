@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="openNginxStatusAlert">
+  <q-dialog v-model="isOpenNginxStatusAlert">
     <q-card style="width: 400px">
       <q-card-section>
         <div class="text-h6">저런...</div>
@@ -11,26 +11,35 @@
 
       <q-card-actions align="right">
         <q-btn label="물론이죠!" color="negative" @click="ok" />
-        <q-btn label="처음 상태로 되돌려주세요!" color="primary" @click="cancel" />
+        <q-btn
+          label="처음 상태로 되돌려주세요!"
+          color="primary"
+          @click="cancel"
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 
 <script>
+import { StoreMixin } from "src/mixins/store";
+import { NginxMixin } from "src/mixins/nginx";
+
 export default {
-  name: 'NginxStatusAlert',
-  
+  name: "NginxStatusAlert",
+
+  mixins: [StoreMixin, NginxMixin],
+
   methods: {
     ok() {
-      this.startNginxProcess()      
-      this.openNginxStatusAlert = false
+      this.startNginxProcess();
+      this.closeNginxStatusAlert();
     },
 
     cancel() {
-      this.isNginxRunning = false
-      this.openNginxStatusAlert = false
-    }
-  }
-}
+      this.nginxOff();
+      this.closeNginxStatusAlert();
+    },
+  },
+};
 </script>

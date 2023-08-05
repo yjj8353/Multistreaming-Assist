@@ -1,48 +1,41 @@
 {
-  "name": "multisteaming-assist-v2",
-  "version": "2.0.0-alpha",
-  "description": "This is multistreaming assist tool",
+  "name": "multistreaming-assist-v2",
+  "version": "0.0.1",
+  "description": "Multistreaming Assist version 2 project",
   "productName": "Multistreaming Assist V2",
   "author": "yjj8353 <yjj8353@gmail.com>",
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.vue ./",
-    "test": "echo \"No test specified\" && exit 0"
+    "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
+    "test": "echo \"No test specified\" && exit 0",
+    "dev": "quasar dev",
+    "build": "quasar build"
   },
   "dependencies": {
-    "@quasar/cli": "^1.2.2",
-    "@quasar/extras": "^1.11.5",
-    "cheerio": "^1.0.0-rc.10",
-    "common-tags": "^1.8.1",
-    "core-js": "^3.6.5",
-    "follow-redirects": "^1.14.6",
-    "marked": "^4.0.5",
-    "quasar": "^2.3.1",
-    "vuex": "^4.0.1"
+    "@quasar/extras": "^1.16.4",
+    "@tauri-apps/api": "^1.4.0",
+    "cheerio": "^1.0.0-rc.12",
+    "common-tags": "^1.8.2",
+    "marked": "^6.0.0",
+    "marked-gfm-heading-id": "^3.0.5",
+    "marked-mangle": "^1.1.0",
+    "pinia": "^2.0.11",
+    "quasar": "^2.6.0",
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.13.14",
-    "@quasar/app": "^3.2.0",
-    "electron": "^15.1.2",
-    "electron-packager": "^15.2.0",
-    "eslint": "^7.14.0",
+    "@quasar/app-vite": "^1.3.0",
+    "autoprefixer": "^10.4.2",
+    "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-vue": "^7.0.0",
-    "eslint-webpack-plugin": "^2.4.0"
+    "eslint-plugin-vue": "^9.0.0",
+    "postcss": "^8.4.14",
+    "prettier": "^2.5.1"
   },
-  "browserslist": [
-    "last 10 Chrome versions",
-    "last 10 Firefox versions",
-    "last 4 Edge versions",
-    "last 7 Safari versions",
-    "last 8 Android versions",
-    "last 8 ChromeAndroid versions",
-    "last 8 FirefoxAndroid versions",
-    "last 10 iOS versions",
-    "last 5 Opera versions"
-  ],
   "engines": {
-    "node": ">= 12.22.1",
+    "node": "^18 || ^16 || ^14.19",
     "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
   }

@@ -1,35 +1,48 @@
+import { dialog } from "@tauri-apps/api";
+import { appConfigDir } from "@tauri-apps/api/path";
+import { appWindow } from "@tauri-apps/api/window";
+import { shell } from "@tauri-apps/api";
+
 export const ElectronMixin = {
-  name: 'ElectronMixin',
+  name: "ElectronMixin",
 
   methods: {
     minimizeApp() {
-      window.app.minimize()
+      appWindow.minimize();
     },
 
     maximizeApp() {
-      window.app.maximize()
+      appWindow.toggleMaximize();
     },
 
     closeApp() {
-      const result = window.nginx.isWorking()
+      const result = window.nginx.isWorking();
 
-      if(result) {
-        this.openNginxStillRunningAlert = true
+      if (result) {
+        this.openNginxStillRunningAlert = true;
       } else {
-        window.app.close()
+        appWindow.close();
       }
     },
 
-    openDialog() {
-      return window.app.openDialog()
+    async openDialog(path) {
+      if (path) {
+        return await dialog.open({
+          directory: true,
+          multiple: false,
+          defaultPath: path,
+        });
+      } else {
+        return await dialog.open({
+          directory: true,
+          multiple: false,
+          defaultPath: await appConfigDir(),
+        });
+      }
     },
 
-    openExternal(url) {
-      window.shell.openExternal(url)
+    async openWebPage(url) {
+      await shell.open(url);
     },
-
-    openWebPage(url) {
-      window.app.openWebPage('open-web-page', url)
-    }
-  }
-}
+  },
+};

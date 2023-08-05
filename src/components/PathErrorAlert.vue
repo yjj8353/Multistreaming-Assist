@@ -1,11 +1,11 @@
 <template>
-  <div class="fullscreen bg-blue text-white text-center q-pa-md flex flex-center">
+  <div
+    class="fullscreen bg-blue text-white text-center q-pa-md flex flex-center"
+  >
     <div>
-      <div style="font-size: 30vh">
-        경로 문제
-      </div>
+      <div style="font-size: 30vh">경로 문제</div>
 
-      <div class="text-h2" style="opacity:.4">
+      <div class="text-h2" style="opacity: 0.4">
         어라... 혹시 경로에 한글이 포함되어 있나요?
       </div>
 
@@ -24,10 +24,10 @@
 
 <script>
 export default {
-  name: 'PathErrorAlert',
-  
-  setup () {
-    return {}
-  }
-}
+  name: "PathErrorAlert",
+
+  setup() {
+    return {};
+  },
+};
 </script>
